@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>哨兵 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>哨兵</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/05/10/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E5%93%A8%E5%85%B5/">哨兵</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-05-10
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/05/10/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E5%93%A8%E5%85%B5/">哨兵</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-05-10
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><img src="/images/d9a3bf9dfd47b2761c410c583057f7c5.png"></p>
+<p>高可用主要来自两方面：</p>
+<ol>
+<li>数据主从节点之间会有同步，如果主节点没了，从节点还有数据</li>
+<li>有哨兵节点进行监控，选主。主节点崩了，重新选一个，继续向外提供服务</li>
+</ol>
+<h2 id="为什么要有哨兵？"><a href="#为什么要有哨兵？" class="headerlink" title="为什么要有哨兵？"></a>为什么要有哨兵？</h2><p>在Redis的主从架构中，读写是分离的，如果主没了，那就没人来处理写命令了，也没法给同节点同步数据了</p>
+<p>这时如果要恢复服务的话，需要人工介入，选择一个「从节点」切换为「主节点」，然后让其他从节点指向新</p>
+<p>的主节点，同时还需要通知上游那些连接 Redis 主节点的客户端，将其配置中的主节点 IP 地址更新为「新主</p>
+<p>节点」的 IP 地址。</p>
+<p>redis 2.8后就推出了一种新模式，即Sentinel，干的事情就是监控主节点是否宕机</p>
+<p>以及主节点宕机选主，然后把数据同步给从节点和客户端</p>
+<p>有了哨兵后，客户端就可以 和sentinel通信，然后获取主节点信息</p>
+<p><img src="/images/925eb4686c67245d14531a2ab67589e8.png"></p>
+<h2 id="哨兵如何工作？"><a href="#哨兵如何工作？" class="headerlink" title="哨兵如何工作？"></a>哨兵如何工作？</h2><p>哨兵其实是运行在特殊环境下的一个Redis进程，所以它是一个节点，但实际落地哨兵也是有多个的。</p>
+<p>主要负责三件事：监控，选主，通知</p>
+<h2 id="如何判断主节点是否真故障？"><a href="#如何判断主节点是否真故障？" class="headerlink" title="如何判断主节点是否真故障？"></a>如何判断主节点是否真故障？</h2><p>哨兵每隔一秒给主从节点发心跳包，主从节点在规定时间内回了那就是正常的。</p>
+<p>如果没有哨兵就会将它们标记为「主观下线」。这个「规定的时间」是配置项 down-after-millisecon</p>
+<p>参数设定的，单位是毫秒。	</p>
+<p>下线分主观和客观，主观就是唯心的即实际不一定的，从节点只会被标记为客观</p>
+<p>主节点可能会因为请求压力大，导致网络阻塞从而回消息慢了点，不是真下线</p>
+<p>然后为了避免这种情况，即增强纠错机制，哨兵也是议会制的，即多个哨兵都认为它宕机了它才宕机</p>
+<p>增加容错度</p>
+<h2 id="具体是怎么判定主节点为「客观下线」的呢？"><a href="#具体是怎么判定主节点为「客观下线」的呢？" class="headerlink" title="具体是怎么判定主节点为「客观下线」的呢？"></a>具体是怎么判定主节点为「客观下线」的呢？</h2><p>当有一个哨兵认为主节点下线后，就会通知其他哨兵，根据自身和主节点的网络情况，做出攒成和反对的投</p>
+<p>票。</p>
+<p>当这个哨兵的赞同票数达到哨兵配置文件中的 quorum 配置项设定的值后，这时主节点就会被该哨兵标记为</p>
+<p>「客观下线」。 </p>
+<p>PS：quorum 的值一般设置为哨兵个数的二分之一加 1，例如 3 个哨兵就设置 2。 </p>
+<p>判断完后就会从从节点里选一个出来作为主节点</p>
+<h2 id="哪个哨兵来进行选主呢？"><a href="#哪个哨兵来进行选主呢？" class="headerlink" title="哪个哨兵来进行选主呢？"></a>哪个哨兵来进行选主呢？</h2><p>哨兵投票投出来的。一般会有候选者。</p>
+<p>哪个哨兵节点判断主节点为「客观下线」，这个哨兵节点就是候选者，所谓的候选者就是想</p>
+<p>当 Leader 的哨兵。</p>
+<p>每个哨兵只有一次投票机会，如果用完后就不能参与投票了，可以投给自己或投给别人，但是只有候选者才能</p>
+<p>把票投给自己。 </p>
+<p>那么在投票过程中，任何一个「候选者」，要满足两个条件： </p>
+<p>第一，拿到半数以上的赞成票； </p>
+<p>第二，拿到的票数同时还需要大于等于哨兵配置文件中的 quorum 值。 </p>
+<p>举个例子，假设哨兵节点有 3 个，quorum 设置为 2，那么任何一个想成为 Leader 的哨兵只要拿到 2 张赞成票，就可以选举成功了。如果没有满足条件，就需要重新进行选举。 </p>
+<p>如果某个时间点，刚好有两个哨兵节点判断到主节点为客观下线，那这时不就有两个候选者了？这时该如何决定谁是 Leader 呢？ </p>
+<p>简单来说，<strong>谁先发现有个节点故障了，谁就是候选者</strong>，如果只有一个候选者，一般就是它成为Leader，如果</p>
+<p>同时有多个候选者，看其它投票者先给谁投票，谁就是Leader </p>
+<h2 id="主从故障转移的过程是怎样的？"><a href="#主从故障转移的过程是怎样的？" class="headerlink" title="主从故障转移的过程是怎样的？"></a>主从故障转移的过程是怎样的？</h2><ol>
+<li>从已下线的主节点下的从节点里挑一个出来</li>
+<li>让从节点修改copy目标</li>
+<li>将新主节点的ip地址和信息，通过pub&#x2F;sub通知到客户端里去</li>
+<li>继续监视已下线的主节点，如果它复活了，那就将它设置为新主节点的从节点</li>
+</ol>
+<p>步骤一：挑选过程</p>
+<p>先过滤掉网络不健康的从节点，然后三轮考察，一是优先级，二是复制进度，三是ID号</p>
+<p>前两个都是谁大谁win，id号是谁小谁win</p>
+<p>winer出来后，然后向这个「从节点」发送 <strong>SLAVEOF no one</strong> 命令，将这个「从节点」转换为「主节点」</p>
+<p>步骤二：让从节点更改</p>
+<p>哨兵向原从节点发送 slaveof 命令</p>
+<p>步骤三：通知客户的主节点已更换 </p>
+<p>经过前面一系列的操作后，哨兵集群终于完成主从切换的工作，那么新主节点的信息要如何通知给客户端</p>
+<p>呢？ </p>
+<p>这主要通过 Redis 的发布者&#x2F;订阅者机制来实现的。每个哨兵节点提供发布者&#x2F;订阅者机制，客户端可以从哨兵订阅消息。 </p>
+<p>哨兵提供的消息订阅频道有很多，不同频道包含了主从节点切换过程中的不同关键事件，几个常见的事件如下： </p>
+<p><img src="/images/efc76292f199d578dbaaf7a2910eda9d.png"></p>
+<p>客户端和哨兵建立连接后，客户端会订阅哨兵提供的频道。主从切换完成后，哨兵就会向 +switch-master 频道发布新主节点的 IP 地址和端口的消息，这个时候客户端就可以收到这条信息，然后用这里面的新主节点的 IP 地址和端口进行通信了。 </p>
+<p>通过发布者&#x2F;订阅者机制机制，有了这些事件通知，客户端不仅可以在主从切换后得到新主节点的连接信息，还可以监控到主从节点切换过程中发生的各个重要事件。这样，客户端就可以知道主从切换进行到哪一步了，有助于了解切换进度 </p>
+<p>步骤四：将旧主节点变为从节点 </p>
+<p>故障转移操作最后要做的是，继续监视旧主节点，当旧主节点重新上线时，哨兵集群就会向它发送 SLAVEOF 命令，让它成为新主节点的从节点 </p>
+<h2 id="哨兵集群如何组成？"><a href="#哨兵集群如何组成？" class="headerlink" title="哨兵集群如何组成？ "></a><font style="color:rgb(0, 0, 0);">哨兵集群如何组成？ </font></h2><p>在配置哨兵信息的时候，只需要设置这几个参数，主节点名字，主节点的IP地址和端口号以及 qunorum值</p>
+<p>不需要填其他哨兵的信息，哨兵节点之间是通过订阅发现机制来互相发现的</p>
+<p>在主从集群中，主节点上有一个名为 <strong>sentinel</strong>：hello的频道，不同哨兵就是通过它来互相发现的，</p>
+<p>实现互相通信的</p>
+<p>哨兵主节点只要发布信息到到这个频道上，哨兵b,c订阅了这个频道，就可以互相通信了，集群就这样形成了</p>
+<h2 id="哨兵如何知道从节点信息？"><a href="#哨兵如何知道从节点信息？" class="headerlink" title="哨兵如何知道从节点信息？ "></a><font style="color:rgb(0, 0, 0);">哨兵如何知道从节点信息？ </font></h2><p>主节点知道所有从节点的信息，所以从节点每秒10s就向主节点发<font style="color:#DF2A3F;">INFO</font>请求获取所有从节点的信息</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/13/Docker/%E9%95%9C%E5%83%8F/">镜像</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JavaSE/%E5%A4%9A%E6%80%81%E5%8E%9F%E7%90%86/">多态原理</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/25/Codetop%E5%88%B7%E9%A2%98/%E6%A0%91/">树</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/20/MySQL/%E6%9E%B6%E6%9E%84/">架构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/Bean%E6%98%AF%E5%AE%89%E5%85%A8%E7%9A%84%E4%B9%88/">Bean是安全的么</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%88%86%E7%B1%BB/">进程分类</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/24/%E5%AE%9E%E4%B9%A0/%E6%B8%B8%E6%97%8F%E7%BD%91%E7%BB%9C/%E4%BB%BB%E5%8A%A1%E6%9D%A1%E8%AE%BE%E7%BD%AE/">任务条设置</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B8%B8%E8%A7%84/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/">责任链模式</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/10/%E8%AE%A1%E7%BD%91/tcp%E9%82%A3%E4%BA%9B%E4%BA%8B/%E4%B8%8A/">上</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E5%BC%82%E6%AD%A5%E5%8C%96%E8%AE%BE%E8%AE%A1/">异步化设计</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/05/10/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E5%93%A8%E5%85%B5/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/05/10/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E5%93%A8%E5%85%B5/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/05/10/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E5%93%A8%E5%85%B5/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

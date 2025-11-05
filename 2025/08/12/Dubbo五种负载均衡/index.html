@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>Dubbo五种负载均衡 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>Dubbo五种负载均衡</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/08/12/Dubbo%E4%BA%94%E7%A7%8D%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">Dubbo五种负载均衡</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-08-12
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/08/12/Dubbo%E4%BA%94%E7%A7%8D%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">Dubbo五种负载均衡</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-08-12
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="最短响应时间策略："><a href="#最短响应时间策略：" class="headerlink" title="最短响应时间策略："></a>最短响应时间策略：</h2><ol>
+<li>遍历服务提供者，计算每个服务的预计等待时间：<code>(成功总耗时/成功请求数) * 活跃数</code>。</li>
+<li>选择时间最短的服务，若多个则按权重选择，权重相同则随机。</li>
+</ol>
+<h2 id="加权轮询算法"><a href="#加权轮询算法" class="headerlink" title="加权轮询算法"></a>加权轮询算法</h2><p>Dubbo的加权轮询算法经历了三个主要阶段，其演进目标是在保证按权重分配请求的前提下，兼顾性能和请求分布的平滑性。</p>
+<ol>
+<li>Dubbo 2.6.4 版本及之前：存在严重性能问题的朴素实现。</li>
+<li>第一次优化：修复了性能问题，时间复杂度降至O(1)，但请求分布不平滑。</li>
+<li>最终方案（平滑加权轮询）：在保证O(1)时间复杂度的基础上，实现了平滑的请求分布，避免了某个节点短时间内压力激增。</li>
+</ol>
+<p>该算法的灵感来源于Nginx的平滑加权轮询算法。其核心思想是，通过动态调整一个“当前权重”值，让请求能够更均匀地分散到各个节点上，而不是连续地分配给高权重节点。</p>
+<p><font style="color:rgb(0, 0, 0);">对于每一次请求，选择过程如下：</font></p>
+<ol>
+<li><strong><font style="color:rgb(0, 0, 0);">遍历并更新</font></strong><font style="color:rgb(0, 0, 0);">：遍历所有Invoker，将每个Invoker的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;current&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">值加上其固定的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;weight&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">选择最大者</font></strong><font style="color:rgb(0, 0, 0);">：从步骤1更新后的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;current&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">值中，选出最大的一个。该值对应的Invoker即为本次选中的节点。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">调整选中者权重</font></strong><font style="color:rgb(0, 0, 0);">：将</font><strong><font style="color:rgb(0, 0, 0);">选中节点</font></strong><font style="color:rgb(0, 0, 0);">的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;current&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">值减去总权重</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;total&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">返回结果</font></strong><font style="color:rgb(0, 0, 0);">：返回选中的Invoker。</font></li>
+</ol>
+<p><strong><font style="color:rgba(0, 0, 0, 0.4);">关键点</font></strong><font style="color:rgba(0, 0, 0, 0.4);">：第3步“减去总权重”是保证算法能够循环往复、实现平滑的核心。</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 非完整代码，仅为说明算法逻辑</span></span><br><span class="line"><span class="keyword">protected</span> &lt;T&gt; Invoker&lt;T&gt; <span class="title function_">doSelect</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 获取第一个Invoker和它的固定权重</span></span><br><span class="line">    Invoker&lt;T&gt; initInvoker = invokers.get(<span class="number">0</span>);</span><br><span class="line">    <span class="type">int</span> <span class="variable">weight</span> <span class="operator">=</span> getWeight(initInvoker, invocation);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 初始化所有Invoker的当前权重和总权重</span></span><br><span class="line">    <span class="comment">// `weightArray` 是一个数组，保存了每个Invoker的【固定权重】和【当前权重】</span></span><br><span class="line">    <span class="comment">// 这里是为了找到最大的固定权重和总权重</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">totalWeight</span> <span class="operator">=</span> weight;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxWeight</span> <span class="operator">=</span> weight;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; length; i++) &#123;</span><br><span class="line">        weight = getWeight(invokers.get(i), invocation);</span><br><span class="line">        maxWeight = Math.max(maxWeight, weight);</span><br><span class="line">        totalWeight += weight;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 核心算法循环</span></span><br><span class="line">    <span class="comment">// 如果最大权重大于0，且所有Invoker的当前权重不全都相等，进入状态机逻辑</span></span><br><span class="line">    <span class="keyword">if</span> (maxWeight &gt; <span class="number">0</span> &amp;&amp; !sameWeight) &#123;</span><br><span class="line">        <span class="comment">// 状态机模式，循环直到选出一个Invoker</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">            <span class="comment">// 当前索引的Invoker，将其【当前权重】增加【固定权重】</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">current</span> <span class="operator">=</span> weightArray[i].current += weightArray[i].weight;</span><br><span class="line">            <span class="comment">// 如果当前值大于已知最大值，更新最大值和选中的Invoker</span></span><br><span class="line">            <span class="keyword">if</span> (current &gt; maxCurrent) &#123;</span><br><span class="line">                maxCurrent = current;</span><br><span class="line">                selectedInvoker = invokers.get(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 选中后，将【选中Invoker】的【当前权重】减去【总权重】</span></span><br><span class="line">        <span class="comment">// 这是实现平滑的关键步骤！</span></span><br><span class="line">        weightArray[selectedIndex].current -= totalWeight;</span><br><span class="line">        <span class="keyword">return</span> selectedInvoker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4. 如果所有权重相同，则退化为普通轮询</span></span><br><span class="line">    <span class="keyword">return</span> invokers.get(sequence++ % length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(0, 0, 0);">Dubbo的加权轮询负载均衡算法通过三次演进，最终采用了</font><strong><font style="color:rgb(0, 0, 0);">平滑加权轮询算法</font></strong><font style="color:rgb(0, 0, 0);">。该算法通过引入动态的“当前权重”（</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;current&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">），并在每次选中后减去“总权重”（</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;total&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">），巧妙地实现了：</font></p>
+<ol>
+<li><strong><font style="color:rgb(0, 0, 0);">严格按权重分配</font></strong><font style="color:rgb(0, 0, 0);">：在多次请求后，各节点被选中的次数比严格等于其权重比。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">请求分布平滑</font></strong><font style="color:rgb(0, 0, 0);">：高权重节点的请求被分散开，避免了瞬时压力过大。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">高性能</font></strong><font style="color:rgb(0, 0, 0);">：时间复杂度为O(n)，其中n是服务节点数，通常很小，可视为常量级。</font></li>
+</ol>
+<p><font style="color:rgb(0, 0, 0);"></font></p>
+<p><font style="color:rgb(0, 0, 0);"></font></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><strong><font style="color:rgb(0, 0, 0);">原理</font></strong><font style="color:rgb(0, 0, 0);">：</font><ul>
+<li><font style="color:rgb(0, 0, 0);">最短响应时间策略：选择平均响应时间最短的服务，结合权重和活跃数计算预计等待时间。</font></li>
+<li><font style="color:rgb(0, 0, 0);">最小活跃数策略：选择活跃请求数最少的服务，需配合</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;ActiveLimitFilter&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">使用，否则退化为加权随机。</font></li>
+<li><font style="color:rgb(0, 0, 0);">一致性哈希策略：通过哈希环和虚拟节点分布请求，减少节点变动时的数据迁移。</font></li>
+<li><font style="color:rgb(0, 0, 0);">加权轮询策略：请求按权重比例轮流分配，平滑加权算法避免请求集中。</font></li>
+<li><font style="color:rgb(0, 0, 0);">加权随机策略：根据权重设置随机概率，权重越大的服务被选中的概率越高。</font></li>
+</ul>
+</li>
+<li><strong><font style="color:rgb(0, 0, 0);">作用</font></strong><font style="color:rgb(0, 0, 0);">：优化资源利用、提升响应速度、保证高可用性。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">应用场景</font></strong><font style="color:rgb(0, 0, 0);">：</font><ul>
+<li><font style="color:rgb(0, 0, 0);">最短响应时间：适用于对延迟敏感的场景，如实时计算。</font></li>
+<li><font style="color:rgb(0, 0, 0);">最小活跃数：适合处理时间差异大的服务，如慢查询优化。</font></li>
+<li><font style="color:rgb(0, 0, 0);">一致性哈希：需要会话保持或顺序处理的场景，如缓存分片。</font></li>
+<li><font style="color:rgb(0, 0, 0);">加权轮询&#x2F;随机：服务器性能不均时，按权重分配负载。</font></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/30/claude%20code%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">claude code使用技巧</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/12/JUC/%E6%89%8B%E5%86%99%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%E7%B1%BB/">手写并发任务编排工具类</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/13/JavaSE/switch%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">switch时间复杂度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/explain/">explain</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/20/MySQL/limit/">limit</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/13/MySQL/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%AB%E8%A1%A8%E4%BB%BB%E5%8A%A1%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E5%87%BA%E7%8E%B0%E6%AD%BB%E5%BE%AA%E7%8E%AF/">数据库扫表任务如何避免出现死循环</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">Bean的生命周期</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A6%9C%E5%8D%95%E9%97%AE%E9%A2%98%E4%B9%8B%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%20+%20zset%20+%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%96%B9%E6%A1%88/">Redis 数据结构：榜单问题之本地缓存 + zset + 定时任务方案</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">Linux内存管理</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/10/Redis/%E8%BF%87%E6%9C%9Fkey%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/Redis%E4%B8%AD%E6%9C%89%E4%B8%80%E6%89%B9key%E7%9E%AC%E9%97%B4%E8%BF%87%E6%9C%9F%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%85%B6%E5%AE%83key%E7%9A%84%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E4%BC%9A%E9%99%8D%E4%BD%8E%EF%BC%9F/">Redis中有一批key瞬间过期，为什么其它key的读写效率会降低？</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/08/12/Dubbo%E4%BA%94%E7%A7%8D%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/08/12/Dubbo%E4%BA%94%E7%A7%8D%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/08/12/Dubbo%E4%BA%94%E7%A7%8D%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

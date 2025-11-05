@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>Spring循环依赖问题 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>Spring循环依赖问题</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/04/25/Spring/Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/">Spring循环依赖问题</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-04-25
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/04/25/Spring/Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/">Spring循环依赖问题</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-04-25
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="解决思想"><a href="#解决思想" class="headerlink" title="解决思想"></a>解决思想</h2><p><img src="/images/a2b7317ec738eba0bee73d5c21d51723.jpeg"></p>
+<p>提供一个另外思考的视角，Spring 解决循环依赖的做法是 【图论环检测】 的经典实践。 依赖关系可以表示为一个有向图，Cat -&gt; Dog -&gt; Cat 的依赖关系可以表示为一个【有向图】 ，Bean是怕【顶点】， 依赖关系是【边】。Spring在createBean时会递归构建依赖图 （深度优先遍历DFS) , 如果发现当前路径中某个Bean正在创建中（即存在“正在创建”的顶点被重复访问），则判定存在环 【环检测】 。简化做法是采用二级缓存来获取 Cat 的引用 【在图中引入一个虚拟顶点】， 将环拆解为链式依赖 ，从而避免了无限递归。当所有依赖注入完成，再将真实顶点替换虚拟顶点。故视频中的loadingIoc缓存是用于存放虚拟顶点进行环检测的集合容器，ioc是存放真实顶点的集合容器。</p>
+<h2 id="Spring的落地实践解决循环依赖"><a href="#Spring的落地实践解决循环依赖" class="headerlink" title="Spring的落地实践解决循环依赖"></a>Spring的落地实践解决循环依赖</h2><p>Spring中存在三层缓存，就对于单例对象来说</p>
+<ul>
+<li>第一层缓存：单例对象缓存池，已经实例化并且属性赋值，这里的对象是<strong>成熟对象</strong></li>
+<li>第二层缓存：单例对象缓存池，已经实例化但还没进行属性set，这里的对象是半成品对象</li>
+<li>第三层缓存：单例工厂的缓存，里面存放的是工厂对象，实际上是一串lambda表达式，每个工厂都可以创建对应的bean，eg：private Map&lt;String, Supplier<Object>&gt; singletonFactories &#x3D; new HashMap&lt;&gt;();</li>
+</ul>
+<p>Spring生成Bean的流程</p>
+<p>假设A和B 发生了循环依赖</p>
+<p>起点：先初始化A</p>
+<ol>
+<li>先往creatingSet集合（一个set集合，用于存放正在被创建的bean，便于后续判断是否发生了循环依赖）里放入A</li>
+<li>一级缓存找不到A，<strong>那么就通过无参构造化实例化A，将和A有关的一串lambda表达式放入三级缓存（此时A的实例化和属性注入就已经分离开了）</strong>，set属性注入 B</li>
+<li>creatingSet里找不到B，此时还不知道出现了循环依赖，就去一级缓存找B，找不到，就往creatingSet里找B。通过无参构造实例化B，将和B有关的一串lambda表达式放入三级缓存，进行set属性注入A </li>
+<li>通过creatingSet发现了A，就知道<strong>发生了循环依赖</strong>，然后这时候就会去<strong>二级缓存寻找</strong>，没找到，去三级缓存找，找到有关A的lambda表达式，执行lambda<ul>
+<li>如果A需要被AOP，则此时提前对其进行AOP（正常的bean周期应该是初始化后才AOP的），<strong>将AOP的代理对象放入二级缓存</strong>，并从三级缓存中删除（这样能保证你AOP出来的代理对象是单例的，也就是说你这个lambda表达式是一次性的，同时是会加锁的保证线程安全），并将代理对象放入<strong>earlyProxyReference</strong>（用于存储哪些对象提前AOP了，后续有用）</li>
+<li>如果A不需要AOP，则<strong>生成A的普通对象并放入二级缓存</strong>，并从三级缓存中删除</li>
+</ul>
+</li>
+<li>OK此时B是已经拿到对象A了（可能是proxy的，也可能是普通的）进行set注入，进行B的其他Bean的声明周期，当Bean成熟之后放入一级缓存，移除二、三级缓存（实际上此时二级缓存中没有B，三级缓存中有B）</li>
+<li>此时返回A的初始化过程，A就拿到了B的成熟对象，set注入A中。然后进行A的其他Bean的声明周期</li>
+<li>A的其他生命周期包括AOP（是在BeanPostProcessor的after方法执行的），但这时候A可能在lambda表达式那里就提前AOP了，这就需要通过earlyProxyReference判断A是否提前AOP了，即A存不存在。防止重复AOP</li>
+<li>将成熟的A放入1缓存，同时删除2,3缓存（实际此时三级缓存已经没有A了，在第4步已经被移除了）</li>
+</ol>
+<p>如果A和B发生了循环依赖，然后发现A和C又发生了循环依赖</p>
+<p>A和B走完流程要注入C，此时二级缓存其实是有A了，C就直接从二级缓存里拿A set就好了，重复A和B的流</p>
+<p>程</p>
+<p>各级缓存的作用： </p>
+<ol>
+<li>一级缓存就是用来保存Bean单例的，也就是我们getBean的源头</li>
+<li>二级缓存用来保证Bean是单例的。因为你三级缓存lambda是一次性消耗品，因此只会生成一份Bean。那么这个生成的半成品Bean就先放入二级缓存。用于存放提前曝光的不成熟的bean</li>
+<li>三级缓存则是用来打破循环依赖并出现AOP的情况下的循环依赖的。当发生循环依赖时，可以保证你一定是能从三级缓存获取到Bean的（因为三级缓存都是会在Bean实例化同时存入lambda表达式的）。通过三级缓存，我们可以生成半成品的普通Bean或者proxybean。然后再放入二级缓存，然后把三级缓存删掉，这样能保证Bean是单例的</li>
+</ol>
+<p>一级缓存能解决循环依赖吗？ </p>
+<p>可以解决普通的循环依赖。但把半成品和完全品都放入一个集合里不是很优雅。AOP的循环依赖没法解决</p>
+<p>可不可以使用一、二级缓存解决循环依赖？ </p>
+<p>可以，但这样如果出现AOP的话，在对象实例化时就要完成AOP代理，生成代理对象，再进行属性注入，即先创建代理对象，再对代理对象进行属性注入，这与Spring设计理念中“将Bean的初始化和代理解耦”是不符的 </p>
+<p>那么就可以通过三级缓存中的lambda判断，只有当出现AOP + 循环依赖的时候，才提前创建代理对象，然后进行依赖注入初始化，否则创建普通对象，走正常的Bean生命周期 </p>
+<p>可不可以使用一、三级缓存解决循环依赖？ </p>
+<p>不可以。因为你用三级缓存这套东西的话就说明你的bean是单例的，也就是每次产出半成品都会删除。那这</p>
+<p>样的话，你每次都会重新去放入lambda表达式，每次出来的半成品都不是同一个。当出现A与B发生循环依</p>
+<p>赖，A与C也发生循环依赖的这种情况，B中的A和C中的A就不是同一个了。必须让三级缓存是单例的，且半</p>
+<p>成品对象必须得找个地方存，这个地方就是二级缓存</p>
+<p>Spring如何解决循环依赖？ </p>
+<p>creatingSet（判断是否存在循环依赖）+三级缓存（解决循环依赖问题）+</p>
+<p>earlyProxyReference（防止解决循环依赖的过程中重复AOP）</p>
+<p>哪些循环依赖默认情况下无法解决？ </p>
+<ol>
+<li>构造注入下的循环依赖，因为构造注入是要求强制注入的</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> B b;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    A(B b) &#123;  <span class="comment">// 构造器注入</span></span><br><span class="line">        <span class="built_in">this</span>.b = b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">如果没有 B，<span class="type">A</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">A</span>(<span class="literal">null</span>); 都过不去（<span class="keyword">final</span> 成员必须赋值）。</span><br><span class="line"></span><br><span class="line">👉 在 对象创建的一瞬间 就要保证依赖存在。</span><br><span class="line"></span><br><span class="line">没有任何缓冲空间，所以是 强制注入。</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>两个都是多例对象，因为多例对象根本就没三级缓存这一说，每次getbean都会执行一次构造方法并给属性赋值</li>
+</ol>
+<p>其它循环依赖如何解决： 	</p>
+<p>@Lazy：</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/RabbitMQ/%E9%AB%98%E5%8F%AF%E7%94%A8/">高可用</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/">注入方式</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/07/mongodb/spring%20mongodb%20converter/">spring mongodb converter</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%88%86%E7%B1%BB/">进程分类</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E8%A1%A8%E7%BA%A7%E9%94%81/">表级锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/AOF%20%E5%92%8C%20RDB/">AOF 和 RDB</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5/">缓存更新策略</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%9A%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE/">为什么做这个项目</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE/">线程池参数设置</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%A1%B9%E7%9B%AE%E6%A8%A1%E5%9D%97/">项目模块</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/04/25/Spring/Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/25/Spring/Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/25/Spring/Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

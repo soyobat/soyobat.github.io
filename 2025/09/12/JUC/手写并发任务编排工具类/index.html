@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>手写并发任务编排工具类 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>手写并发任务编排工具类</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/12/JUC/%E6%89%8B%E5%86%99%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%E7%B1%BB/">手写并发任务编排工具类</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-12
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/12/JUC/%E6%89%8B%E5%86%99%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%E7%B1%BB/">手写并发任务编排工具类</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-12
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><h3 id="并发场景可能存在的需求-每个执行结果的回调"><a href="#并发场景可能存在的需求-每个执行结果的回调" class="headerlink" title="并发场景可能存在的需求-每个执行结果的回调"></a><font style="color:rgb(79, 79, 79);">并发场景可能存在的需求-每个执行结果的回调</font></h3><p>CompleteableFuture大家都用过，里面有supply、then、combine、allOf等等方法，都可以用来接收一个任务，最终将多个任务汇总成一个结果。</p>
+<p>但有一个问题，你supply一个任务后，这个任务就黑盒了。如果你编排了很多个任务，每一个任务的执行情况，执行到哪一步了，每一步的执行结果情况，我们是不知道的。只能等它最终执行完毕后，最后汇总结果。</p>
+<p><strong>一个并行框架，它最好是对每一步的执行都能监控。每一步的执行结果，无论成功与失败，它应该有个回调，才算完整。拥有回调的任务，可以监控任务的执行状况，如果执行失败、超时，可以记录异常信息或者处理个性化的默认值。</strong></p>
+<p>CompleteableFuture中也有一些回调方法，例如：thenAccept()，whenComplete()，handle()，exceptionally()等，这些方法也能支持任务的回调，但是前提是任务执行了，才能完成回调。在某些场景中，有些任务单元是可能被SKIP跳过不执行的，不执行的任务也应该有回调。</p>
+<h3 id="并发场景可能存在的需求-依赖上游的执行结果作为入参"><a href="#并发场景可能存在的需求-依赖上游的执行结果作为入参" class="headerlink" title="并发场景可能存在的需求-依赖上游的执行结果作为入参"></a><font style="color:rgb(79, 79, 79);">并发场景可能存在的需求-依赖上游的执行结果作为入参</font></h3><p>future1.thenCompose(f2,()-&gt;xxx)</p>
+<p>下游依赖于上游的结果</p>
+<h3 id="并发场景可能存在的需求-全组任务的超时"><a href="#并发场景可能存在的需求-全组任务的超时" class="headerlink" title="并发场景可能存在的需求-全组任务的超时"></a><font style="color:rgb(79, 79, 79);">并发场景可能存在的需求-全组任务的超时</font></h3><p><font style="color:rgb(77, 77, 77);">一组任务，虽然内部的各个执行单元的时间不可控，但是可以控制全组的执行时间不超过某个值。通过设置timeOut，来控制全组的执行阈值。</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CompletableFuture.allOf(futures).get(timeout, TimeUnit.MILLISECONDS);</span><br></pre></td></tr></table></figure>
+
+<h3 id="并发场景可能存在的需求-高性能、低线程数"><a href="#并发场景可能存在的需求-高性能、低线程数" class="headerlink" title="并发场景可能存在的需求-高性能、低线程数"></a><font style="color:rgb(79, 79, 79);">并发场景可能存在的需求-高性能、低线程数</font></h3><p>复用线程</p>
+<p><img src="/images/e9c19d62b0544bc231c2a3567063e231.png"></p>
+<p><font style="color:rgb(77, 77, 77);">该框架全程无锁，没有一个加锁的地方。</font></p>
+<p><font style="color:rgb(77, 77, 77);">创建线程量少。如上图④中场景。A会运行在B、C执行更慢的那个单元的线程上，而不会额外创建线程。</font></p>
+<p><font style="color:rgb(77, 77, 77);"></font></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><font style="color:rgb(77, 77, 77);">总结</font></h2><p>一个并发框架可能需要具备哪些能力？</p>
+<p>1、提供任何形式的串行、并行执行单元的组合</p>
+<p>2、为每个执行单元提供执行成功、失败、超时、异常的回调</p>
+<p>3、支持为单个执行单元设置异常、失败后的默认值</p>
+<p>4、支持为整个group（多个任意组合的执行单元）设置超时时间。单个执行单元失败，不影响其他单元的回调和最终结果获取。如果自己依赖的任务失败，则自己也失败，并返回默认值。</p>
+<p>5、整个group执行完毕或超时后，同步阻塞返回所有执行单元结果集，按添加的顺序返回list。也支持整个group的异步回调不阻塞主线程</p>
+<p>6、支持每个group独享线程池，或所有group共享线程池（默认）</p>
+<h2 id="异步回调如何实现"><a href="#异步回调如何实现" class="headerlink" title="异步回调如何实现"></a>异步回调如何实现</h2><p>上面我们总结了多线程的编排场景及实现，以及并发场景的一些潜在需求及实现。</p>
+<p>该框架的难点和重点，主要有两点，分别是任务的<strong>顺序编排</strong>和<strong>任务结果的回调</strong>。</p>
+<p>回调是个很有用的模式，譬如我的主线程执行过程中，要执行一个非常耗时的逻辑。为了不阻塞主线程，自然我们会想到用异步的形式去执行这个耗时逻辑，新建个线程，让这个耗时的逻辑在线程中执行，不阻塞主线程。但问题来了，异步执行没毛病，执行成功、失败后出结果了，该怎么通知主线程？</p>
+<h3 id="4-1、CompletableFuture的回调"><a href="#4-1、CompletableFuture的回调" class="headerlink" title="4.1、CompletableFuture的回调"></a>4.1、CompletableFuture的回调</h3><p>CompletableFuture提供了许多回调的方法，例如：thenAccept()，whenComplete()，handle()，exceptionally()等。下面列举一些比较常用的回调方法，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.计算结果完成，或者异常时执行给定action(当前线程执行)</span></span><br><span class="line">CompletableFuture&lt;T&gt; <span class="title function_">whenComplete</span><span class="params">(BiConsumer&lt;? <span class="built_in">super</span> T, ? <span class="built_in">super</span> Throwable&gt; action)</span>;</span><br><span class="line"><span class="comment">//2.计算结果完成，或者异常时执行给定action（另起线程执行）</span></span><br><span class="line">CompletableFuture&lt;T&gt; <span class="title function_">whenCompleteAsync</span><span class="params">(BiConsumer&lt;? <span class="built_in">super</span> T, ? <span class="built_in">super</span> Throwable&gt; action)</span>;</span><br><span class="line"><span class="comment">//3.执行完成时对结果进行处理，还可以处理异常</span></span><br><span class="line">&lt;U&gt; CompletableFuture&lt;U&gt; <span class="title function_">handle</span><span class="params">(BiFunction&lt;? <span class="built_in">super</span> T, Throwable, ? extends U&gt; fn)</span></span><br><span class="line"><span class="comment">//4.异常时，返回指定结果</span></span><br><span class="line">CompletableFuture&lt;T&gt; <span class="title function_">exceptionally</span><span class="params">(Function&lt;Throwable, ? extends T&gt; fn)</span></span><br></pre></td></tr></table></figure>
+
+<p>CompleteableFuture提供的回调方法，这些方法也能支持任务的回调，但是前提是任务执行了，才能完成回调。在某些场景中，有些任务单元是可能被SKIP跳过不执行的，不执行的任务也应该有回调。</p>
+<h3 id="4-2、Netty-future中的回调"><a href="#4-2、Netty-future中的回调" class="headerlink" title="4.2、Netty future中的回调"></a>4.2、Netty future中的回调</h3><p>Netty中的回调是非常多的。netty中的future，可以添加Listener，当异步任务执行完毕后，主动回调一下自己就可以了。</p>
+<p>整个netty里面大量充斥着类似的回调，但是如果我们要用，仅仅是针对一个或多个异步任务，希望能有个类似的回调，netty就帮不上忙了。</p>
+<p>Netty回调的伪代码：其中doSomething是在异步线程里，而回调是在主线程里的。（回调代码是在主线程，回调任务实际是在异步线程里执行的）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//主线程</span></span><br><span class="line">main &#123;</span><br><span class="line">  <span class="comment">//doSomething是在异步线程里，回调是在主线程</span></span><br><span class="line">  doSomething().async().addListener(<span class="keyword">new</span> <span class="title class_">Listener</span>()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">complete</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">      <span class="comment">//do your job</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3、如何自己实现一个简单回调的异步任务"><a href="#4-3、如何自己实现一个简单回调的异步任务" class="headerlink" title="4.3、如何自己实现一个简单回调的异步任务"></a><font style="color:rgb(79, 79, 79);">4.3、如何自己实现一个简单回调的异步任务</font></h3><p>首先我们有这么一个需求，有N个耗时任务，可能是IO任务，我们希望他执行时不会阻塞主线程，<font style="color:rgb(77, 77, 77);">而期望它执行完毕（成功\失败）后，来发起一次回调，最好还有超时、异常的回调控制。</font></p>
+<p><font style="color:rgb(77, 77, 77);">我们可以有这样的角色：</font></p>
+<ol>
+<li>Bootstrap主线程</li>
+<li>worker 任务</li>
+<li>listener 监听器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.soyo.simple;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>: lkl</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span>: 2025/9/12 22:24</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Bootstrap</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Bootstrap</span> <span class="variable">bootstrap</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Bootstrap</span>();</span><br><span class="line">        <span class="type">Worker</span> <span class="variable">worker</span> <span class="operator">=</span> bootstrap.newWorker();</span><br><span class="line"></span><br><span class="line">        <span class="type">Wrapper</span> <span class="variable">wrapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Wrapper</span>();</span><br><span class="line">        wrapper.setWorker(worker);</span><br><span class="line">        wrapper.setParam(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2.回调方法，输出worker中的内容</span></span><br><span class="line">        bootstrap.doWorker(wrapper).addListener(<span class="keyword">new</span> <span class="title class_">Listener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">callback</span><span class="params">(Object result)</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName());</span><br><span class="line">                System.out.println(result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//1.主线程不阻塞，打印当前线程</span></span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Wrapper <span class="title function_">doWorker</span><span class="params">(Wrapper wrapper)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="type">Worker</span> <span class="variable">worker</span> <span class="operator">=</span> wrapper.getWorker();</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> worker.action(wrapper.getParam());</span><br><span class="line">            wrapper.getListener().callback(result);</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> wrapper;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Worker <span class="title function_">newWorker</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Worker</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> String <span class="title function_">action</span><span class="params">(String obj)</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> obj + <span class="string">&quot; callback!&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h3 id="核心线程数为0的线程池"><a href="#核心线程数为0的线程池" class="headerlink" title="核心线程数为0的线程池"></a>核心线程数为0的线程池</h3><p>作者在issue上推荐一个tomcat只使用一个不定长线程池。</p>
+<p>AsyncTool关于多线程并发执行的问题。如果不指定线程池，默认使用不定长线程池。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title function_">newCachedThreadPool</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                  <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> <span class="title class_">SynchronousQueue</span>&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>注意，newCachedThreadPool() 它的核心线程数是0，最大线程数是Integer.MAX_VALUE。可以说它的线程数是可以无限扩大的线程池。</p>
+<p>他使用的队列是没有存储空间的，只要请求过来了，如果没有空闲线程，就会创建一个新的线程。</p>
+<p>这种不定长线程池，适合处理执行时间比较短的任务。在高并发下，如果在耗时长的RPC\IO操作中使用该线程池，势必会造成系统 线程爆炸。</p>
+<p>AsyncTool作者在京东使用的场景多数为低耗时（10ms）高并发，瞬间冲击的场景。这种高并发，且任务耗时较少的，适合使用不定长线程池。</p>
+<p>但是这种低耗时的场景也不多，对于耗时较长的场景，推荐使用自定义线程池，可以避免那些耗时长的任务长时间占用线程，造成线程 ”爆炸 “，容错率更高。</p>
+<p>总结：</p>
+<ul>
+<li><code>**newCachedThreadPool**</code>** 特性**：核心线程数 0，最大线程数无限，队列无缓存 → 任务一来没线程就新建线程。</li>
+<li><strong>适合短耗时任务</strong>：任务执行快，线程能很快释放和复用，高并发时能快速扩容，冲击过去后线程又能被回收，不会长期暴涨。</li>
+<li><strong>不适合长耗时任务</strong>：线程长时间被占用，新任务只能不断新建线程，最终线程数“爆炸”，导致内存和 CPU 切换压力过大，系统崩溃。</li>
+<li><strong>结论</strong>：短平快的高并发任务用不定长线程池；耗时任务必须用自定义线程池（限制核心数、最大数和队列），避免线程无限增长。</li>
+</ul>
+<p><strong>短耗时 + 高并发场景 → 秒杀下单接口</strong></p>
+<ul>
+<li>用户在 11.11 秒杀活动一开始，会有 <strong>瞬间几十万请求</strong>冲进来。</li>
+<li>每个请求要做的事情很简单：<ul>
+<li>校验库存（内存中或 Redis 中）</li>
+<li>扣减库存标记</li>
+<li>返回“抢购成功&#x2F;失败”结果</li>
+</ul>
+</li>
+<li>整个处理逻辑可能只需要 <strong>5~10ms</strong>。</li>
+</ul>
+<p>在这种场景下：</p>
+<ul>
+<li>请求量短时间非常大 → 需要线程池快速扩容，防止请求被阻塞。</li>
+<li>每个任务很快执行完 → 线程会迅速释放，可以被复用，不会造成线程无限积压。</li>
+<li>高峰一过，线程池里的线程就会在 60s 内回收 → 节省资源。</li>
+</ul>
+<p>👉 所以 <code>newCachedThreadPool</code> 就特别适合这种“短平快、高并发、瞬时冲击”的场景。</p>
+<p>而且双11这种平台肯定是希望用户请求在机器不会崩的情况下流量越多越好，因为下单的单数越多，那么平台赚得越多</p>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2>
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JUC/CopyOnWrite/">CopyOnWrite</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/05/JavaSE/%E4%BD%A0%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3OOP/">你如何理解OOP</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/groupby/">groupby</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JVM/%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/">内存结构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/08/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/MySQL/SQL%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/select/">select</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E8%A1%8C%E7%BA%A7%E9%94%81/">行级锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/07/%E5%9C%BA%E6%99%AF%E9%A2%98/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%82%B9%E8%B5%9E/">点赞</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/14/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AE%BE%E8%AE%A1/">过滤器设计</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/12/JUC/%E6%89%8B%E5%86%99%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%E7%B1%BB/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/12/JUC/%E6%89%8B%E5%86%99%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%E7%B1%BB/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/12/JUC/%E6%89%8B%E5%86%99%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%E7%B1%BB/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

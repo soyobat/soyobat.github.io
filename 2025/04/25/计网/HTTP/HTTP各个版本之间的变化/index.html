@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>HTTP各个版本之间的变化 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>HTTP各个版本之间的变化</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/04/25/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%90%84%E4%B8%AA%E7%89%88%E6%9C%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8F%98%E5%8C%96/">HTTP各个版本之间的变化</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-04-25
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/04/25/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%90%84%E4%B8%AA%E7%89%88%E6%9C%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8F%98%E5%8C%96/">HTTP各个版本之间的变化</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-04-25
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="1-0和1-1"><a href="#1-0和1-1" class="headerlink" title="1.0和1.1"></a>1.0和1.1</h2><p><font style="color:rgb(31, 41, 55);">HTTP&#x2F;1.1相比HTTP&#x2F;1.0带来了多项改进：</font></p>
+<p><font style="color:rgb(31, 41, 55);">首先，HTTP&#x2F;1.1默认启用长连接，减少了TCP握手的开销，这对于频繁交互的应用尤其重要。</font></p>
+<p><font style="color:rgb(31, 41, 55);">其次，在缓存控制方面，HTTP&#x2F;1.1提供了更精细的Cache-Control头部，使得缓存管理更加灵活。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第三 HTTP&#x2F;1.1 通过引入Host头部，支持虚拟主机，这使得多个网站可以共享同一服务器资源，降低了成本。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第四在错误处理方面，HTTP&#x2F;1.1引入了更详细的错误状态码和描述，便于开发者定位和解决问题。</font></p>
+<p><font style="color:rgb(31, 41, 55);">这些改进使得HTTP&#x2F;1.1 的网络通信得到了极大的提升。</font></p>
+<p><font style="color:rgb(31, 41, 55);"></font></p>
+<p><font style="color:rgb(31, 41, 55);">但是 HTTP 1.1 虽然有了很多改进，但是这并不是终点，因为 HTTP 1.1 依旧有很多缺点。</font></p>
+<p><font style="color:rgb(31, 41, 55);">最显著的缺点就是请求阻塞，也就是当一个请求在等待服务器响应时，后续请求必须等待，即使它们与前面的请求无关。这导致了队头阻塞，降低了性能。</font></p>
+<p><font style="color:rgb(31, 41, 55);">此外还有头部数据量太大，高并发下长连接容易成为性能瓶颈，并且 HTTP 1.1 是明文传输，不支持服务端主动发送数据等缺点。</font></p>
+<p><font style="color:rgb(31, 41, 55);">所以在后续又引入了 HTTP 2.0，而 HTTP 2.0 则是进一步引入了多路复用，头部压缩 和服务器推送等功能，解决了 HTTP 1.1 的缺点。</font></p>
+<p><font style="color:rgb(31, 41, 55);"></font></p>
+<h2 id="1-1和2"><a href="#1-1和2" class="headerlink" title="1.1和2"></a><font style="color:rgb(31, 41, 55);">1.1和2</font></h2><p>HTTP&#x2F;2.0相比HTTP&#x2F;1.1带来了多项性能优化和效率提升。</p>
+<p>首先，HTTP&#x2F;2.0支持多路复用，允许在单个连接中同时发送多个请求和响应，解决了HTTP&#x2F;1.1中的队头阻塞问题。</p>
+<p>其次，HTTP&#x2F;2.0使用HPACK算法压缩请求和响应的头部，减少了冗余数据，提高了传输效率。</p>
+<p>第三，HTTP&#x2F;2.0引入了二进制分帧层，将HTTP消息分解为独立的帧，提高了数据传输的效率和解析速度。</p>
+<p>第四，HTTP&#x2F;2.0还允许服务器主动向客户端推送资源，减少了客户端需要发送的请求数量，提高了页面加载速度。</p>
+<p>最后，HTTP&#x2F;2.0要求使用TLS进行加密传输，增强了安全性，防止了中间人攻击。</p>
+<p>这些改进使得HTTP&#x2F;2.0成为现代网络应用的首选协议。</p>
+<p>HTTP&#x2F;2.0虽大幅提升了性能，但仍存在依赖TCP导致的建连延迟和队头阻塞问题，且头部压缩复杂、明文传输风险未根除。</p>
+<p>而HTTP&#x2F;3.0基于QUIC协议，运行在UDP上，实现更快的建连和彻底解决队头阻塞，采用更高效的QPACK头部压缩，并强制TLS加密，全面提升了传输效率和安全性。</p>
+<h2 id="2和3"><a href="#2和3" class="headerlink" title="2和3"></a>2和3</h2><p>HTTP&#x2F;2.0 和 HTTP&#x2F;3.0 的区别，主要集中在底层协议、并行传输能力、握手效率、头部压缩、网络适应性等层面。</p>
+<p>HTTP&#x2F;2.0 是基于 TCP 的，一旦某个数据包丢失就必须等重传，这会造成整个连接里的所有数据流都被阻塞，也就是所谓的队头阻塞问题。HTTP&#x2F;3.0 用的是基于 UDP 的 QUIC 协议，可以把每个数据流都独立分配 ID，只要某个流丢包，就只重传那个流，不会拖慢其它流，这在高丢包或弱网环境下会表现得更好。</p>
+<p>HTTP&#x2F;2.0 需要先完成 TCP 三次握手，然后再进行 TLS 握手，如果要恢复会话，也会多一次 RTT。而 QUIC 把传输层和加密层放在一起，相当于只需要一次握手就能建立安全连接，比 HTTP&#x2F;2.0 快了大约一半。更进一步，QUIC 还支持 0-RTT 恢复，如果客户端保存过相关密钥信息，重连时几乎可以立刻发送数据，尤其在网络波动或需要频繁断网重连的场景下非常有效。不过，要注意 0-RTT 可能带来重放攻击风险，服务端通常要配合额外的安全逻辑做校验。</p>
+<p>HTTP&#x2F;2.0 使用 HPACK 来压缩头部，但它依赖顺序传输，对网络乱序的容忍度不高。而 HTTP&#x2F;3.0 则是用 QPACK，在无序或丢包的条件下也能更好地解码头部，减少了因为乱序导致的性能损耗。</p>
+<p>得益于QUIC使得HTTP&#x2F;3.0在网络适应性上也更突出，它通过 Connection ID 来标识连接，这意味着用户从 Wi-Fi 切到蜂窝网络时，只要保持同一个 Connection ID，连接就能平滑迁移，不用重新握手下载证书。移动端在遇到丢包高或延迟大的情况时，QUIC 的拥塞控制也能更适配弱网环境，实现更流畅的体验。</p>
+<p>总而言之，HTTP&#x2F;3.0 的确代表了未来的发展趋势，但如何在实际项目里落地，依然要根据网络环境和服务端能力做通盘考虑。如果是固定网络而且丢包率不高，现有的 HTTP&#x2F;2.0 完全能满足需求。如果业务对实时性要求很高，用户网络情况又比较复杂，比如移动端场景、大规模跨区访问或者弱网环境，HTTP&#x2F;3.0 可以显著改善访问体验。不过在企业内网或对兼容性要求极高的场合，最好采用双协议或者逐步升级的方案，避免因为 UDP 流量受限或中间设备不兼容而导致服务不可用。</p>
+<h2 id="http和https"><a href="#http和https" class="headerlink" title="http和https"></a>http和https</h2><p><font style="color:rgb(31, 41, 55);">HTTP与HTTPS的</font><strong><font style="color:rgb(17, 24, 39);">主要区别在于安全性和数据传输的可靠性</font></strong><font style="color:rgb(31, 41, 55);">。</font></p>
+<p><font style="color:rgb(31, 41, 55);">HTTP使用明文传输数据，容易受到中间人攻击，数据可能被窃听或篡改。而HTTPS在HTTP基础上增加了TLS协议，对数据进行加密传输，确保了数据的安全性和完整性，需要使用数字证书来验证服务器身份</font></p>
+<p><font style="color:rgb(31, 41, 55);">虽然HTTPS的加密和解密过程会增加一定的延迟，但现代硬件和优化技术已大幅减少了这种影响。此外，HTTPS有助于提高搜索引擎排名，浏览器显示安全锁标志，增强用户信任。</font></p>
+<p><font style="color:rgb(31, 41, 55);">在实际应用中，尤其是在处理敏感信息如登录凭据、支付信息的场景下，HTTPS是必不可少的。通过使用HTTP&#x2F;2.0和优化TLS配置，可以进一步减少性能开销。</font></p>
+<p><font style="color:rgb(31, 41, 55);">随着互联网安全重要性的提升，HTTPS已成为现代网络应用的标配。</font></p>
+<blockquote>
+<h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">简述</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">安全，安全，还是 TMD 安全；1</font></p>
+</blockquote>
+<p><font style="color:rgb(31, 41, 55);">HTTPS相比HTTP，在通信步骤中显著增加了TLS握手、证书验证和密钥交换等关键步骤。</font></p>
+<p><font style="color:rgb(31, 41, 55);">具体而言，HTTPS在建立TCP连接后，首先进行TLS握手，客户端发送支持的TLS版本、加密方法和随机数，服务器回应并附上服务器证书；</font></p>
+<p><font style="color:rgb(31, 41, 55);">接着，客户端验证证书合法性，确保通信对方可信；</font></p>
+<p><font style="color:rgb(31, 41, 55);">随后，双方协商生成会话密钥，用于后续数据的加密传输。</font></p>
+<p><font style="color:rgb(31, 41, 55);">这些额外步骤不仅确保了数据的安全性和完整性，还验证了通信双方的身份，显著提升了安全性。</font></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/count/">count</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/">注入方式</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E5%8E%9F%E5%88%99/">最左前缀原则</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E5%85%A8%E5%B1%80%E9%94%81/">全局锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">DNS</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/06/03/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B/">TCP三次握手</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/tcp%E5%9F%BA%E7%A1%80/">tcp基础</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E5%B8%82%E9%9D%A2%E4%B8%8A%E5%B8%B8%E8%A7%81%E7%BD%91%E5%85%B3/">市面上常见网关</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%B0%83%E7%A0%94/">调研</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/04/25/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%90%84%E4%B8%AA%E7%89%88%E6%9C%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8F%98%E5%8C%96/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/25/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%90%84%E4%B8%AA%E7%89%88%E6%9C%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8F%98%E5%8C%96/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/25/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%90%84%E4%B8%AA%E7%89%88%E6%9C%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8F%98%E5%8C%96/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

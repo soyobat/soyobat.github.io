@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>MySQL的varchar(50)和varchar(500)区别? | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>MySQL的varchar(50)和varchar(500)区别?</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/10/13/MySQL/MySQL%E7%9A%84varchar(50)%E5%92%8Cvarchar(500)%E5%8C%BA%E5%88%AB/">MySQL的varchar(50)和varchar(500)区别?</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-10-13
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/10/13/MySQL/MySQL%E7%9A%84varchar(50)%E5%92%8Cvarchar(500)%E5%8C%BA%E5%88%AB/">MySQL的varchar(50)和varchar(500)区别?</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-10-13
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7350228838151847976">https://juejin.cn/post/7350228838151847976</a></p>
+<p>这个的话，如果说是磁盘占用其实都是一样的，比如说你一个字段为20，那么磁盘所占用的一定是20</p>
+<p>但如果从内存占用来说，这两个就有比较大的区别的了。你把这个字段读到内存时，为这个字段申请的内存是根据varchar（xx）这东西来确定的，因为我们操作系统本身为数据申请内存，都有预申请的一个过程，一次申请多少呢。</p>
+<p><strong><font style="color:rgb(0, 0, 0);">总结的核心结论：</font></strong></p>
+<ul>
+<li><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">的“可变长度”特性主要体现在</font><strong><font style="color:rgb(0, 0, 0);">磁盘存储</font></strong><font style="color:rgb(0, 0, 0);">上，使其能节省空间。</font></li>
+<li><font style="color:rgb(0, 0, 0);">在</font><strong><font style="color:rgb(0, 0, 0);">内存</font></strong><font style="color:rgb(0, 0, 0);">中，为了性能和简化数据读取流程，MySQL 会为</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">列</font><strong><font style="color:rgb(0, 0, 0);">预先分配其定义的最大长度 (</font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">) 所需的空间</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">这种内存分配机制意味着</font><strong><font style="color:rgb(0, 0, 0);">过度定义</font>****<font style="color:rgb(0, 0, 0);"> </font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">的最大长度 (</font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">) 会直接导致内存浪费</font></strong><font style="color:rgb(0, 0, 0);">，这种浪费是普遍存在的（不仅限于排序操作）。</font></li>
+<li><font style="color:rgb(0, 0, 0);">因此，在定义 </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">字段时，</font><strong><font style="color:rgb(0, 0, 0);">务必根据实际业务需求，选择一个足够用但又不会过度冗余的最大长度 (</font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">)</font></strong><font style="color:rgb(0, 0, 0);">，以平衡磁盘空间节省和内存使用效率。</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(255)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">的流行与其在单字节长度前缀下的存储效率优化有关。</font></li>
+</ul>
+<p><img src="/images/fd3666d17ac1bd6be81f1249496ba855.png"></p>
+<ol>
+<li><strong><font style="color:rgb(0, 0, 0);">磁盘存储（节省空间）：</font></strong><ul>
+<li><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">在磁盘上存储的是</font><strong><font style="color:rgb(0, 0, 0);">实际数据</font></strong><font style="color:rgb(0, 0, 0);"> + </font><strong><font style="color:rgb(0, 0, 0);">一个或两个字节的长度前缀</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">长度前缀指示了该字段值实际占用的字节数。</font></li>
+<li><font style="color:rgb(0, 0, 0);">因此，磁盘空间占用是</font><strong><font style="color:rgb(0, 0, 0);">可变的</font></strong><font style="color:rgb(0, 0, 0);">，只取决于实际存储的数据长度（加上很小的长度前缀开销）。定义的最大长度 (</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(N)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">) 只限制了能存储多少数据，不影响实际存储空间（除非数据达到最大长度）。</font></li>
+</ul>
+</li>
+<li><strong><font style="color:rgb(0, 0, 0);">内存分配（固定大小）：</font></strong><ul>
+<li><font style="color:rgb(0, 0, 0);">当 MySQL 从磁盘读取一行数据到内存时，它需要</font><strong><font style="color:rgb(0, 0, 0);">预先为每一列分配内存空间</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">在读取具体数据内容</font><strong><font style="color:rgb(0, 0, 0);">之前</font></strong><font style="color:rgb(0, 0, 0);">，MySQL 只知道该列的定义：它是一个</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">，并且其</font><strong><font style="color:rgb(0, 0, 0);">最大允许长度是</font>****<font style="color:rgb(0, 0, 0);"> </font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">字节</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">MySQL </font><strong><font style="color:rgb(0, 0, 0);">无法</font></strong><font style="color:rgb(0, 0, 0);">在读取数据之前知道该字段在这一行中的</font><strong><font style="color:rgb(0, 0, 0);">实际长度</font></strong><font style="color:rgb(0, 0, 0);">是多少（是 10 还是 20？）。这个实际长度信息是</font><strong><font style="color:rgb(0, 0, 0);">存储在数据本身的开头</font></strong><font style="color:rgb(0, 0, 0);">（长度前缀）。</font></li>
+<li><font style="color:rgb(0, 0, 0);">为了能够安全地接收从磁盘读取出来的整行数据（包括所有列），MySQL 必须为每个</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">列分配</font><strong><font style="color:rgb(0, 0, 0);">足够容纳其最大可能长度 (</font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">) 的内存空间</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">关键原因：性能。</font></strong><font style="color:rgb(0, 0, 0);"> 如果每次读取一行时，都尝试先读取长度前缀，再根据这个长度精确申请内存，然后再读取实际数据，会导致大量的、细碎的内存分配操作和额外的 I&#x2F;O 定位。这会</font><strong><font style="color:rgb(0, 0, 0);">极大地降低数据读取的性能</font></strong><font style="color:rgb(0, 0, 0);">。预先按最大长度分配内存虽然可能浪费一些空间，但</font><strong><font style="color:rgb(0, 0, 0);">避免了频繁的内存申请开销</font></strong><font style="color:rgb(0, 0, 0);">，是性能与内存利用之间的权衡。</font></li>
+</ul>
+</li>
+<li><strong><font style="color:rgb(0, 0, 0);">定义长度 (</font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">) 的重要性：</font></strong><ul>
+<li><font style="color:rgb(0, 0, 0);">正因为内存分配是按定义的最大长度 (</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">) 进行的，所以</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(N)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">中的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;</code><strong><font style="color:rgb(0, 0, 0);">直接影响内存消耗</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">即使你存储的实际数据很短（比如</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(255)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">只存了 10 个字符），MySQL 在内存中也会为该字段预留 255 字节（或根据字符集计算出的最大字节数）的空间。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">过度定义</font>****<font style="color:rgb(0, 0, 0);"> </font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">(如</font>****<font style="color:rgb(0, 0, 0);"> </font></strong><code>**&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(1000)&lt;/font&gt;**</code><strong><font style="color:rgb(0, 0, 0);">但实际只用 10 字节) 会导致严重的内存浪费。</font></strong><font style="color:rgb(0, 0, 0);"> 这种浪费不仅发生在排序等需要临时表的操作中（如原文所述），也发生在</font><strong><font style="color:rgb(0, 0, 0);">任何将行数据读入内存</font></strong><font style="color:rgb(0, 0, 0);">的操作中（如简单的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;SELECT&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">查询、连接操作、在内存中更新数据等）。这就是为什么强调“即使不排序，也可能有其它内存不够的问题出现”。</font></li>
+</ul>
+</li>
+<li><strong><font style="color:rgb(0, 0, 0);">255 字节的特殊性：</font></strong><ul>
+<li><font style="color:rgb(0, 0, 0);">长度前缀需要占用空间。对于最大长度</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">&lt;&#x3D; 255 字节的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">，长度前缀只需要 </font><strong><font style="color:rgb(0, 0, 0);">1 个字节</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">对于最大长度</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;N&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">&gt; 255 字节的</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">，长度前缀需要 </font><strong><font style="color:rgb(0, 0, 0);">2 个字节</font></strong><font style="color:rgb(0, 0, 0);">。</font></li>
+<li><font style="color:rgb(0, 0, 0);">因此，</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(255)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">是一个非常常见的定义：</font><ul>
+<li><font style="color:rgb(0, 0, 0);">它充分利用了单字节长度前缀能表示的最大长度（255）。</font></li>
+<li><font style="color:rgb(0, 0, 0);">定义</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(256)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">会导致长度前缀变成 2 字节，而实际能存储的数据只比</font><font style="color:rgb(0, 0, 0);"> </font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(255)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">多 1 字节（256 vs 255），但长度前缀开销翻倍（2字节 vs 1字节）。从存储效率角度看，</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(255)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">是单字节长度前缀下的最优选择。</font></li>
+<li><strong><font style="color:rgb(0, 0, 0);">注意：</font></strong><font style="color:rgb(0, 0, 0);"> 这里的 255&#x2F;256 指的是</font><strong><font style="color:rgb(0, 0, 0);">字节数</font></strong><font style="color:rgb(0, 0, 0);">，不是字符数。对于多字节字符集（如 UTF8MB4），一个字符可能占用多个字节，</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;VARCHAR(255)&lt;/font&gt;</code><font style="color:rgb(0, 0, 0);">能存储的字符数会少于 255。</font></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/19/JUC/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%97%A0%E9%94%81%E9%98%9F%E5%88%97/">如何实现无锁队列</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E5%87%BD%E6%95%B0/">函数</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/17/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E7%BB%93%E5%90%88deepWiki%E9%98%85%E8%AF%BB%E6%BA%90%E7%A0%81/">结合deepWiki阅读源码</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/03/MySQL/QPS%20%EF%BC%9F%E8%B0%83%E4%BC%98/%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98QPS/">如何提高QPS</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/04/MySQL/QPS%20%EF%BC%9F%E8%B0%83%E4%BC%98/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%8C%E7%BE%8E%E7%9A%84%E8%A1%A8%E7%BB%93%E6%9E%84/">如何设计完美的表结构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E5%8A%A0%E9%94%81%E7%AE%97%E6%B3%95%EF%BC%9F/">加锁算法？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E4%BA%8B%E5%8A%A1/redis%E7%9A%84lua%E8%84%9A%E6%9C%AC/">redis的lua脚本</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/13/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E5%B7%A5%E5%85%B7%E7%B1%BB%E8%AF%B4%E6%98%8E/">工具类说明</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/14/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/Mybatis%20Cursor/">Mybatis Cursor</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/27/%E9%A1%B9%E7%9B%AE/%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E5%B9%B3%E5%8F%B0/%E9%A1%B9%E7%9B%AE%E9%9A%BE%E7%82%B9/">项目难点</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/10/13/MySQL/MySQL%E7%9A%84varchar(50)%E5%92%8Cvarchar(500)%E5%8C%BA%E5%88%AB/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/10/13/MySQL/MySQL%E7%9A%84varchar(50)%E5%92%8Cvarchar(500)%E5%8C%BA%E5%88%AB/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/10/13/MySQL/MySQL%E7%9A%84varchar(50)%E5%92%8Cvarchar(500)%E5%8C%BA%E5%88%AB/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

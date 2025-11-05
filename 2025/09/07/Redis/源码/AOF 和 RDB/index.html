@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>AOF 和 RDB | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>AOF 和 RDB</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/AOF%20%E5%92%8C%20RDB/">AOF 和 RDB</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-07
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/AOF%20%E5%92%8C%20RDB/">AOF 和 RDB</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-07
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><a target="_blank" rel="noopener" href="https://app.diagrams.net/#G1ZI0SeLxjvF7EnIbyF7G0HyBjzioMod6b#%7B%22pageId%22%3A%22C5RBs43oDa-KdzZeNtuy%22%7D">https://app.diagrams.net/#G1ZI0SeLxjvF7EnIbyF7G0HyBjzioMod6b#%7B%22pageId%22%3A%22C5RBs43oDa-KdzZeNtuy%22%7D</a></p>
+<p>Redis 3.0</p>
+<p><img src="/images/09855137bdb1fc095681289fb86b1be3.png"></p>
+<p>由上图可以看到，Redis从整体来看其实就是一个while死循环</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">    <span class="comment">//阻塞，直到被唤醒</span></span><br><span class="line">    <span class="comment">//文件处理器</span></span><br><span class="line">    events = epoll_wait()</span><br><span class="line">    <span class="comment">//处理每一个事件</span></span><br><span class="line">    <span class="keyword">for</span>(event: events)&#123;</span><br><span class="line">        <span class="comment">//这里的读事件是指 从网卡读 要拿取数据了</span></span><br><span class="line">        <span class="comment">//这里的写事件是指 往网卡里写 要发送数据了</span></span><br><span class="line">        <span class="keyword">if</span>(读事件)&#123;</span><br><span class="line">            <span class="comment">//从socket缓冲区拿出数据</span></span><br><span class="line">            readQueryFormClient() ;</span><br><span class="line">            <span class="comment">// while 循环处理 客户端缓冲区 只要构成一个完整的Redis协议命令</span></span><br><span class="line">            <span class="comment">//在这也是pipeline机制实现原理</span></span><br><span class="line">            processInputBuffer(); </span><br><span class="line">            <span class="comment">//容易阻塞点!!!</span></span><br><span class="line">            <span class="comment">//1、检查命令合法性，参数合法性</span></span><br><span class="line">            <span class="comment">//2、客户端是否认证，集群转向ask、moved</span></span><br><span class="line">            <span class="comment">//3、是否maxMemory，slave节点拒绝写命令</span></span><br><span class="line">            <span class="comment">//4、订阅模式命令，发布模式命令</span></span><br><span class="line">            processCommand();</span><br><span class="line">            <span class="comment">//1、执行命令 ---&gt; 执行结果放到输出缓冲区，然后注册可写事件</span></span><br><span class="line">            <span class="comment">// 	什么是可写事件：客户端tcp窗口没满，就是可写</span></span><br><span class="line">            <span class="comment">//2、慢命令 --&gt; show log</span></span><br><span class="line">            <span class="comment">//3、propagate Command --&gt; feedAppendOnlyFile 把命令写入AOF缓冲区</span></span><br><span class="line">            <span class="comment">//                     --&gt; rePlicationFeedSlave 把命令发送给从服务器</span></span><br><span class="line">            call()</span><br><span class="line">            <span class="comment">//epoll：水平触发，边缘触发。Redis这里属于水平触发</span></span><br><span class="line">            <span class="comment">//epoll的坑</span></span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             水平模式：多次触发</span></span><br><span class="line"><span class="comment">             边缘模式：一次没触发后就不会触发了</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(写事件)&#123;</span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">            输出缓冲区：</span></span><br><span class="line"><span class="comment">            buf静态缓冲区，固定大小</span></span><br><span class="line"><span class="comment">            replay动态缓冲区，大响应时用</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            <span class="comment">//将输出缓冲区里的数据write回 客户端的socket（就是网卡缓冲区）</span></span><br><span class="line">            <span class="comment">//如果write出错了，就返回（如果tcp窗口满了）</span></span><br><span class="line">            <span class="comment">//如果缓冲区写完了，那么就卸载可写事件</span></span><br><span class="line">            sendReplyToClient()</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//时间处理器</span></span><br><span class="line">    severcorn(100ms); <span class="comment">//低频处理</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//每次循环都会执行，跟epoll_wait() 被唤醒的频率有关</span></span><br><span class="line">    beforeSleep()</span><br><span class="line">&#125;</span><br><span class="line">severcorn()&#123;</span><br><span class="line">    watch dog 机制</span><br><span class="line">    更新信息 时钟 内存峰值 rss内存 关闭信号 </span><br><span class="line">    客户端操作（超时，缓冲区）</span><br><span class="line">    清理过期件，渐进式hash</span><br><span class="line">    （易阻塞）重写aof rdb</span><br><span class="line">    辅助性aof落盘</span><br><span class="line">    客户端异步关闭</span><br><span class="line">    主从操作</span><br><span class="line">    集群操作</span><br><span class="line">    sentinel操作</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">beforeSleep()&#123;</span><br><span class="line">    过期键清理</span><br><span class="line">    副本ack同步</span><br><span class="line">    （易阻塞）aof缓冲区落盘</span><br><span class="line">    集群维护 故障转移</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="aof和rdb调用关系"><a href="#aof和rdb调用关系" class="headerlink" title="aof和rdb调用关系"></a>aof和rdb调用关系</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 客户端的命令</span></span><br><span class="line">lastsave</span><br><span class="line">saveCommand -&gt;   rdbSave()</span><br><span class="line">bgsaveCommand  -&gt;  rdbSaveBackground()  -&gt;   rdbSave()</span><br><span class="line">bgrewriteaofCommand  -&gt;  rewriteAppendOnlyFileBackground()  fork子进程    -&gt;    rewriteAppendOnlyFile() 读取内存数据到临时文件</span><br><span class="line"></span><br><span class="line"><span class="comment">//低频调用</span></span><br><span class="line">serverCron()&#123;</span><br><span class="line">    <span class="comment">//如果 BGSAVE 和 BGREWRITEAOF 都没有在执行，并且有一个 BGREWRITEAOF 在等待</span></span><br><span class="line">    <span class="keyword">if</span> (server.rdb_child_pid == -<span class="number">1</span> &amp;&amp; server.aof_child_pid == -<span class="number">1</span> &amp;&amp; server.aof_rewrite_scheduled) &#123;</span><br><span class="line">        rewriteAppendOnlyFileBackground(); <span class="comment">//手动触发才会走到这里来 </span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (server.rdb_child_pid != -<span class="number">1</span> || server.aof_child_pid != -<span class="number">1</span>)&#123;</span><br><span class="line">        backgroundSaveDoneHandler()   <span class="comment">//</span></span><br><span class="line">        backgroundRewriteDoneHandler()</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//BGSAVE 和 BGREWRITEAOF 都没有在执行</span></span><br><span class="line">        rdbSaveBackground()  <span class="comment">// save 60 10000  参数格式,及默认</span></span><br><span class="line">        rewriteAppendOnlyFileBackground()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高频调用</span></span><br><span class="line">beforeSleep()&#123;</span><br><span class="line">    <span class="comment">//aof刷盘</span></span><br><span class="line">    flushAppendOnlyFile(<span class="number">0</span>);    <span class="comment">//server.aof_buf  写到文件</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="aof"><a href="#aof" class="headerlink" title="aof"></a>aof</h2><p>aof包含刷盘和重写两大块</p>
+<h3 id="aof-流程及刷盘"><a href="#aof-流程及刷盘" class="headerlink" title="aof 流程及刷盘"></a>aof 流程及刷盘</h3><p>每执行一个redis写命令，会存到aof缓冲区。然后在文件事件结束后，依赖** beforeSleep()** 函数执行写入动作。</p>
+<p>写命令 -&gt; aof 缓冲区 -&gt; write数据 -&gt; 刷盘策略</p>
+<p><strong>flushAppendOnlyFile()</strong> 函数被 <strong>beforeSleep()</strong> 函数高频调用，每次调用都会调用 write函数（<strong>主线程执行</strong>），然后根据策略刷盘。</p>
+<p>aof_fsync 的含义，每次都会调用write函数，但是刷盘时机可以配置</p>
+<blockquote>
+<p><strong><font style="color:rgb(38, 38, 38);">always</font></strong><font style="color:rgb(38, 38, 38);"> 模式，也可能丢失数据，而且高频的调用 </font>aof_fsync 会导致redis吞吐量下降。</p>
+<p><font style="color:#DF2A3F;">PS：为什么高频调用会导致Redis，因为always模式下flush是在主线程，而不是跟everysec一样是异步线程</font></p>
+<p><strong>everysec</strong> 模式下，数据丢失风险 不止1秒！若刷盘上次刷盘不及时，或者文件事件执行过长（高并发时，且有阻塞性的大key导致）</p>
+<p><strong>no</strong> 依赖操作系统刷盘</p>
+</blockquote>
+<p>思考：如果设置的刷盘策略为每秒，为什么write数据还是在主线程，而刷盘在异步线程。为什么不把write也放到异步线程呢？</p>
+<p>:::color4<br>1.write是轻量级的，就是将用户态的数据拷贝到page cache，而flush需要等到IO事件结束，耗时长，更适合异步化</p>
+<p>2.write的时候涉及 aof_buf，如果是异步的话，在多线程情况下，就需要引入锁机制</p>
+<p>:::</p>
+<h3 id="重写aof流程"><a href="#重写aof流程" class="headerlink" title="重写aof流程"></a>重写aof流程</h3><p>为什么</p>
+<p>手动</p>
+<h4 id="自动重写aof时机"><a href="#自动重写aof时机" class="headerlink" title="自动重写aof时机"></a>自动重写aof时机</h4><p>:::color4<br>此时没有进行rdb和重写aof（判断是否存在子进程）</p>
+<p>aof当前体积 &gt; 最小重写阈值</p>
+<p>配置了自动重写百分比，且现在的体积 较于上次aof体积 增长率 大于 配置的值</p>
+<p>:::</p>
+<h4 id="aof重写逻辑流程"><a href="#aof重写逻辑流程" class="headerlink" title="aof重写逻辑流程"></a>aof重写逻辑流程</h4><p>:::color4</p>
+<ol>
+<li>fork 一个子进程 ，记录fork子进程时间，关闭字典rehash<br>子进程：</li>
+</ol>
+<p>1.关闭网络连接</p>
+<p>2.创建临时文件名 tempfile &#x3D; temp-rewriteaof-bg-%d.aof**** ，这里就是相当于在内存里创建了一个字符串</p>
+<p>3.创建临时文件temp-rewriteaof-%d.aof</p>
+<p>4.<strong>遍历所有db</strong>,写入键值对以及过期信息</p>
+<p>5.temp-rewriteaof-%d aof 原子改名为 temp-rewriteaof-bg-%d.aof</p>
+<p>6.unlink temp0-rewriteaof-%d.aof </p>
+<p>&#x2F;&#x2F;unlink：删除文件名 file1.txt。  将 inode 的链接计数器减 1，变为 1。</p>
+<p>7.向父进程发送退出信号</p>
+<ol start="2">
+<li>在n个循环后子进程执行完毕，打开temp-rewrite-bg-%d aof</li>
+<li>遍历aof重写缓冲区，数据追加到 temp-rewrite-bg-%d.aof</li>
+<li>打开appendonl.aof，temp-rewrite-bg-%d.aof 改名为 appendonly.aof</li>
+<li>更新Server aof_filename 等于tmpfile的 fd引用，并刷盘</li>
+<li><strong>异步</strong>关闭旧的aof文件fd</li>
+</ol>
+<p>:::</p>
+<p>伪代码：</p>
+<p>if(xxx &#x3D; fork() &#x3D;&#x3D; 0){</p>
+<p>}</p>
+<p>else{</p>
+<p>&#x2F;&#x2F;关闭网络连接</p>
+<p>}</p>
+<p>整个过程中会有三个文件</p>
+<p>appendonly.aof</p>
+<p>temp-rewrite-bg-%d aof</p>
+<p>temp-rewrite-%d aof</p>
+<h3 id="Redis异步线程"><a href="#Redis异步线程" class="headerlink" title="Redis异步线程"></a>Redis异步线程</h3><p>rewriteAppendOnlyFileBackground() -&gt; bioCreateBackgroundJob()</p>
+<p>redis3.0 使用异步线程的地方：</p>
+<p>1，异步刷盘（ fsync）</p>
+<p>2，重写aof时，异步关闭文件</p>
+<table>
+<thead>
+<tr>
+<th><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">版本</font></th>
+<th><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">关键异步任务</font></th>
+<th><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">技术实现</font></th>
+<th><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">演进意义</font></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">Redis 3.0</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);"> AOF持久化（fsync）</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);"> bioCreateBackgroundJob创建后台线程</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">首次引入多线程，解决fsync阻塞主线程问题</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">Redis 4.0</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">大Key异步删除、数据库清空（UNLINK&#x2F;FLUSHDB ASYNC）</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">独立BIO线程池（3个线程：关闭文件、AOF刷盘、惰性删除）</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);"> 主线程与耗时操作解耦，提升稳定性</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">Redis 6.0</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">网络I&#x2F;O读写、协议解析 </font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);"> I&#x2F;O线程组（可配置数量）</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">网络吞吐提升300%，单节点性能突破20W QPS</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">Redis 7.0 </font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">RDB生成、AOF重写、集群任务分发</font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">动态线程池（负载自适应） </font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">优化后台任务并行性，减少尾延迟65%</font></td>
+</tr>
+<tr>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">Redis 7.4+ </font></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">哈希字段过期、向量数据处理（AI优化）</font></td>
+<td></td>
+<td><font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">字段级异步过期线程</font></td>
+</tr>
+</tbody></table>
+<h2 id="rdb流程"><a href="#rdb流程" class="headerlink" title="rdb流程"></a>rdb流程</h2><p>自动处理的默认配置</p>
+<p>save xx xx</p>
+<p>save xx xx</p>
+<p>save xx xx</p>
+<p>只要满足了以上一个就触发</p>
+<p>1，记录开始的时间，fork子进程</p>
+<p>子进程：</p>
+<p>1，关闭网络fd</p>
+<p>2，创建临时文件 temp-%d.rdb</p>
+<p>3，遍历16个db的所有数据，写入到临时文件，刷盘并关闭fd</p>
+<p>4，把临时文件重命名为dump.rdb</p>
+<p>5，向父进程发送信号</p>
+<p>2，计算fork所花时间，记录子进程id，关闭自动rehash</p>
+<p>3，在n个循环后，收到子进程信号，更新一些信息</p>
+<p>4，处理正在等待 BGSAVE 完成的那些 slave</p>
+<h2 id="cow-和-fork"><a href="#cow-和-fork" class="headerlink" title="cow 和 fork"></a>cow 和 fork</h2><h3 id="cow内存计算逻辑"><a href="#cow内存计算逻辑" class="headerlink" title="cow内存计算逻辑"></a>cow内存计算逻辑</h3><p>1个g，fork子进程之后 子进程和父进程同一块物理内存，总内存还是一个g，父进程还会写</p>
+<p>1g内存</p>
+<p>–&gt; fork 子进程后，因为共享</p>
+<p>还是1g内存</p>
+<p>–&gt; 父进程修改一遍 全部内存后 父进程持有1g内存</p>
+<p>–&gt; 子进程修改一遍 全部内存后 子进程持有1g内存</p>
+<p>1 + 1 + 1&#x3D;3?</p>
+<p>但好像不是</p>
+<p><img src="/images/f290709864820ff996a947a9ef79efef.png"></p>
+<p>共享内存都很小了</p>
+<p>fork的内存计算问题</p>
+<h2 id="fork阻塞问题"><a href="#fork阻塞问题" class="headerlink" title="fork阻塞问题"></a>fork阻塞问题</h2><p>主进程fork子进程本身也是有延迟的。父进程fork 超过5g内存，会有一定延迟，超过200ms</p>
+<h2 id="fork性能问题堪忧"><a href="#fork性能问题堪忧" class="headerlink" title="fork性能问题堪忧"></a>fork性能问题堪忧</h2><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/8ee3b10817bd8eca063c8aa82857557a"><font style="color:rgb(55, 58, 64);">LostPigxx</font></a></p>
+<p><font style="color:rgb(55, 58, 64);">很好奇一点，fork对开源redis可以说是阿喀琉斯之踵了，我看antirez在twitter上也说尽可能的利用sharding来规避这个问题。<br></font><font style="color:rgb(55, 58, 64);">从技术上真的没办法解决fork的影响吗？</font></p>
+<p><font style="color:rgb(145, 150, 161);">2020-12-24</font></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/9a5b3939dfe83d6861ced6dfc68e243b"><font style="color:rgb(55, 58, 64);">logoV5</font></a></p>
+<p><font style="color:rgb(55, 58, 64);">其实解决fork影响是os内核要做的，甚至os内核认为这点影响是理所当然，在它看来未必要做啥优化。<br></font><font style="color:rgb(55, 58, 64);">而使用者是应该认识到并避免它的。Redis之所以无法避免，还是因为它本身是个缓存，又想做持久化。</font></p>
+<p><font style="color:rgb(145, 150, 161);">2020-12-24</font></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/13/caffeine/">caffeine</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JavaSE/%E6%B3%9B%E5%9E%8B/">泛型</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/truncate%E3%80%81delete%E3%80%81drop%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F/">truncate、delete、drop的区别？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/RabbitMQ/%E6%B6%88%E6%81%AF%E7%A7%AF%E5%8E%8B%E6%80%8E%E4%B9%88%E5%8A%9E/">消息积压怎么办</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/%E5%8D%95%E4%BE%8Bbean%E6%A8%A1%E5%BC%8F%E6%98%AF%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E4%B9%88/">单例bean模式是单例模式么</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/09/Redis/Redisson/">Redisson</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/30/%E5%9C%BA%E6%99%AF%E9%A2%98/%E6%8E%A8%E7%89%B9%E6%B7%B7%E5%90%88%E6%9E%B6%E6%9E%84%EF%BC%8C%E5%B9%B3%E8%A1%A1%E5%88%A9%E5%BC%8A%E7%9A%84%E4%BC%98%E9%9B%85%E8%AE%BE%E8%AE%A1/">推特混合架构，平衡利弊的优雅设计</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%EF%BC%88%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%EF%BC%89/">聚簇索引（主键索引）</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/06/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE/">为什么要做这个项目</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%A1%B9%E7%9B%AE%E6%A8%A1%E5%9D%97/">项目模块</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/AOF%20%E5%92%8C%20RDB/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/AOF%20%E5%92%8C%20RDB/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/AOF%20%E5%92%8C%20RDB/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

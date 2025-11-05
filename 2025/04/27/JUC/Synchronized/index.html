@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>Synchronized | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>Synchronized</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/04/27/JUC/Synchronized/">Synchronized</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-04-27
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/04/27/JUC/Synchronized/">Synchronized</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-04-27
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><p>Java中的关键字，主要用来加锁</p>
+<h2 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h2><p>不管怎么用，最终锁的都是对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//加到方法上</span><br><span class="line">synchronized static f()锁的是类的class对象</span><br><span class="line">synchronized void f()  锁的是类的实例对象</span><br><span class="line">//代码块</span><br><span class="line">synchronized()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h2><p>即monitor（管程or监视器），用来实现多个线程对统同一资源的互斥访问</p>
+<p>在Java中，每个对象都有Monitor，Monitor伴随Java对象一身</p>
+<p>在hotsopt虚拟机中，monitor的实现为ObjectMonitor。<br>ObjectMonitor是基于c++来实现的，它有几个重要属性：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">_owner：指向持有 ObjectMonitor 对象的线程</span><br><span class="line"></span><br><span class="line">_WaitSet：存放处于 wait 状态的线程队列</span><br><span class="line"></span><br><span class="line">_EntryList：存放处于等待锁 block 状态的线程队列</span><br><span class="line"></span><br><span class="line">_recursions：锁的重入次数（控制可重入次数的）</span><br><span class="line"></span><br><span class="line">_count：用来记录该线程获取锁的次数 （辅助判断锁的整体活跃度、竞争情况）</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="对象头的mark-word"><a href="#对象头的mark-word" class="headerlink" title="对象头的mark word"></a>对象头的mark word</h2><p><img src="/images/248d929695f48a8fd89b3aaae31517ac.png"></p>
+<p>和ObjectMonitor的关系？</p>
+<p>如果一个Java对象被线程持有，那么这个Java对象的对象头中的mark word的Lock word就会指向<br>      ObjectMonitor的起始地址</p>
+<h2 id="重要级锁"><a href="#重要级锁" class="headerlink" title="重要级锁"></a>重要级锁</h2><p>在JDK1.6之前，synchronized的实现才会直接调用ObjectMonitor的enter和exit方法，这种锁被称为</p>
+<p>重量级锁。主要实现是通过ObjectMonitor的关键属性来实现的，owner，EntryList,waitset,count</p>
+<p>当多个线程同时访问同一段同步代码时，会先进入EntryList队列，当其中某个线程获取得到对象的Monitor后</p>
+<p>进入owner区域并把Monitor中的_owner变量设置为当前线程，同时把Monitor中的计数器_count+1 即获得对</p>
+<p>像锁。<strong>而其他线程这时候来获取锁，获取不到就处于变为阻塞状态。</strong></p>
+<p>当持有Monitor的线程调用了wait()方法后，那么他就会释放当前的Monitor，并将owner变量置为null，</p>
+<p>count–，同时该线程进入waitset集合中等待被唤醒。若当前线程执行完毕也将释放monitor并复位变量的值</p>
+<p>，以便其他线程进入获取monitor，<strong>这时候会去唤醒EntryList中的其他线程</strong>。</p>
+<p><img src="/images/656458266228a779fe9c327509d4ffc3.png"></p>
+<p>monitor依赖于操作系统的mutexLock</p>
+<p>为什么说他重？</p>
+<p>Java的线程模型默认是一个用户线程对应着操作系统的一个内核线程。那么在synchronized中涉及到大</p>
+<p>线程的阻塞和唤醒，这些都是从用户态切换到内核态来实现的，而这个切换操作在早期CPU是很耗时的</p>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>在JDK1.6引入，在JDK13默认为关闭了，JDK 15 完全禁用，JDK 17彻底移除代码</p>
+<p>正确地来说，它并不是一个真正的锁。当第一个线程抢到锁时，会在java锁对象中的对象头的markword里填</p>
+<p>入自己的线程名字。下个线程还获取时就会进行一个判断（这个判断操作是很轻的），如果还是同一个的话，</p>
+<p>就会直接获取。不是的话，就得进行一个锁升级了</p>
+<p>匿名偏向？</p>
+<p>还没有人去持有偏向锁，这时候锁就是匿名的</p>
+<p>为什么要有这个锁？</p>
+<p>因为在通过Java开发团队的大量统计，其实在开发中很多代码都是同一个线程在执行</p>
+<p>为什么偏向级锁不要设置为一开始就启动，默认是JVM启动后4s才会开启</p>
+<p>如果一开始就明确就是多线程环境，那么偏向锁还有什么意义？JVM启动涉及到10多个线程，本身就是</p>
+<p>多线程环境</p>
+<p>为什么JDK 15要废弃偏向锁？</p>
+<p>早期很多集合都是一把synchronized梭哈，比如vector，HashTable。不可否认，偏向锁能保证这些老集</p>
+<p>合在单线程使用的环境下的性能，但后来随着HashMap，ArrayLIst等集合的出现。偏向锁变得不是很</p>
+<p>重要了</p>
+<p><img src="/images/e20fbb36b9cb98108b3d8efcbc497d03.png"></p>
+<p>而且官方还说偏向锁的引入导致代码的复杂度升高了，不好维护</p>
+<p><strong>微博禁用偏向锁，性能直接飙升</strong></p>
+<p>偏向锁这种东西会让对象迟迟无法被回收，导致对象一直越来越多，STW时间变长</p>
+<h2 id="锁撤销"><a href="#锁撤销" class="headerlink" title="锁撤销"></a>锁撤销</h2><h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>它的出现是为了优化重量级锁在竞争少的场景下的开销大的问题</p>
+<p>当另外一个线程获取非匿名偏向锁时，偏向锁就会被撤销，锁就会自动升级为轻量级锁</p>
+<p>轻量级锁状态时，JVM为锁对象的对象头markword预留了一部分空间，用来存储指向线程栈中Lock record</p>
+<p>的指针</p>
+<p>当一个线程尝试获取轻量级锁时（即发现对象头里的锁标记位为 00），就在线程虚拟机栈中开辟一快空间，</p>
+<p>即Lock record，里面有两个部分</p>
+<p><img src="/images/c698e7beeba82f27fdca98a610f39694.png"></p>
+<p>然后尝试通过CAS操作将对象头的mark word更新为指向锁记录的指针</p>
+<p>自适应自旋？</p>
+<h2 id="锁膨胀"><a href="#锁膨胀" class="headerlink" title="锁膨胀"></a>锁膨胀</h2><p>发生在轻量级—&gt; 重量级锁</p>
+<h2 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h2><p><img src="/images/7e2bea1ccbc789a6e1aad0917f0d7976.png"></p>
+<p>锁升级过程</p>
+<p><img src="/images/2d5c3d5bb88112c0813686c3ff164683.png"></p>
+<h2 id="synchronized-的锁能降级吗？"><a href="#synchronized-的锁能降级吗？" class="headerlink" title="synchronized 的锁能降级吗？"></a><font style="color:rgb(51, 51, 51);">synchronized 的锁能降级吗？</font></h2><p>对于HotSpot虚拟机来说，是没办法的。即一旦锁升级为重量级锁后，你的锁状态就会一直维持重量级锁，直到释放。</p>
+<p>不过还有一种特殊的“降级”情况，即重量级锁的monitor对象不再被任何线程持有时，被清理和回收的过程。</p>
+<h2 id="JDK6对synchronized的优化？"><a href="#JDK6对synchronized的优化？" class="headerlink" title="JDK6对synchronized的优化？"></a>JDK6对synchronized的优化？</h2><p>自旋锁</p>
+<p>JDK1.4引入，JDK1.6默认开启</p>
+<p>锁消除</p>
+<p>JIT层面的优化，即在使用synchronized的时候，如果JIT经过逃逸分析后发现并无线程安全的问题的话，</p>
+<p>就会做锁消除</p>
+<p>锁粗化</p>
+<p>如果在一个循环里，频繁地获取资源释放资源，这样带来的消耗会很大，锁粗化会扩大锁的范围，把加锁</p>
+<p>逻辑放到外面。</p>
+<p>ps：锁粗化和“平时我们在开放中要尽可能地减少锁的粒度”矛盾吗？</p>
+<p>不矛盾</p>
+<p>锁升级</p>
+<p>JDK1.6引入了偏向锁，轻量级锁。当线程竞争不激烈时，可以减少性能开销</p>
+<h2 id="Synchronized的缺点"><a href="#Synchronized的缺点" class="headerlink" title="Synchronized的缺点"></a>Synchronized的缺点</h2><p>无法知道线程是否获取到了锁</p>
+<p>锁只有阻塞状态</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/20/JavaSE/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E6%9C%89%E9%BB%98%E8%AE%A4%E5%80%BC%E8%80%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E6%B2%A1%E6%9C%89/">为什么成员变量有默认值而局部变量没有</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/RabbitMQ/%E6%9E%B6%E6%9E%84/">架构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/10/Redis/redis%E4%BD%BF%E7%94%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">redis使用最佳实践</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/07/mongodb/spring%20mongodb%20converter/">spring mongodb converter</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">Kafka为什么读写效率高（高吞吐） ？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/06/02/%E8%AE%A1%E7%BD%91/UDP%E8%AE%BF%E9%97%AEDNS/">UDP访问DNS</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/07/%E5%9C%BA%E6%99%AF%E9%A2%98/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%82%B9%E8%B5%9E/">点赞</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">TCP 协议通信排查工具</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/24/%E5%AE%9E%E4%B9%A0/%E6%B8%B8%E6%97%8F%E7%BD%91%E7%BB%9C/%E6%96%B0%E7%9A%84%E7%9F%A5%E8%AF%86/akka%E6%A1%86%E6%9E%B6/">akka框架</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/06/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/k-job/Nacos%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE!Distro%E4%B8%8ERaft%E5%8D%8F%E8%AE%AE/">Nacos一致性协议:Distro与Raft协议</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/04/27/JUC/Synchronized/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/27/JUC/Synchronized/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/27/JUC/Synchronized/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

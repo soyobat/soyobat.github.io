@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>Redis 数据结构：榜单问题之本地缓存 + zset + 定时任务方案 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>Redis 数据结构：榜单问题之本地缓存 + zset + 定时任务方案</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A6%9C%E5%8D%95%E9%97%AE%E9%A2%98%E4%B9%8B%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%20+%20zset%20+%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%96%B9%E6%A1%88/">Redis 数据结构：榜单问题之本地缓存 + zset + 定时任务方案</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-16
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A6%9C%E5%8D%95%E9%97%AE%E9%A2%98%E4%B9%8B%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%20+%20zset%20+%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%96%B9%E6%A1%88/">Redis 数据结构：榜单问题之本地缓存 + zset + 定时任务方案</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-16
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><font style="color:rgb(55, 65, 81);">这个案例实际上还是相当高端的。但是这个高端不是说技术难度很高，而是说思路很清晰，属于花小钱办大事的典型解决方案。</font></p>
+<p><font style="color:rgb(55, 65, 81);">一方面，你可以把这个</font><strong><font style="color:rgb(17, 24, 39);">当做你的项目难点</font></strong><font style="color:rgb(55, 65, 81);">；另外一方面来说，你也可以在谈及 Redis zset 的时候引用这个案例。当然了，如果要是面试官问你做过啥有挑战性的事情，也可以用这个回答。</font></p>
+<p><font style="color:rgb(55, 65, 81);">总的来说，这个案例用在初中级岗位面试中，效果非常强，能帮你建立极大的竞争优势。你在复习的时候要多琢磨这个案例之中的细节。</font></p>
+<p><strong><font style="color:rgb(10, 10, 10);"></font></strong></p>
+<p><strong><font style="color:rgb(10, 10, 10);">内容</font></strong></p>
+<p><font style="color:rgb(31, 41, 55);">这个案例</font><strong><font style="color:rgb(17, 24, 39);">对应的是大数据、高性能、高并发榜单的解决方案</font></strong><font style="color:rgb(31, 41, 55);">。</font></p>
+<p><font style="color:rgb(31, 41, 55);">代码在这里：</font><a target="_blank" rel="noopener" href="https://github.com/meoying/interview-cases/tree/main/case21_30/case21"><font style="color:rgb(17, 24, 39);">interview-cases&#x2F;case21_30&#x2F;case21 at main · meoying&#x2F;interview-cases (github.com)</font></a></p>
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a><font style="color:rgb(17, 24, 39);">实现思路</font></h3><p><font style="color:rgb(31, 41, 55);">整个实现的要点：</font></p>
+<ol>
+<li><font style="color:rgb(31, 41, 55);">定时任务计算全局的1000名，假设每个小时计算一次。那么即便有突发热点，那么最多一个小时就能看出来；</font></li>
+<li><font style="color:rgb(31, 41, 55);">将1000名定时写入到 Redis，</font><strong><font style="color:rgb(17, 24, 39);">用 zset 实时维护</font></strong><font style="color:rgb(31, 41, 55);">。写入的时候删除原有的key然后将1000名写入。这一步是为了尽可能保证榜单数据准确。</font></li>
+<li><font style="color:rgb(31, 41, 55);">再起一个定时任务，每一分钟将redis中的前100名（也就是1000中的前100，有可能不是全局的前100）同步到所有节点的本地缓存上，这一步是为了访问效率</font></li>
+<li><font style="color:rgb(31, 41, 55);">从本地读取榜单数据</font></li>
+</ol>
+<p><font style="color:rgb(31, 41, 55);">整个过程如下图：</font></p>
+<p><img src="/images/11dc7d89b174ea8a6352a848f5114fac.png"></p>
+<p><font style="color:rgb(31, 41, 55);">这里稍微解释一下这个案例的思路：</font></p>
+<p><font style="color:rgb(31, 41, 55);">首先定时任务取前 1000 条，是基于这么一个假设：即这一小时内，top 100 绝大概率就是从这 1000 中选出来。如果你觉得 1000 这个太少，那么可以扩展到 10000。如果你打算进一步扩展到前 10w，那么就要考虑 Redis 分 key 了，不然会有大 key 问题。</font></p>
+<p><font style="color:rgb(31, 41, 55);">那么会不会有例外呢？肯定会有的，比如说某个排名 1200 的热度激增，导致瞬间闯进去前 100，那么在下一次计算前 1000 的时候，它没有机会被发现。但是我们并不在意这点不精确。而且，这种不精准可以通过调低定时任务的间隔来改善。例如说改为每 10 分钟执行一次，就几乎不太可能能耐</font></p>
+<p><font style="color:rgb(31, 41, 55);">其次则是 Redis 的 zset 主要就是为了能够尽可能精准维护这 top 100的。当然，这一步是可以去掉的，也就是只依赖定时任务每隔一段时间利用数据库的数据直接计算出来前 100。</font></p>
+<p><font style="color:rgb(31, 41, 55);">这里还有一些细节要注意：</font></p>
+<ol>
+<li><font style="color:rgb(31, 41, 55);">在使用 zset ZADD 命令的时候，必须要带上 XX。这样可以保证 zset 不会增加额外的元素</font></li>
+<li><font style="color:rgb(31, 41, 55);">在更新的时候要注意顺序问题。举个例子来说，如果针对同一个数据，一个要更新热度为 100，一个要更新热度为 101，你要小心并发问题。最好就是在 ZADD 的命令里面再加上一个 GT 选项；</font></li>
+<li><font style="color:rgb(31, 41, 55);">如果更新热度本身也是一个高并发，那么可以在更新接口之前插入一个 Kafka 操作，也就是将更新操作丢进去 Kafka 中，消费者从里面取出来再慢慢更新热度。而且消费者可以进一步叠加批量消费这种手段来优化更新性能；</font></li>
+</ol>
+<p><font style="color:rgb(31, 41, 55);">.</font></p>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a><font style="color:rgb(17, 24, 39);">适用场景</font></h3><p><font style="color:rgb(31, 41, 55);">通常来说，你在简历里写擅长设计高性能，高可用的缓存方案或者设计过高性能高可用的榜单方案， 就可以用这个案例作为证据。遇到这些问题你就可以用这个案例来回答：</font></p>
+<ul>
+<li><font style="color:rgb(31, 41, 55);">你的项目有什么难点？</font></li>
+<li><font style="color:rgb(31, 41, 55);">你做过什么令人印象深刻的事情？</font></li>
+<li><font style="color:rgb(31, 41, 55);">你觉得你做得最好的点是什么？</font></li>
+</ul>
+<p><font style="color:rgb(31, 41, 55);">如果面试官问到了有关缓存、Redis、Redis zset 这些问题，你也可以使用这个案例</font></p>
+<ul>
+<li><font style="color:rgb(31, 41, 55);">你有设计过缓存方案吗？这个方案总的来说还是很强的</font></li>
+<li><font style="color:rgb(31, 41, 55);">你用过 zset 吗？</font></li>
+</ul>
+<p><font style="color:rgb(31, 41, 55);">而</font><strong><font style="color:rgb(17, 24, 39);">榜单问题本身就是一个面试热点，</font></strong><font style="color:rgb(31, 41, 55);">所以这个问题也能显著帮到你，换句话来说，只要面试官问你怎么解决排行榜之类的问题，你就可以用这个案例。</font></p>
+<p><font style="color:rgb(31, 41, 55);">可以参考以下话术来使用这个案例，这个案例是站在一个演进的角度来阐述的：</font></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">我设计过一个解决大数据、高可用、高性能的榜单方案。一开始我们业务的数据量不是很大，所以直接用了最简单的 Redis zset 来计算榜单。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">后面随着业务的发展，计算这个榜单的数据越来越多，并发量越来越高，并且还引入了分库分表。这个时候，一个 zset 里面要放几百万个数据，存储这个 zset 的 Redis 并发极高，压力极大。并且 zset 中元素数量太多，导致更新的时候越来越慢。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">发现这个问题之后，我就综合业务实际情况，设计了一个新的榜单解决方案。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">首先每个小时计算一下全局前1000名数据写入到 Redis 中，用 zset 保存好。这 1000 个是覆盖式更新，也就是原本的 1000 会被删除，而后假如新的 1000 元素。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">其次，如果收到新的更新请求，就使用 ZADD XX 来更新数据，并且确保 zset 内始终只有 1000 个元素。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">最后，我再使用定时任务，每分钟计算一次 top100，同步到各个节点的本地缓存上。本地缓存本身是永不过期的，这样即便整个机制崩坏，但是还可以从本地缓存中读取到榜单数据，最多就是本地缓存中的榜单数据迟迟没有更新而已。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">当然，两个定时任务的间隔都是可以调整的，前 1000 名这个也是可以调整的，可以根据业务需要来调整。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">在这种改造之下，先是解决了 zset 引发的大 key 问题和热点问题，其次是大幅度提高了榜单查询的性能。当然缺点就是榜单的实时性下降了，但是这都是可以接受的。</font></strong></em></p>
+<h3 id="模拟面试题"><a href="#模拟面试题" class="headerlink" title="模拟面试题"></a><font style="color:rgb(17, 24, 39);">模拟面试题</font></h3><p><strong><font style="color:rgb(17, 24, 39);">你提到要将前 100 同步到所有节点的本地缓存上，怎么做？</font></strong></p>
+<p><font style="color:rgb(31, 41, 55);">你可以参考这个问题：</font><a target="_blank" rel="noopener" href="https://i.meoying.com/question/detail?id=801"><font style="color:rgb(17, 24, 39);">怎么同时更新所有节点上的本地缓存？</font></a></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">我在这里用的方案是定时刷新。也就是每个整分钟（例如说 00:01:00, 00:02:00）每个节点都会查询 Redis，获得最新的 top100 的数据。因为几乎是同时查询 top100，所以大家获得的 top 100 数据都是一样的。</font></strong></em></p>
+<p><strong><font style="color:rgb(17, 24, 39);">为什么你从数据库中只计算前 1000，而不是 2000 或者 3000？</font></strong></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">这实际上就是一个经验值。也就是说根据我的观察，我发现在一段时间内，前 100 名大概率出自前 1000 名，很少有例外，所以选 1000 就够了。当然选 2000,3000 其实问题也不大。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">严格来说，只要使用 Redis zset 的时候没有大 key 问题，那么这个数字是可以尽可能大的。但是从业务上来说犯不着，因为排名靠后的那些数据，很难说短时间就变到前 100 了。</font></strong></em></p>
+<p><strong><font style="color:rgb(17, 24, 39);">为什么你从数据库中取前 1000 是间隔一小时？间隔 30 分钟行不行？</font></strong></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">1 小时也是一个经验值。从理论上来说，只要间隔时间大于计算前 1000 的时间就可以了。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">而间隔一小时可以保证不会频繁计算，也可以保证榜单的实时性处在一种比较好的状态。</font></strong></em></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/30/JUC/java%20Reactor/">java Reactor</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/count/">count</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/Bean%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96/">Bean的实例化</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%EF%BC%88%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%EF%BC%89/">聚簇索引（主键索引）</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">DNS</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">TCP函数</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E9%9D%A2%E7%BB%8F/">面经</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/18/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E6%80%A7%E8%83%BD/">性能</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84/">网络拓扑结构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/18/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%99%90%E6%B5%81%E6%96%B9%E5%BC%8F/">限流方式</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A6%9C%E5%8D%95%E9%97%AE%E9%A2%98%E4%B9%8B%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%20+%20zset%20+%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%96%B9%E6%A1%88/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A6%9C%E5%8D%95%E9%97%AE%E9%A2%98%E4%B9%8B%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%20+%20zset%20+%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%96%B9%E6%A1%88/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A6%9C%E5%8D%95%E9%97%AE%E9%A2%98%E4%B9%8B%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%20+%20zset%20+%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%96%B9%E6%A1%88/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

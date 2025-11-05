@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>主从同步 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>主从同步</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/10/Redis/%E6%BA%90%E7%A0%81/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/">主从同步</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-10
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/10/Redis/%E6%BA%90%E7%A0%81/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/">主从同步</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-10
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><a target="_blank" rel="noopener" href="https://app.diagrams.net/">主从</a></p>
+<h2 id="知识准备"><a href="#知识准备" class="headerlink" title="知识准备"></a>知识准备</h2><p>IO复用：</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/367591714">https://zhuanlan.zhihu.com/p/367591714</a></p>
+<p>两种触发</p>
+<p>水平触发：这次不处理，下次还是会触发</p>
+<p>边缘触发：只触发一次</p>
+<p>两种事件</p>
+<p>可读事件：内核缓冲区有数据可读</p>
+<p>可写事件：内核缓冲区还有空间即 对方tcp窗口还没满。在IO多路复用情况下，两个Socket啥事没干，可写事件是会一直触发的</p>
+<p><strong>Redis：</strong></p>
+<ol>
+<li>一般地客户端的可读事件会一直注册在那个epoll wait里的，没处理事件会持续触发，避免数据丢失</li>
+<li>而写事件，只有在输出缓冲区有数据时注册，完成后立马注销</li>
+</ol>
+<h2 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h2><h3 id="命令执行以及架构"><a href="#命令执行以及架构" class="headerlink" title="命令执行以及架构"></a>命令执行以及架构</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">​主节点设requirepass,  从节点设masterauth password</span><br><span class="line"></span><br><span class="line">slaveof  host port        #当前节点成为某个节点的从节点</span><br><span class="line"></span><br><span class="line">slaveof no one      #解除复制</span><br><span class="line"></span><br><span class="line">REPLICAOF   #<span class="number">5.0</span>以上对slaveof的替代</span><br></pre></td></tr></table></figure>
+
+<h3 id="主从复制详细过程"><a href="#主从复制详细过程" class="headerlink" title="主从复制详细过程"></a>主从复制详细过程</h3><p>场景说明</p>
+<ol>
+<li>初次建立主从关系，必定是全量同步。（从节点会把本身旧的数据给删了）</li>
+<li>全量同步完成后，主从节点进入命令传播阶段，此时主节点会将每个写命令同时发送给所有从节点</li>
+<li>如果此时网络闪断导致主从连接断开，之后重新连接时，从节点会发送PSYNC命令携带之前保存的主节点runID 和 复制偏移量 （<strong>很像断线重连哦</strong>）</li>
+<li>主节点检查runID 是否匹配，且复制偏移量是否还在复制积压缓冲区范围内</li>
+<li>如果条件满足，主节点只需要发送缺失的那部分命令即可，这就是部分同步</li>
+</ol>
+<h3 id="初次主从同步"><a href="#初次主从同步" class="headerlink" title="初次主从同步"></a>初次主从同步</h3><p>（从）执行slaveof ip host </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">slaveofCommand()   -&gt;  replicationSetMaster()</span><br><span class="line"></span><br><span class="line">replicationSetMaster()&#123;</span><br><span class="line">    <span class="comment">//改个状态然后啥都不做</span></span><br><span class="line">    server.repl_state = REDIS_REPL_CONNECT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>(从)下一次事件循环 【建立tcp连接】</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">serverCron()  -&gt; replicationCron()  -&gt;  connectWithMaster()</span><br><span class="line"></span><br><span class="line">replicationCron()&#123;</span><br><span class="line">    <span class="keyword">if</span> (server.repl_state == REDIS_REPL_CONNECT) &#123;</span><br><span class="line">        connectWithMaster()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">connectWithMaster()&#123;</span><br><span class="line">    anetTcpNonBlockConnect()</span><br><span class="line">    aeCreateFileEvent(server.el,fd,AE_READABLE|AE_WRITABLE,syncWithMaster,NULL)</span><br><span class="line">    server.repl_transfer_lastio = server.unixtime;</span><br><span class="line">    server.repl_transfer_s = fd;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将状态改为已连接</span></span><br><span class="line">    server.repl_state = REDIS_REPL_CONNECTING;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>(从）再下一次事件循环 【发送ping】</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">syncWithMaster()&#123;</span><br><span class="line">    <span class="keyword">if</span> (server.repl_state == REDIS_REPL_CONNECTING) &#123;</span><br><span class="line">        <span class="comment">// 手动发送同步 PING ，暂时取消监听写事件</span></span><br><span class="line">        aeDeleteFileEvent(server.el,fd,AE_WRITABLE);</span><br><span class="line">        <span class="comment">// 更新状态</span></span><br><span class="line">        server.repl_state = REDIS_REPL_RECEIVE_PONG;</span><br><span class="line">        <span class="comment">// 同步发送 PING</span></span><br><span class="line">        syncWrite(fd,<span class="string">&quot;PING\r\n&quot;</span>,<span class="number">6</span>,<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（主）两个事件，回pong，同步从节点信息给客户端</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">readQueryFromClient()  -&gt;    pingCommand()   -&gt;  addReply()</span><br><span class="line">sendReplyToClient()</span><br></pre></td></tr></table></figure>
+
+<p>5，（从）主服务器写数据 触发可读事件 （ 触发注册了的syncWithMaster）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//2.8之前，Redis从节点断线重连 智能全量重同步</span></span><br><span class="line"></span><br><span class="line">syncWithMaster()&#123;</span><br><span class="line">    <span class="comment">// 接收 PONG 命令</span></span><br><span class="line">    <span class="keyword">if</span> (server.repl_state == REDIS_REPL_RECEIVE_PONG)&#123;</span><br><span class="line">        <span class="comment">// 手动同步接收 PONG ，暂时取消监听读事件</span></span><br><span class="line">        aeDeleteFileEvent(server.el,fd,AE_READABLE);</span><br><span class="line">        syncReadLine()<span class="comment">//读取pong            </span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//auth 认证</span></span><br><span class="line">    sendSynchronousCommand(fd,<span class="string">&quot;AUTH&quot;</span>,server.masterauth,NULL);</span><br><span class="line">    <span class="comment">//REPLCONF命令,获取master监听的端口</span></span><br><span class="line">    sendSynchronousCommand(fd,<span class="string">&quot;REPLCONF&quot;</span>,<span class="string">&quot;listening-port&quot;</span>,port,NULL);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根据返回的结果决定是执行部分 resync ，还是 full-resync</span></span><br><span class="line">    psync_result = slaveTryPartialResynchronization(fd);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 可以执行部分 resync</span></span><br><span class="line">    <span class="keyword">if</span> (psync_result == PSYNC_CONTINUE) &#123;</span><br><span class="line">        redisLog(REDIS_NOTICE, <span class="string">&quot;MASTER &lt;-&gt; SLAVE sync: Master accepted a Partial Resynchronization.&quot;</span>);</span><br><span class="line">        <span class="comment">// 返回</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 主服务器不支持 PSYNC ，发送 SYNC</span></span><br><span class="line">    <span class="keyword">if</span> (psync_result == PSYNC_NOT_SUPPORTED) &#123;</span><br><span class="line">        <span class="comment">// 向主服务器发送 SYNC 命令</span></span><br><span class="line">        syncWrite(fd,<span class="string">&quot;SYNC\r\n&quot;</span>,<span class="number">6</span>,server.repl_syncio_timeout*<span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//到这里 psync_result == PSYNC_FULLRESYNC 或 PSYNC_NOT_SUPPORTED</span></span><br><span class="line">    <span class="comment">// 新建临时文件, 用来接收传输过来的rdb文件</span></span><br><span class="line">    snprintf(tmpfile,<span class="number">256</span>,<span class="string">&quot;temp-%d.%ld.rdb&quot;</span>,(<span class="type">int</span>)server.unixtime,(<span class="type">long</span> <span class="type">int</span>)getpid());</span><br><span class="line">    <span class="comment">//安装读事件处理器（readQueryFromClient变为 readSyncBulkPayload）指针函数的改变</span></span><br><span class="line">    aeCreateFileEvent(server.el,fd, AE_READABLE,readSyncBulkPayload,NULL)</span><br><span class="line">    <span class="comment">// 设置状态</span></span><br><span class="line">    server.repl_state = REDIS_REPL_TRANSFER;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">slaveTryPartialResynchronization()&#123;</span><br><span class="line">    <span class="comment">//组装参数</span></span><br><span class="line">    <span class="comment">//PSYNC ? -1    完整重同步</span></span><br><span class="line">    <span class="comment">//PSYNC  runid  offset  部分重同步</span></span><br><span class="line">    <span class="comment">// 向主服务器发送 PSYNC 命令 (同步请求并等待)</span></span><br><span class="line">    reply = sendSynchronousCommand(fd,<span class="string">&quot;PSYNC&quot;</span>,psync_runid,psync_offset,NULL);</span><br><span class="line">    <span class="keyword">if</span>(reply == <span class="string">&quot;+FULLRESYNC&quot;</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> PSYNC_FULLRESYNC;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(reply == <span class="string">&quot;+CONTINUE&quot;</span>)&#123;</span><br><span class="line">        <span class="comment">// 安装 readQueryFromClient 或者  sendReplyToClient</span></span><br><span class="line">        <span class="keyword">return</span> PSYNC_CONTINUE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> PSYNC_NOT_SUPPORTED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6，（主）收到 sync命令，进行准备</p>
+<p>两种：全同步装备rdb文件，部分重同步 同步命令</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;sync&quot;</span>/<span class="string">&quot;psync&quot;</span> readQueryFromClient()  -&gt; syncCommand()</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">syncCommand</span><span class="params">(redisClient *c)</span>&#123;</span><br><span class="line">    <span class="comment">// 如果这是一个从服务器，但与主服务器的连接仍未就绪，那么拒绝 SYNC</span></span><br><span class="line">    <span class="keyword">if</span> (server.masterhost &amp;&amp; server.repl_state != REDIS_REPL_CONNECTED) &#123;</span><br><span class="line">        addReplyError(c,<span class="string">&quot;Can&#x27;t SYNC while not connected with my master&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;psync&quot;</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(masterTryPartialResynchronization())&#123;</span><br><span class="line">            <span class="keyword">return</span>;        </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (server.rdb_child_pid != -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//正好有可用的rdb文件</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//fork子进程进行rdb</span></span><br><span class="line">        rdbSaveBackground();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//设置状态</span></span><br><span class="line">    c-&gt;replstate = REDIS_REPL_WAIT_BGSAVE_END;</span><br><span class="line">    <span class="comment">// 添加到 slave 列表中</span></span><br><span class="line">    listAddNodeTail(server.slaves,c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>rdb执行完后，为从客户端安装写事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">serverCron()   -&gt;   backgroundSaveDoneHandler()  -&gt; updateSlavesWaitingBgsave()</span><br><span class="line"></span><br><span class="line">updateSlavesWaitingBgsave()&#123;</span><br><span class="line">    <span class="comment">//遍历所有slave,如果slave状态为  slave-&gt;replstate == REDIS_REPL_WAIT_BGSAVE_END</span></span><br><span class="line">    aeCreateFileEvent(server.el, slave-&gt;fd, AE_WRITABLE, sendBulkToSlave, slave)    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发送rdb 文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sendBulkToSlave()  <span class="comment">//主</span></span><br><span class="line">readSyncBulkPayload()  <span class="comment">//从</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="超时和典型问题"><a href="#超时和典型问题" class="headerlink" title="超时和典型问题"></a><strong>超时和典型问题</strong></h2><p>默认60s从节点不回复，视为超时</p>
+<p>REPLCONF ACK：从节点<strong>每秒</strong>上报偏移量，主节点检测延迟</p>
+<p>典型为题：</p>
+<p>数据不一致场景：</p>
+<p>网络延迟，解决：监控master和slave的offset</p>
+<p>从节点执行key * 阻塞，解决：避免在从节点执行慢查询</p>
+<p>全量复制风暴：</p>
+<p>导致主节点压力大，解决：错峰同步，级联更新</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/11/%E9%9D%A2%E8%AF%95%E5%89%8D%E5%BF%85%E7%9C%8B%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%F0%9F%92%AA%F0%9F%92%AA%F0%9F%92%AA/">面试前必看！！！！！！！💪💪💪</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/@Autowired%E5%92%8C@Resource/">@Autowired和@Resource</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/Redis/%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">线程模型</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/11/%E5%9C%BA%E6%99%AF%E9%A2%98/%E5%BC%80%E6%94%BE%E5%BC%8F%E6%95%B0%E6%8D%AE%E9%87%8F%E7%BA%A7%E9%97%AE%E9%A2%98/">开放式数据量级问题</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/12/%E5%9C%BA%E6%99%AF%E9%A2%98/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%87%BA%E5%8F%A3%E7%BD%91%E5%85%B3%E7%9A%84%E4%BD%9C%E7%94%A8/">微服务架构出口网关的作用</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/25/%E5%9C%BA%E6%99%AF%E9%A2%98/%E8%BD%AC%E8%BD%AC%E4%BA%BF%E7%BA%A7%E6%A0%B8%E5%BF%83%E8%A1%A8%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E6%89%A9%E5%B1%95%E5%AD%97%E6%AE%B5%EF%BC%9F/">转转亿级核心表如何优雅扩展字段？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E9%A1%B5%E9%94%81/">页锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/24/%E5%AE%9E%E4%B9%A0/%E6%B8%B8%E6%97%8F%E7%BD%91%E7%BB%9C/%E5%AE%9E%E4%B9%A0%E6%84%9F%E5%8F%97%E5%92%8C%E6%94%B6%E8%8E%B7/">实习感受和收获</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E5%B8%82%E9%9D%A2%E5%B7%B2%E6%9C%89%E7%9A%84%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%A1%86%E6%9E%B6/">市面已有的定时任务框架</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/%E5%9F%BA%E7%A1%80/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB/">为什么这么快</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/10/Redis/%E6%BA%90%E7%A0%81/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/10/Redis/%E6%BA%90%E7%A0%81/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/10/Redis/%E6%BA%90%E7%A0%81/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

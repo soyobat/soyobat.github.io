@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>如何理解AOP | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>如何理解AOP</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/04/25/Spring/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3AOP/">如何理解AOP</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-04-25
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/04/25/Spring/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3AOP/">如何理解AOP</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-04-25
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><p>AOP即面向切面编程，是一种思想，是对OOP的补充。简单的来说就是把公共的逻辑抽离出来，</p>
+<p>让开发者可以跟关注于业务逻辑的开发</p>
+<p>说简单点AOP就是 在不惊动原有的代码的基础上对功能进行增强操作 </p>
+<p>概念：</p>
+<p>连接点：JIONPoint，可以被AOP控制的方法（<font style="color:rgb(51, 51, 51);">运行时刻被拦截到的方法</font>）</p>
+<p>通知：advice 增强，切面的具体行为</p>
+<p>切入点：决定在哪些方法上生效</p>
+<p>切面：描述切入点和通知的关系</p>
+<p>通知类型：</p>
+<p>@Before</p>
+<p>@After</p>
+<p>@AfterReturning</p>
+<p>@AfterThrowing 在抛错之后</p>
+<p>@Aroud 环绕通知：<strong>在目标方法执行之前和之后都能插入逻辑</strong>，甚至可以决定是否执行目标方法。  </p>
+<p>总结：</p>
+<p><img src="/images/aeb77bb5b15cace19699cb473fa709c6.png"></p>
+<h2 id="AOP的底层实现方法"><a href="#AOP的底层实现方法" class="headerlink" title="AOP的底层实现方法"></a>AOP的底层实现方法</h2><p>一共有三种吧，常见的像代理，还有AspectJ框架提供的两种方法</p>
+<p>第一种就是AJC增强，它就是指AJC编译器在<strong>编译过程</strong>中把通知的增强功能植入目标类的Class文件中</p>
+<p>来达到增强的效果，然后它的执行时机就是通知类上有Aspect注解，不需要component注解，该通知类</p>
+<p>就没有被Spring所管理。所有AOP的执行底层是通过AJC去修改Class文件，而不是动态代理，这时候没有</p>
+<p>Spring容器也可以进行aop增强，但需要用到maven一个插件，这种方式用得很少</p>
+<p>第二宗就是通过agent底层来实现aop，它是agent编译器在加载目标类的时候，因为是在加载类的时候么，</p>
+<p>Class文件已经编译完了，它就在<strong>加载目标类的时候</strong>修改对应的Class文件，达到增强的功能。它的执行时机</p>
+<p>跟AJC编译差不多的，也是通知类上有Aspect注解，不需要component注解。区别就是给JVM加一个参数 - </p>
+<p>javaagent，后面指定maven目录下的一个jar包路径 </p>
+<p>第三种就是我们常用的代理增强了。代理的本质就是生成一个代理对象，类似于房东和中介的，中介就是代理</p>
+<p>这个代理对象和切入点有着相同的方法，然后代理对象的方法就是根据需求增强过的，然后调用切入点的方法</p>
+<p>不走它的方法，而是走代理对象在增强过的方法。而怎么<strong>保证代理对象和切入点有着相同的方法呢，这就分为</strong></p>
+<p><strong>两派，一种是jdk代理，一种是cglib代理。</strong></p>
+<p>jdk代理是Java自带的代理，主要是采用了多态和反射的方式。它是代理对象和目标类实现同一个接口，就可</p>
+<p>以保证两者都有同样的方法</p>
+<p>jdk代理通过Proxy.newProxyInstance()获取到代理对象 </p>
+<p><img src="/images/f39a9891de6c6715b4d4c4b4b4ee1eca.png"></p>
+<p>newProxyInstance方法的三个参数： </p>
+<p>第一个参数，类加载器 </p>
+<p>第二个参数，接口集合，因为jdk代理需要目标对象实现接口 </p>
+<p>第三个参数，一个函数式接口，实现增强方法逻辑，这个函数式接口也有三个参数： </p>
+<p>第一个参数，目标对象 </p>
+<p>第二个参数，需要被增强的方法 </p>
+<p>第三个参数，方法执行的参数 </p>
+<p>proxy.newProxyInstance()方法底层会根据传入的接口集合，在运行时在本类目录下生成一个$proxy0类</p>
+<p>实现这些方法，然后里面的所有方法都会被InvocationHandler方法给拦截下来进行增强（包括equals和hashcode）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">$Proxy0</span> <span class="keyword">extends</span> <span class="title class_">Proxy</span> <span class="keyword">implements</span> <span class="title class_">Test</span> &#123; </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Method m1; </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Method m2; </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Method m3; </span><br><span class="line"> </span><br><span class="line"><span class="comment">// $Proxy0 类的构造方法 </span></span><br><span class="line"><span class="comment">// 参数为 invocationHandler </span></span><br><span class="line"><span class="keyword">public</span> $Proxy0(InvocationHandler invocationHandler) &#123; </span><br><span class="line"><span class="built_in">super</span>(invocationHandler); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> &#123; </span><br><span class="line">m1 = Class.forName(<span class="string">&quot;java.lang.Object&quot;</span>).getMethod(<span class="string">&quot;equals&quot;</span>, Class.forName(<span class="string">&quot;java.lang.Object&quot;</span>)); </span><br><span class="line">m2 = Class.forName(<span class="string">&quot;java.lang.Object&quot;</span>).getMethod(<span class="string">&quot;hashCode&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[<span class="number">0</span>]); </span><br><span class="line">m3 = Class.forName(<span class="string">&quot;com.xxx.Test&quot;</span>).getMethod(<span class="string">&quot;test&quot;</span>, <span class="keyword">new</span> <span class="title class_">Class</span>[<span class="number">0</span>]); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123; </span><br><span class="line"><span class="built_in">this</span>.h.invoke(<span class="built_in">this</span>, m3, <span class="literal">null</span>); </span><br><span class="line"><span class="keyword">return</span>; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123; </span><br><span class="line"><span class="keyword">return</span> <span class="built_in">this</span>.h.invoke(<span class="built_in">this</span>, m2, <span class="literal">null</span>); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123; </span><br><span class="line"><span class="keyword">return</span> <span class="built_in">this</span>.h.invoke(<span class="built_in">this</span>, m1, <span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;o&#125;); </span><br><span class="line">&#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+
+<p>cglib代理不是jdk自带的代理，需要导外部依赖，其底层是让代理类继承目标类，通过Enhancer.create获取代理对象 </p>
+<p><img src="/images/08325682eb4363c7a33e63295439a618.png"></p>
+<p>create方法的两个参数： </p>
+<p>第一个参数：目标类 </p>
+<p>第二个参数：一个函数式接口，实现增强方法逻辑，这个函数式接口有四个参数： </p>
+<p>第一个参数，代理对象自己 </p>
+<p>第二个参数，需要被增强的方法 </p>
+<p>第三个参数，方法执行的参数 </p>
+<p>第四个参数，MethodProxy，代理不走反射的关键 </p>
+<p>其实AOP的重点是如何获取目标类的原始方法，并把它放到特定的上下文环境下执行</p>
+<p>对于这一点，jdk代理采用的是反射，你看，我都采用反射了，我还拿不到你原始方法吗</p>
+<p>而cglib采用的就是继承，我都继承了，我肯定能通过super.xx拿到你的原始方法</p>
+<p>还有就是，代理模式则是在运行期生成新的字节码。AspectJ对代码的侵入性很强，因此没有怎么流行               但因为它是在编译器和类加载期修改字节码，故性能较高。且能突破代理只能重写方法来实现增强的限	            制，如能增强构造方法，静态方法，final修饰的方法	</p>
+<p><img src="/images/1f8537415b739031083c2a3e5766b7fa.png"></p>
+<h2 id="Spring的AOP是怎么实现的"><a href="#Spring的AOP是怎么实现的" class="headerlink" title="Spring的AOP是怎么实现的"></a>Spring的AOP是怎么实现的</h2><p>Spring的AOP是采用动态代理实现的</p>
+<p><img src="/images/90aa575ccaba8defc5c3e44f877c8e05.png"></p>
+<p>至于是jdk还是cglib，Spring容器代理时，会有一个proxyBean类，这个类会传入目标对象和通知</p>
+<p>，然后这个类还有一个boolean proxyTargetClass，如果设置为false，那就会去检查目标类是否实现了</p>
+<p>接口，有就用jdk，无就用cglib。如果为true，那就直接用cglib</p>
+<h2 id="一个方法被多个切面AOP了？"><a href="#一个方法被多个切面AOP了？" class="headerlink" title="一个方法被多个切面AOP了？"></a>一个方法被多个切面AOP了？</h2><p>需要给切面标明@Order（x）x越小，说明你那个优先级越高。</p>
+<p>如果无标明，那就会按注册的顺序来执行，但此时是随机的，不可知的</p>
+<p>因为 Spring AOP 内部会把所有的切面包装成 Advisor，然后放到一个集合里。虽然这个集合是个List，但</p>
+<p>虽然用的是 <code>ArrayList</code>（顺序表），但<strong>插入顺序本身没保证稳定</strong>，因为：</p>
+<pre><code>- 不同 BeanFactory 扫描/注册 Bean 的顺序可能不同。
+- 不同 JDK、不同文件系统，class 扫描顺序也可能不同。
+- 所以“默认顺序”没有规范，才会被说成是 **不可知的**。
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Before(&quot;execution(* com.example.service.*.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">before</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;LogAspect before&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SecurityAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Before(&quot;execution(* com.example.service.*.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">before</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;SecurityAspect before&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//执行顺序不一定的</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/a9618b6352fad51587615a43660b70b7.png"></p>
+<h2 id="AOP失效？"><a href="#AOP失效？" class="headerlink" title="AOP失效？"></a>AOP失效？</h2><p>当然这只限于代理类的</p>
+<p>类中自调用方法，同一个类中A调用B方法，B方法的AOP不会生效 </p>
+<p>调用内部类方法 </p>
+<p>调用静态方法，静态方法不会被AOP </p>
+<p>调用final方法，final方法不会被AOP</p>
+<p>目标类不符合规则，如jdk代理时没继承接口，cglib代理时是final类 </p>
+<h2 id="cglib-和jdk代理哪个快"><a href="#cglib-和jdk代理哪个快" class="headerlink" title="cglib 和jdk代理哪个快"></a>cglib 和jdk代理哪个快</h2><p><img src="/images/72ec9b05f388f36c5dc9eb546b104e6b.png"></p>
+<p>在 JDK1.6、JDK1.7、JDK1.8 逐步对 JDK 动态代理优化之后，在调用次数较少的情况下，JDK 代理效率高于 CGLib 代理效率，只有当进行大量调用的时候，JDK1.6 和 JDK1.7 比 CGLib 代理效率低一点，但是到 JDK1.8 的时候，JDK 代理效率高于 CGLib 代理。所以如果有接口使用 JDK 动态代理，如果没有接口使用 CGLIB 代理。</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/11/Codetop%E5%88%B7%E9%A2%98/">Codetop刷题</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/12/Docker/Docker%20UnionFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Docker UnionFS文件系统</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/13/Codetop%E5%88%B7%E9%A2%98/%E8%BF%90%E7%AE%97/">运算</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/12/MySQL/other%20sql%20db/">other sql db</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JVM/%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/">内存结构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/31/kafka/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2/">如何保证消息不丢</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/06/09/%E5%9C%BA%E6%99%AF%E9%A2%98/%E6%BB%9A%E5%8A%A8%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E6%96%B9%E6%B3%95Flume%20taildir%E6%A8%A1%E5%BC%8F/">滚动日志收集方法Flume taildir模式</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/25/%E5%9C%BA%E6%99%AF%E9%A2%98/%E8%BD%AC%E8%BD%AC%E4%BA%BF%E7%BA%A7%E6%A0%B8%E5%BF%83%E8%A1%A8%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E6%89%A9%E5%B1%95%E5%AD%97%E6%AE%B5%EF%BC%9F/">转转亿级核心表如何优雅扩展字段？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E6%8C%81%E4%B9%85%E5%8C%96/%E4%B8%89%E7%A7%8D%E6%8C%81%E4%B9%85%E5%8C%96%E7%AD%96%E7%95%A5/">三种持久化策略</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/%E7%BC%93%E5%86%B2%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98/">缓冲三大问题</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/04/25/Spring/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3AOP/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/25/Spring/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3AOP/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/25/Spring/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3AOP/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

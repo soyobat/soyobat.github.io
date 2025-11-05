@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>重试策略：区分偶发性超时和频繁超时的重试策略 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>重试策略：区分偶发性超时和频繁超时的重试策略</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5%EF%BC%9A%E5%8C%BA%E5%88%86%E5%81%B6%E5%8F%91%E6%80%A7%E8%B6%85%E6%97%B6%E5%92%8C%E9%A2%91%E7%B9%81%E8%B6%85%E6%97%B6%E7%9A%84%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5/">重试策略：区分偶发性超时和频繁超时的重试策略</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-16
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5%EF%BC%9A%E5%8C%BA%E5%88%86%E5%81%B6%E5%8F%91%E6%80%A7%E8%B6%85%E6%97%B6%E5%92%8C%E9%A2%91%E7%B9%81%E8%B6%85%E6%97%B6%E7%9A%84%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5/">重试策略：区分偶发性超时和频繁超时的重试策略</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-16
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><font style="color:rgb(55, 65, 81);">这是一个非常高级的案例。借助这个案例，你可以达成三个效果：</font></p>
+<ul>
+<li><font style="color:rgb(55, 65, 81);">证明自己很擅长搞服务治理</font></li>
+<li><font style="color:rgb(55, 65, 81);">证明自己懂得解决重试风暴的问题</font></li>
+<li><font style="color:rgb(55, 65, 81);">证明自己能够设计非常复杂的方案</font></li>
+</ul>
+<p><font style="color:rgb(55, 65, 81);">这个案例就是借助滑动窗口算法来统计一段时间内的超时请求比率，如果超过了比率，那么就认为此时超时不是一个偶发性的问题，不应该继续重试。而后，为了支撑高并发的场景，滑动窗口算法可以借助 ring buffer 来实现，用一个比特来表达请求是否超时。同时可以用原子操作来进一步提高性能，因此你在这个案例下能够聊的话题非常多：</font></p>
+<ul>
+<li><font style="color:rgb(55, 65, 81);">滑动窗口算法</font></li>
+<li><font style="color:rgb(55, 65, 81);">Ring Buffer 算法</font></li>
+<li><font style="color:rgb(55, 65, 81);">位操作：统计 1 的个数</font></li>
+<li><font style="color:rgb(55, 65, 81);">原子操作</font></li>
+</ul>
+<p><font style="color:rgb(55, 65, 81);">我愿称之为，你拿出去装一次逼，就可以证明你在算法设计上还是有点东西的。</font></p>
+<p><font style="color:rgb(55, 65, 81);"></font></p>
+<p><font style="color:rgb(55, 65, 81);"></font></p>
+<p><font style="color:rgb(31, 41, 55);">在微服务超时控制和重试策略里面，经常会引用这个案例。代码在</font><font style="color:rgb(31, 41, 55);"> </font><a target="_blank" rel="noopener" href="https://github.com/meoying/interview-cases/tree/main/case31_40/case32"><font style="color:rgb(17, 24, 39);">interview-cases&#x2F;case31_40&#x2F;case32 at main · meoying&#x2F;interview-cases (github.com)</font></a></p>
+<h3 id="普通版"><a href="#普通版" class="headerlink" title="普通版"></a><font style="color:rgb(17, 24, 39);">普通版</font></h3><p><font style="color:rgb(31, 41, 55);">普通版本就是使用一个普通的滑动窗口算法，关键点是：</font></p>
+<ul>
+<li><font style="color:rgb(31, 41, 55);">在窗口里面，记录了每个请求的时间戳，以及这个请求是否超时；</font></li>
+<li><font style="color:rgb(31, 41, 55);">每个请求在收到了超时响应之后，统计这个窗口内部的超时请求数量；</font></li>
+<li><font style="color:rgb(31, 41, 55);">如果超时请求数量超过阈值了，那么就认为不应该重试了；</font></li>
+<li><font style="color:rgb(31, 41, 55);">如果超时请求数量没有超过阈值，那么就认为可以重试；</font></li>
+</ul>
+<h3 id="进阶版"><a href="#进阶版" class="headerlink" title="进阶版"></a><font style="color:rgb(17, 24, 39);">进阶版</font></h3><p><font style="color:rgb(31, 41, 55);">在高并发的情况下，滑动窗口算法的开销是难以忍受的。举个例子来说，即便将窗口限制在 1s，高并发的时候 1s 也有几万个请求，这几万个请求会占据你很多内存。而且在判定要不要重试的时候还要遍历，这也是一个极大的问题。</font></p>
+<p><font style="color:rgb(31, 41, 55);">所以在进阶版里面，需要做优化：</font></p>
+<ul>
+<li><font style="color:rgb(31, 41, 55);">使用 ring buffer 来实现滑动窗口，进一步使用一个比特来标记请求是否超时；</font></li>
+<li><font style="color:rgb(31, 41, 55);">每个请求超时之后，判定要不要执行重试，就要统计这个 ring buffer 里面为 1 的比特数量；</font></li>
+<li><font style="color:rgb(31, 41, 55);">如果超时请求数量超过阈值了，那么就认为不应该重试；</font></li>
+<li><font style="color:rgb(31, 41, 55);">如果超时请求数量没有超过阈值，那么就认为可以重试；</font></li>
+<li><font style="color:rgb(31, 41, 55);">为了进一步提高性能，这里可以使用原子操作；</font></li>
+</ul>
+<p><font style="color:rgb(31, 41, 55);">举个例子来说，假设我们现在用 128 个比特来记录请求的超时信息，也就是说窗口大小是 128 个请求（不再是以时间来作为窗口大小了）。而后第一个请求过来标记下标 0 的比特，第二个请求标记下标 1 的比特…当都标记满了，就再次从头开始。</font></p>
+<p><font style="color:rgb(31, 41, 55);">要注意，在我们的实现里面使用了大量的原子操作，所以你同样可以用这个案例来证明你很擅长并发编程。如果你觉得代码奇怪，请不要惊讶，它确实是对的，只是说违背一般的并发编程的模式而已，但是它确实是并发安全的，并且性能很好。</font></p>
+<h3 id="适用场景和话术"><a href="#适用场景和话术" class="headerlink" title="适用场景和话术"></a><font style="color:rgb(17, 24, 39);">适用场景和话术</font></h3><p><font style="color:rgb(31, 41, 55);">它可以用在这些场景：</font></p>
+<ul>
+<li><font style="color:rgb(31, 41, 55);">介绍你的提高可用性的方案，你可以将重试作为作为提高系统可用性的一环，而后介绍你这个规避了重试风暴的重试策略；</font></li>
+<li><font style="color:rgb(31, 41, 55);">在面试中讨论到了超时问题</font></li>
+<li><font style="color:rgb(31, 41, 55);">在面试中讨论到了重试问题，你可以主动提及重试风暴的问题，以及你解决了这个问题，也就是这个案例；</font></li>
+</ul>
+<p><font style="color:rgb(31, 41, 55);">而在介绍的时候，你要用一种演进的预期来介绍，也就是你不要上来就介绍进阶版，你要先介绍普通版，而后介绍进阶版。从这个演进中能够体现你对系统的思考，以及你是一个精益求精的人。</font></p>
+<p><font style="color:rgb(31, 41, 55);">那么你可以参考这个话术：</font></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">在处理大量请求时，我们经常会遇到超时的情况。为了合理控制重试行为，避免所谓的“重试风暴”，我设计了一个基于时间窗口的算法。在这个算法中，我们维护了一个滑动窗口，窗口内记录了每个请求的时间戳以及该请求是否超时。每当一个请求超时后，我们会统计窗口内超时的请求数量。如果超时请求的数量超过了设定的阈值，我们就认为当前系统压力较大，不适合进行重试；否则，我们认为可以安全地进行重试。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">然而，随着并发量的增加，普通版的滑动窗口算法暴露出了一些问题。特别是在高并发场景下，窗口内需要维护的请求数量可能非常大，这不仅占用了大量内存，而且在判定是否需要重试时还需要遍历整个窗口，这大大增加了算法的时间复杂度。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">为了解决这个问题，我们进一步设计了进阶版的算法。在这个版本中，我们引入了ring buffer 来优化滑动窗口的实现。具体来说，我们不再以时间为窗口大小，而是使用固定数量的比特位来记录请求的超时信息。每个比特位对应一个请求，用1表示超时，用0表示未超时。当所有比特位都被标记后，我们从头开始再次标记。</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">这种设计极大地降低了内存占用，因为无论并发量多高，我们只需要固定数量的比特位来记录请求的超时状态。同时，在判定是否需要重试时，我们只需要统计ring buffer中为1的比特数量，这大大简化了算法的实现并提高了效率。</font></strong></em></p>
+<h3 id="模拟面试题"><a href="#模拟面试题" class="headerlink" title="模拟面试题"></a><font style="color:rgb(17, 24, 39);">模拟面试题</font></h3><p><strong><font style="color:rgb(17, 24, 39);">你的 ring buffer 设置得多大？</font></strong></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">你可以随便说，并不需要很多。比如说你可以这么回答：</font></strong></em></p>
+<p><em><strong><font style="color:rgb(17, 24, 39);">默认情况下是 128 字节，也就是 128 * 8 比特，1024 个比特。相当于每次都是只统计 1024 个请求中超时的比例</font></strong></em></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/13/Docker/%E9%95%9C%E5%83%8F_ez0sv8trtpzaql3g/">镜像</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/12/JavaSE/java%20and%20kotlin/">java and kotlin</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/21/JVM/%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84gc/">方法区的gc</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">源码</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">kafka副本</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E7%B4%A2%E5%BC%95%E5%90%88%E5%B9%B6%E6%9C%BA%E5%88%B6/">索引合并机制</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E9%94%81%E5%8D%87%E7%BA%A7/">锁升级</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E9%A1%B5%E9%94%81/">页锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B8%B8%E8%A7%84/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/">责任链模式</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/06/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE/">为什么要做这个项目</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5%EF%BC%9A%E5%8C%BA%E5%88%86%E5%81%B6%E5%8F%91%E6%80%A7%E8%B6%85%E6%97%B6%E5%92%8C%E9%A2%91%E7%B9%81%E8%B6%85%E6%97%B6%E7%9A%84%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5%EF%BC%9A%E5%8C%BA%E5%88%86%E5%81%B6%E5%8F%91%E6%80%A7%E8%B6%85%E6%97%B6%E5%92%8C%E9%A2%91%E7%B9%81%E8%B6%85%E6%97%B6%E7%9A%84%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/16/%E5%9C%BA%E6%99%AF%E9%A2%98/%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5%EF%BC%9A%E5%8C%BA%E5%88%86%E5%81%B6%E5%8F%91%E6%80%A7%E8%B6%85%E6%97%B6%E5%92%8C%E9%A2%91%E7%B9%81%E8%B6%85%E6%97%B6%E7%9A%84%E9%87%8D%E8%AF%95%E7%AD%96%E7%95%A5/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

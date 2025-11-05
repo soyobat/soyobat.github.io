@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>吃透netty | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>吃透netty</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/14/netty/%E5%90%83%E9%80%8Fnetty/">吃透netty</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-14
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/14/netty/%E5%90%83%E9%80%8Fnetty/">吃透netty</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-14
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="大纲"><a href="#大纲" class="headerlink" title="大纲"></a>大纲</h2><p><img src="/images/068c463706a5dea6da3516c1e7a2626d.png"></p>
+<h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><h3 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h3><p>三个模块</p>
+<p>core</p>
+<p>protosupport</p>
+<p>transport</p>
+<p><img src="/images/c543dc08077529cebcf3bf2e11675dad.png"></p>
+<h4 id="1-Core-核心层"><a href="#1-Core-核心层" class="headerlink" title="1. Core 核心层"></a><font style="color:rgb(59, 67, 81);">1. Core 核心层</font></h4><p><font style="color:rgb(59, 67, 81);">Core 核心层是 Netty 最精华的内容，它提供了底层网络通信的通用抽象和实现，包括可扩展的事件模型、通用的通信 API、支持零拷贝的 ByteBuf 等。</font></p>
+<h4 id="2-Protocol-Support-协议支持层"><a href="#2-Protocol-Support-协议支持层" class="headerlink" title="2. Protocol Support 协议支持层"></a><font style="color:rgb(59, 67, 81);">2. Protocol Support 协议支持层</font></h4><p><font style="color:rgb(59, 67, 81);">协议支持层基本上覆盖了主流协议的编解码实现，如 HTTP、SSL、Protobuf、压缩、大文件传输、WebSocket、文本、二进制等主流协议，此外 Netty 还支持自定义应用层协议。Netty 丰富的协议支持降低了用户的开发成本，基于 Netty 我们可以快速开发 HTTP、WebSocket 等服务。</font></p>
+<h4 id="3-Transport-Service-传输服务层"><a href="#3-Transport-Service-传输服务层" class="headerlink" title="3. Transport Service 传输服务层"></a><font style="color:rgb(59, 67, 81);">3. Transport Service 传输服务层</font></h4><p><font style="color:rgb(59, 67, 81);">传输服务层提供了网络传输能力的定义和实现方法。它支持 Socket、HTTP 隧道、虚拟机管道等传输方式。Netty 对 TCP、UDP 等数据传输做了抽象和封装，用户可以更聚焦在业务逻辑实现上，而不必关系底层数据传输的细节。</font></p>
+<h3 id="逻辑结构"><a href="#逻辑结构" class="headerlink" title="逻辑结构"></a>逻辑结构</h3><p><img src="/images/56f2e0e9ead98a70e4c92ed8099815b2.png"></p>
+<h4 id="网络通信层"><a href="#网络通信层" class="headerlink" title="网络通信层"></a>网络通信层</h4><p>主要负责网络事件的监听，当网络数据读取到内核缓冲区后，会触发各种网络事件，会被注册到事件调度层进</p>
+<p>行处理</p>
+<p><font style="color:rgb(59, 67, 81);">网络通信层的</font><strong><font style="color:rgb(59, 67, 81);">核心组件</font></strong><font style="color:rgb(59, 67, 81);">包含</font><strong><font style="color:rgb(59, 67, 81);">BootStrap、ServerBootStrap、Channel</font></strong><font style="color:rgb(59, 67, 81);">三个组件。</font></p>
+<pre><code>- **&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;BootStrap &amp;ServerBootStrap 引导  
+</code></pre>
+<p></font><strong><font style="color:rgb(59, 67, 81);">如下图所示，Netty 中的引导器共分为两种类型：一个为</font></strong><font style="color:rgb(59, 67, 81);">用于客户端引导的 Bootstrap</font><strong><font style="color:rgb(59, 67, 81);">，另一个为</font></strong><font style="color:rgb(59, 67, 81);">用于服务端引导的 ServerBootStrap</font>**<font style="color:rgb(59, 67, 81);">，它们都继承自抽象类 AbstractBootstrap。<br></font>ServerBootStrap用于服务器启动时绑定本地端口，会绑定两个eventloopgroup，一个boss，一个worker。而BootStrap主要是用与服务器进行通信，只有一个eventloopgroup<br>    - channel<br><font style="color:rgb(59, 67, 81);">Channel 的字面意思是“通道”，它是网络通信的载体，说白了就是操作内核缓冲区或者说我们<br></font><font style="color:rgb(59, 67, 81);">可以使用channel的API来操作底层Socket<br></font></p>
+<p><img src="/images/e067149f1d5afbd4e6a0c80466b938a3.png"></p>
+<p>channel还有不同的状态，这些不同的状态就对应的不同的回调事件</p>
+<h4 id="事件调度层"><a href="#事件调度层" class="headerlink" title="事件调度层"></a><font style="color:rgb(59, 67, 81);">事件调度层</font></h4><p><font style="color:rgb(59, 67, 81);">事件调度层的职责是通过 Reactor 线程模型对各类事件进行聚合处理，通过 Selector 主循环线程集成多种事件（ I&#x2F;O 事件、信号事件、定时事件等），实际的业务处理逻辑是交由服务编排层中相关的 Handler 完成。</font></p>
+<p><font style="color:rgb(59, 67, 81);">事件调度层的</font><strong><font style="color:rgb(59, 67, 81);">核心组件</font></strong><font style="color:rgb(59, 67, 81);">包括 </font><strong><font style="color:rgb(59, 67, 81);">EventLoopGroup、EventLoop</font></strong><font style="color:rgb(59, 67, 81);">。</font></p>
+<p><font style="color:rgb(59, 67, 81);">这group其实就是线程池来着，eventloop就是线程</font></p>
+<pre><code>- eventloopgroup和eventloop和channel的关系  
+</code></pre>
+<p><img src="/images/b81986a9741bea32530e2483c8412290.png"><br>特别地说一下，channel被建立后，就会分配一个eventloop与其绑定，且可不是绑死的，可多次松绑or绑定</p>
+<p><strong>一个 Channel 在它的生命周期里，只能绑定到一个 EventLoop。</strong></p>
+<p><strong>一个 EventLoop 可以同时绑定多个 Channel，并处理它们的 I&#x2F;O 事件</strong></p>
+<p><font style="color:rgb(59, 67, 81);">然后eventloop通过操作系统的epoll监听多个channel的事件，事件复杂度接近 O (1)</font></p>
+<p>·<font style="color:rgb(59, 67, 81);">类关系</font><img src="/images/87b0af60dfe64333fa37baa430c1551b.png"></p>
+<p><font style="color:rgb(59, 67, 81);">EventLoopGroup 是 Netty 的核心处理引擎，那么 EventLoopGroup 和之前课程所提到的 Reactor 线程模型到底是什么关系呢？其实 EventLoopGroup 是 Netty Reactor 线程模型的具体实现方式，Netty 通过创建不同的 EventLoopGroup 参数配置，就可以支持 Reactor 的三种线程模型：</font></p>
+<pre><code>    1. **&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;单线程模型&lt;/font&gt;**&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;：EventLoopGroup 只包含一个 EventLoop，Boss 和 Worker 使用同一个EventLoopGroup；&lt;/font&gt;
+    2. **&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;多线程模型&lt;/font&gt;**&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;：EventLoopGroup 包含多个 EventLoop，Boss 和 Worker 使用同一个EventLoopGroup；&lt;/font&gt;
+    3. **&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;主从多线程模型&lt;/font&gt;**&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;：EventLoopGroup 包含多个 EventLoop，Boss 是主 Reactor，Worker 是从 Reactor，它们分别使用不同的 EventLoopGroup，主 Reactor 负责新的网络连接 Channel 创建，然后把 Channel 注册到从 Reactor。&lt;/font&gt;
+</code></pre>
+<h4 id="服务编排层"><a href="#服务编排层" class="headerlink" title="服务编排层"></a><font style="color:rgb(59, 67, 81);">服务编排层</font></h4><h4 id="服务编排层的职责是负责组装各类服务，它是-Netty-的核心处理链，用以实现网络事件的动态编排和有序传播。"><a href="#服务编排层的职责是负责组装各类服务，它是-Netty-的核心处理链，用以实现网络事件的动态编排和有序传播。" class="headerlink" title="服务编排层的职责是负责组装各类服务，它是 Netty 的核心处理链，用以实现网络事件的动态编排和有序传播。"></a>服务编排层的职责是负责组装各类服务，它是 Netty 的核心处理链，用以实现网络事件的动态编排和有序传播。</h4><p>服务编排层的核心组件包括 ChannelPipeline、ChannelHandler、ChannelHandlerContext。</p>
+<pre><code>- **ChannelPipeline**   
+</code></pre>
+<p><font style="color:rgb(59, 67, 81);">ChannelPipeline 是 Netty 的核心编排组件，</font>**<font style="color:rgb(59, 67, 81);">负责组装各种 ChannelHandler。</font>**其实就是把channelHandler给串联起来，本质是一个双向链表。当网络事件来的时候，就会依次调用channelPipeline里的Handler对其进行拦截</p>
+<p><font style="color:rgb(59, 67, 81);">ChannelPipeline 是</font><strong><font style="color:rgb(59, 67, 81);">线程安全</font></strong><font style="color:rgb(59, 67, 81);">的，因为每一个新的 Channel 都会对应绑定一个新的 ChannelPipeline。一个 ChannelPipeline 关联一个 EventLoop，一个 EventLoop 仅会绑定一个线程。</font></p>
+<p><font style="color:rgb(59, 67, 81);">ChannelPipeline 中包含入站 ChannelInboundHandler 和出站 ChannelOutboundHandler 两种处</font></p>
+<p><font style="color:rgb(59, 67, 81);">理器，我们结合客户端和服务端的数据收发流程来理解 Netty 的这两个概念</font></p>
+<pre><code>- **&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;ChannelHandler &amp; ChannelHandlerContext&lt;/font&gt;**
+</code></pre>
+<p>为啥每个channelHandler都要绑定一个**<font style="color:rgb(59, 67, 81);">ChannelHandlerContext？</font>**</p>
+<p>有点类似于工人和工具工位的关系</p>
+<p><font style="color:rgb(59, 67, 81);">ChannelHandlerContext 用于保存 ChannelHandler 上下文，通过 ChannelHandlerContext 我们可以知道 ChannelPipeline 和 ChannelHandler 的关联关系。ChannelHandlerContext 可以实现 ChannelHandler 之间的交互，ChannelHandlerContext 包含了 ChannelHandler 生命周期的所有事件，如 connect、bind、read、flush、write、close 等。此外，你可以试想这样一个场景，如果每个 ChannelHandler 都有一些通用的逻辑需要实现，没有 ChannelHandlerContext 这层模型抽象，你是不是需要写很多相同的代码呢？</font>  </p>
+<p><img src="/images/19756a653874c4a73f9f1603672615d9.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyHandler</span> <span class="keyword">extends</span> <span class="title class_">ChannelInboundHandlerAdapter</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;收到消息: &quot;</span> + msg);</span><br><span class="line">        ctx.fireChannelRead(msg); <span class="comment">// 传递给下一个 Handler</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h4><p><img src="/images/a6de7e1c2cc30185d3376606eddc824f.png"></p>
+<h2 id="服务端启动要干什么"><a href="#服务端启动要干什么" class="headerlink" title="服务端启动要干什么"></a>服务端启动要干什么</h2><p><font style="color:rgb(59, 67, 81);">配置线程池</font></p>
+<p><font style="color:rgb(59, 67, 81);">Channel 初始化</font></p>
+<p><font style="color:rgb(59, 67, 81);">端口绑定</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 检测是否使用Epoll优化性能</span></span><br><span class="line"><span class="comment">// 启动Netty服务器</span></span><br><span class="line"><span class="meta">@SneakyThrows(InterruptedException.class)</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!start.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">// 配置服务器参数，如端口、TCP参数等</span></span><br><span class="line">    serverBootstrap</span><br><span class="line">            .group(eventLoopGroupBoss, eventLoopGroupWorker)</span><br><span class="line">            .channel(SystemUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)</span><br><span class="line">            .option(ChannelOption.SO_BACKLOG, <span class="number">1024</span>)            <span class="comment">// TCP连接的最大队列长度</span></span><br><span class="line">            .option(ChannelOption.SO_REUSEADDR, <span class="literal">true</span>)          <span class="comment">// 允许端口重用</span></span><br><span class="line">            .option(ChannelOption.SO_KEEPALIVE, <span class="literal">true</span>)          <span class="comment">// 保持连接检测</span></span><br><span class="line">            .childOption(ChannelOption.TCP_NODELAY, <span class="literal">true</span>)      <span class="comment">// 禁用Nagle算法，适用于小数据即时传输</span></span><br><span class="line">            .childOption(ChannelOption.SO_SNDBUF, <span class="number">65535</span>)       <span class="comment">// 设置发送缓冲区大小</span></span><br><span class="line">            .childOption(ChannelOption.SO_RCVBUF, <span class="number">65535</span>)       <span class="comment">// 设置接收缓冲区大小</span></span><br><span class="line">            .localAddress(<span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(config.getPort())) <span class="comment">// 绑定监听端口</span></span><br><span class="line">            .childHandler(<span class="keyword">new</span> <span class="title class_">ChannelInitializer</span>&lt;&gt;() &#123;   <span class="comment">// 定义处理新连接的管道初始化逻辑</span></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">initChannel</span><span class="params">(Channel ch)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                    ch.pipeline().addLast(</span><br><span class="line">                            <span class="keyword">new</span> <span class="title class_">HttpServerCodec</span>(), <span class="comment">// 处理HTTP请求的编解码器</span></span><br><span class="line">                            <span class="keyword">new</span> <span class="title class_">HttpObjectAggregator</span>(config.getNetty().getMaxContentLength()), <span class="comment">// 聚合HTTP请求</span></span><br><span class="line">                            <span class="keyword">new</span> <span class="title class_">HttpServerExpectContinueHandler</span>(), <span class="comment">// 处理HTTP 100 Continue请求</span></span><br><span class="line">                            <span class="keyword">new</span> <span class="title class_">NettyHttpServerHandler</span>(nettyProcessor) <span class="comment">// 自定义的处理器</span></span><br><span class="line">                    );</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    serverBootstrap.bind().sync();</span><br><span class="line">    ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);</span><br><span class="line">    log.info(<span class="string">&quot;gateway startup on port &#123;&#125;&quot;</span>, <span class="built_in">this</span>.config.getPort());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="eventloop精髓"><a href="#eventloop精髓" class="headerlink" title="eventloop精髓"></a>eventloop精髓</h2><p><font style="color:rgb(59, 67, 81);">网络框架的设计离不开 I&#x2F;O 线程模型，线程模型的优劣直接决定了系统的吞吐量、可扩展性、安全性等</font></p>
+<p><font style="color:rgb(59, 67, 81);"></font></p>
+<h3 id="三种-Reactor-线程模型"><a href="#三种-Reactor-线程模型" class="headerlink" title="三种 Reactor 线程模型"></a><strong><font style="color:rgb(59, 67, 81);">三种 Reactor 线程模型</font></strong></h3><p>单</p>
+<p>多</p>
+<p>主从</p>
+<p>前两种就是建立和业务处理没分开，无法轻松建立大量连接，建立连接会被耗时的业务请求影响到</p>
+<h3 id="Netty-EventLoop-实现原理"><a href="#Netty-EventLoop-实现原理" class="headerlink" title="Netty EventLoop 实现原理"></a><font style="color:rgb(59, 67, 81);">Netty EventLoop 实现原理</font></h3><p><font style="color:rgb(59, 67, 81);">在 Netty 中 EventLoop 可以理解为 Reactor 线程模型的事件处理引擎，每个 EventLoop 线程都维护一个 Selector 选择器和任务队列 taskQueue。它主要负责处理 I&#x2F;O 事件、普通任务和定时任务。</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * EventLoop 主循环</span></span><br><span class="line"><span class="comment"> * 不停地轮询 I/O 事件 + 执行任务队列（普通任务/定时任务）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 死循环，直到 EventLoop 被关闭</span></span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 根据策略决定如何调用 select()（I/O 多路复用）</span></span><br><span class="line">                <span class="comment">// selectStrategy 会返回 CONTINUE/BUSY_WAIT/SELECT</span></span><br><span class="line">                <span class="keyword">switch</span> (selectStrategy.calculateStrategy(selectNowSupplier, hasTasks())) &#123;</span><br><span class="line">                <span class="keyword">case</span> SelectStrategy.CONTINUE:</span><br><span class="line">                    <span class="comment">// CONTINUE 表示继续下一次循环，不阻塞</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">case</span> SelectStrategy.BUSY_WAIT:</span><br><span class="line">                <span class="keyword">case</span> SelectStrategy.SELECT:</span><br><span class="line">                    <span class="comment">// 轮询 I/O 事件</span></span><br><span class="line">                    <span class="comment">// wakenUp.getAndSet(false) 用来标记是否需要立即唤醒</span></span><br><span class="line">                    select(wakenUp.getAndSet(<span class="literal">false</span>));</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 如果在 select 期间又被要求唤醒，则调用 wakeup()</span></span><br><span class="line">                    <span class="keyword">if</span> (wakenUp.get()) &#123;</span><br><span class="line">                        selector.wakeup();</span><br><span class="line">                    &#125;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="comment">// 其他情况不处理</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                <span class="comment">// 如果 select 出现 IO 异常，重建 selector</span></span><br><span class="line">                rebuildSelector0();</span><br><span class="line">                <span class="comment">// 打印/处理异常</span></span><br><span class="line">                handleLoopException(e);</span><br><span class="line">                <span class="comment">// 跳过这次循环，继续下一次</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 已取消的 SelectionKey 数量清零</span></span><br><span class="line">            cancelledKeys = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 是否需要再次 select 清零</span></span><br><span class="line">            needsToSelectAgain = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// I/O 与任务执行时间比例（默认 50:50）</span></span><br><span class="line">            <span class="keyword">final</span> <span class="type">int</span> <span class="variable">ioRatio</span> <span class="operator">=</span> <span class="built_in">this</span>.ioRatio;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (ioRatio == <span class="number">100</span>) &#123;</span><br><span class="line">                <span class="comment">// ioRatio=100，表示只处理 I/O，再统一处理任务</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    processSelectedKeys(); <span class="comment">// 处理就绪的 I/O 事件</span></span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    runAllTasks();         <span class="comment">// 处理所有任务（普通/定时）</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// ioRatio &lt; 100，需要在 I/O 与任务之间分配时间</span></span><br><span class="line">                <span class="keyword">final</span> <span class="type">long</span> <span class="variable">ioStartTime</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    processSelectedKeys(); <span class="comment">// 处理就绪的 I/O 事件</span></span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    <span class="comment">// 计算本轮 I/O 花费的时间</span></span><br><span class="line">                    <span class="keyword">final</span> <span class="type">long</span> <span class="variable">ioTime</span> <span class="operator">=</span> System.nanoTime() - ioStartTime;</span><br><span class="line">                    <span class="comment">// 按 ioRatio 分配执行任务的时间</span></span><br><span class="line">                    runAllTasks(ioTime * (<span class="number">100</span> - ioRatio) / ioRatio);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">            <span class="comment">// 捕获所有异常，避免循环退出</span></span><br><span class="line">            handleLoopException(t);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 如果正在关闭</span></span><br><span class="line">            <span class="keyword">if</span> (isShuttingDown()) &#123;</span><br><span class="line">                <span class="comment">// 关闭所有 Channel</span></span><br><span class="line">                closeAll();</span><br><span class="line">                <span class="comment">// 确认是否可以安全关闭</span></span><br><span class="line">                <span class="keyword">if</span> (confirmShutdown()) &#123;</span><br><span class="line">                    <span class="keyword">return</span>; <span class="comment">// 安全关闭后退出循环</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">            <span class="comment">// 关闭过程出现异常，打印处理</span></span><br><span class="line">            handleLoopException(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>select(…)</strong> 👉 负责 I&#x2F;O 事件的监听（类似 <code>Selector.select()</code>）。</li>
+<li><strong>processSelectedKeys()</strong> 👉 处理就绪的 I&#x2F;O 事件（读&#x2F;写&#x2F;连接）。</li>
+<li><strong>runAllTasks()</strong> 👉 处理任务队列里的任务（用户提交的 Runnable、定时任务等）。</li>
+<li><strong>ioRatio</strong> 👉 控制 I&#x2F;O 与任务的时间分配。</li>
+<li><strong>isShuttingDown()&#x2F;confirmShutdown()</strong> 👉 支持优雅关闭。</li>
+</ul>
+<h3 id="事件处理机制"><a href="#事件处理机制" class="headerlink" title="事件处理机制"></a><font style="color:rgb(59, 67, 81);">事件处理机制</font></h3><p><img src="/images/b39eb997fc8eaa299a950ee3c54f59a4.png">对于eventloop来说就是无锁串行化，不同eventloop之间是不会有交集的</p>
+<p>**一个 **<code>**Channel**</code> 在注册到某个 <code>EventLoop</code> 之后，它的整个生命周期都只会由这个 <code>EventLoop</code> 负责  </p>
+<p><font style="color:rgb(59, 67, 81);">结合 Netty 的整体架构，我们一起看下 EventLoop 的事件流转图，以便更好地理解 Netty EventLoop 的设计原理。NioEventLoop 的事件处理机制采用的是</font><strong><font style="color:rgb(59, 67, 81);">无锁串行化的设计思路</font></strong><font style="color:rgb(59, 67, 81);">。</font></p>
+<ul>
+<li><strong><font style="color:rgb(59, 67, 81);">BossEventLoopGroup</font></strong><font style="color:rgb(59, 67, 81);"> </font><font style="color:rgb(59, 67, 81);">和</font><font style="color:rgb(59, 67, 81);"> </font><strong><font style="color:rgb(59, 67, 81);">WorkerEventLoopGroup</font></strong><font style="color:rgb(59, 67, 81);"> </font><font style="color:rgb(59, 67, 81);">包含一个或者多个 NioEventLoop。BossEventLoopGroup 负责监听客户端的 Accept 事件，当事件触发时，将事件注册至 WorkerEventLoopGroup 中的一个 NioEventLoop 上。每新建一个 Channel， 只选择一个 NioEventLoop 与其绑定。所以说 Channel 生命周期的所有事件处理都是</font><strong><font style="color:rgb(59, 67, 81);">线程独立</font></strong><font style="color:rgb(59, 67, 81);">的，不同的 NioEventLoop 线程之间不会发生任何交集。</font></li>
+<li><font style="color:rgb(59, 67, 81);">NioEventLoop 完成数据读取后，会调用绑定的 ChannelPipeline 进行事件传播，ChannelPipeline 也是</font><strong><font style="color:rgb(59, 67, 81);">线程安全</font></strong><font style="color:rgb(59, 67, 81);">的，数据会被传递到 ChannelPipeline 的第一个 ChannelHandler 中。数据处理完成后，将加工完成的数据再传递给下一个 ChannelHandler，整个过程是</font><strong><font style="color:rgb(59, 67, 81);">串行化</font></strong><font style="color:rgb(59, 67, 81);">执行，不会发生线程上下文切换的问题。</font></li>
+</ul>
+<p><font style="color:rgb(59, 67, 81);">NioEventLoop 无锁串行化的设计不仅使系统吞吐量达到最大化，而且降低了用户开发业务逻辑的难度，不需要花太多精力关心线程安全问题。虽然单线程执行避免了线程切换，但是</font><strong><font style="color:rgb(59, 67, 81);">它的缺陷就是不能执行时间过长的 I&#x2F;O 操作，一旦某个 I&#x2F;O 事件发生阻塞，那么后续的所有 I&#x2F;O 事件都无法执行，甚至造成事件积压</font></strong><font style="color:rgb(59, 67, 81);">。在使用 Netty 进行程序开发时，我们一定要对 ChannelHandler 的实现逻辑有充分的风险意识。</font></p>
+<p><font style="color:rgb(59, 67, 81);">NioEventLoop 线程的可靠性至关重要，一旦 NioEventLoop 发生阻塞或者陷入空轮询，就会导致整个系统不可用。在 JDK 中， Epoll 的实现是存在漏洞的，即使 Selector 轮询的事件列表为空，NIO 线程一样可以被唤醒，导致 CPU 100% 占用。这就是臭名昭著的 JDK epoll 空轮询的 Bug。Netty 作为一个高性能、高可靠的网络框架，需要保证 I&#x2F;O 线程的安全性。那么它是如何解决 JDK epoll 空轮询的 Bug 呢？实际上 Netty 并没有从根源上解决该问题，而是巧妙地规避了这个问题。</font></p>
+<p><font style="color:rgb(59, 67, 81);"></font></p>
+<p><font style="color:rgb(59, 67, 81);"></font></p>
+<p><font style="color:rgb(59, 67, 81);">netty如何规避的</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">time</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (time - TimeUnit.MILLISECONDS.toNanos(timeoutMillis) &gt;= currentTimeNanos) &#123;</span><br><span class="line"></span><br><span class="line">    selectCnt = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (SELECTOR_AUTO_REBUILD_THRESHOLD &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line"></span><br><span class="line">        selectCnt &gt;= SELECTOR_AUTO_REBUILD_THRESHOLD) &#123;</span><br><span class="line"></span><br><span class="line">    selector = selectRebuildSelector(selectCnt);</span><br><span class="line"></span><br><span class="line">    selectCnt = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(59, 67, 81);">Netty 提供了一种检测机制判断线程是否可能陷入空轮询，具体的实现方式如下：</font></p>
+<ol>
+<li><font style="color:rgb(59, 67, 81);">每次执行 Select 操作之前记录当前时间 currentTimeNanos。</font></li>
+<li><font style="color:rgb(59, 67, 81);">time - TimeUnit.MILLISECONDS.toNanos(timeoutMillis) &gt;&#x3D; currentTimeNanos，如果事件轮询的持续时间大于等于 timeoutMillis，那么说明是正常的，否则表明阻塞时间并未达到预期，可能触发了空轮询的 Bug。</font></li>
+<li><font style="color:rgb(59, 67, 81);">Netty 引入了计数变量 selectCnt。在正常情况下，selectCnt 会重置，否则会对 selectCnt 自增计数。当 selectCnt 达到 SELECTOR_AUTO_REBUILD_THRESHOLD（默认512） 阈值时，会触发重建 Selector 对象。</font></li>
+</ol>
+<p><font style="color:rgb(59, 67, 81);">Netty 采用这种方法巧妙地规避了 JDK Bug。异常的 Selector 中所有的 SelectionKey 会重新注册到新建的 Selector 上，重建完成之后异常的 Selector 就可以废弃了。</font></p>
+<p><font style="color:rgb(59, 67, 81);"></font></p>
+<p><font style="color:rgb(59, 67, 81);">背景：Selector 的空轮询 bug</font></p>
+<ul>
+<li><font style="color:rgb(59, 67, 81);">在 JDK 的部分版本里，</font><code>&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;Selector.select(timeout)&lt;/font&gt;</code><font style="color:rgb(59, 67, 81);"> 存在 bug：<br></font><font style="color:rgb(59, 67, 81);">即使没有任何事件，它也可能</font><strong>立即返回</strong><font style="color:rgb(59, 67, 81);">，没有正常阻塞到超时时间。</font></li>
+<li><font style="color:rgb(59, 67, 81);">结果就是：<br></font><font style="color:rgb(59, 67, 81);">EventLoop 线程会疯狂地“空转”，CPU 飙升到 100%，但又没干实事。</font></li>
+</ul>
+<p>👉<font style="color:rgb(59, 67, 81);"> 如果发现 </font><code>&lt;font style=&quot;color:rgb(59, 67, 81);&quot;&gt;select()&lt;/font&gt;</code><strong>连续过早返回</strong><font style="color:rgb(59, 67, 81);"> 512 次（怀疑 JDK 的 Selector 空轮询 bug），就会 </font><strong>销毁旧 Selector，重建一个新的</strong><font style="color:rgb(59, 67, 81);">，从而避免 EventLoop 陷入死循环空转。</font></p>
+<p><font style="color:rgb(59, 67, 81);"></font></p>
+<p><font style="color:rgb(59, 67, 81);">正常情况：无事件会在阻塞一段时间，异常情况：立即返回</font></p>
+<h3 id="任务处理机制"><a href="#任务处理机制" class="headerlink" title="任务处理机制"></a><font style="color:rgb(59, 67, 81);">任务处理机制</font></h3><ul>
+<li>处理普通任务</li>
+</ul>
+<h2 id="Netty-高性能内存管理设计"><a href="#Netty-高性能内存管理设计" class="headerlink" title="Netty 高性能内存管理设计"></a>Netty 高性能内存管理设计</h2><h3 id="认识jemalloc"><a href="#认识jemalloc" class="headerlink" title="认识jemalloc"></a>认识jemalloc</h3><h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>netty的内存管理也是参考jemalloc的设计。</p>
+<p>内存分配器：jemalloc，temalloc，ptmalloc</p>
+<p>他们都有一个目的即：提高内存分配回收的效率，以及尽可能地减少内存碎片</p>
+<p>内存碎片：</p>
+<p>Linux会把物理内存分配为一个个4kb的内存页，</p>
+<p><font style="color:rgb(59, 67, 81);">物理内存的分配和回收都是基于 Page 完成的，</font>而页里面产生的碎片成为内部碎片，而页与页之间</p>
+<p>叫做外部碎片<br>	<img src="/images/efb01e6b9d60e551e3ad9f043bec98a2.png"></p>
+<p><img src="/images/2ad96b6643c980612b1fe89e27d72103.png"></p>
+<h4 id="内存分配算法"><a href="#内存分配算法" class="headerlink" title="内存分配算法"></a>内存分配算法</h4><p>三种。动态分配，伙伴分配，slab</p>
+<h5 id="动态分配"><a href="#动态分配" class="headerlink" title="动态分配"></a>动态分配</h5><p>动态分配DMA</p>
+<p>会用一个链表来维护空闲内存块，程序申请内存时就从这个链表里面挑选</p>
+<ul>
+<li><strong>内存就像一个大仓库&#x2F;超市</strong>。</li>
+<li><strong>空闲分区（free block）</strong> &#x3D; 货架上的空篮子（还没被进程用的内存）。</li>
+<li><strong>进程的请求（malloc 申请内存）</strong> &#x3D; 顾客来装东西（要一块内存）。</li>
+<li><strong>分配策略（first fit &#x2F; next fit &#x2F; best fit）</strong> &#x3D; 超市员工怎么选篮子给你。</li>
+</ul>
+<p>三种算法</p>
+<p><img src="/images/5a32396506827f6b5859c89cc4e1f86b.png"></p>
+<h5 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h5><p>伙伴算法就是把内存分成 2 的幂次方大小的块，按需拆分、按对合并，分配快、回收快，但会浪费一些空间（内部碎片）。</p>
+<p>比如你分配17kb的，就得申请32kb的</p>
+<p><img src="/images/7bb947157cdb18275c3a6bb0f17cdb03.png"></p>
+<h5 id="slab算法"><a href="#slab算法" class="headerlink" title="slab算法"></a>slab算法</h5><p><font style="color:rgb(59, 67, 81);">Linux 内核使用的就是 Slab 算法</font></p>
+<h4 id="jemalloc架构设计"><a href="#jemalloc架构设计" class="headerlink" title="jemalloc架构设计"></a><font style="color:rgb(59, 67, 81);">jemalloc架构设计</font></h4><h3 id="netty的实现"><a href="#netty的实现" class="headerlink" title="netty的实现"></a>netty的实现</h3><h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h4><p><img src="/images/6f8cf91a73be9ee8d0e260d5185caedf.png"></p>
+<h4 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a><font style="color:rgb(59, 67, 81);">设计原则</font></h4><p><font style="color:rgb(59, 67, 81);">Netty 高性能的内存管理也是借鉴 jemalloc 实现的</font></p>
+<p><img src="/images/ff0c33ef9531f5a02d4d1d1553d8fb90.png"></p>
+<h4 id="内存分规格"><a href="#内存分规格" class="headerlink" title="内存分规格"></a><font style="color:rgb(59, 67, 81);">内存分规格</font></h4><p>tiny，smaller，normal,huge</p>
+<p>当想要申请的内存大小大于huge时，netty是会采用非池化的手段</p>
+<p><img src="/images/f25bca365ddf9a9bd01c561936528e36.png"></p>
+<h4 id="netty的核心组件"><a href="#netty的核心组件" class="headerlink" title="netty的核心组件"></a>netty的核心组件</h4><p>可以看做是jemalloc的Java版实现</p>
+<p><img src="/images/6875a582b2bca5605343823c24fdd645.png"></p>
+<p>PoolArena也就是jemalloc的arena，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class PoolArena&#123;</span><br><span class="line">    smallSubpagePools <span class="comment">// 用来存放比基本单位page 8k小的内存块</span></span><br><span class="line">    tinySubpagePools <span class="comment">//同上</span></span><br><span class="line">    PoolChunkList </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(59, 67, 81);">采用固定数量的多个 Arena 进行内存分配，Arena的数量跟CPU核数有关。当线程申请时，就会给它分配一个Arena，且在这个线程声明周期内，线程只会更这个Arena打交道</font></p>
+<blockquote>
+<p><font style="color:rgb(59, 67, 81);">Netty 借鉴了 jemalloc 中 Arena 的设计思想，采用固定数量的多个 Arena 进行内存分配，Arena 的默认数量与 CPU 核数有关，通过创建多个 Arena 来缓解资源竞争问题，从而提高内存分配效率。线程在首次申请分配内存时，会通过 round-robin 的方式轮询 Arena 数组，选择一个固定的 Arena，在线程的生命周期内只与该 Arena 打交道，所以每个线程都保存了 Arena 信息，从而提高访问效率。</font></p>
+</blockquote>
+<p>PoolChunk：</p>
+<p><font style="color:rgb(59, 67, 81);">PoolArena 的数据结构包含两个 PoolSubpage 数组和六个 PoolChunkList，两个 PoolSubpage 数组分别存放 Tiny 和 Small 类型的内存块，六个 PoolChunkList 分别存储不同利用率的 Chunk，构成一个双向循环链表。</font></p>
+<p><img src="/images/12c803b95354d5a7f3b77120f71aa697.png"></p>
+<p><font style="color:rgb(59, 67, 81);">PoolArena 对应实现了 Subpage 和 Chunk 中的内存分配，其 中 PoolSubpage 用于分配小于 8K 的内存，PoolChunkList 用于分配大于 8K 的内存</font></p>
+<p><img src="/images/5bf86383c4f233b3392dec0013b5d646.png"></p>
+<p>随着PoolChunk的使用率变化，PoolChunk会在不同的PoolChunkList之间移动</p>
+<h4 id="分配流程"><a href="#分配流程" class="headerlink" title="分配流程"></a>分配流程</h4><p><img src="/images/ed3bb00ade42162cb3dc64f62af5ba0e.png"></p>
+<h4 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h4><p><img src="/images/a771110f354291803a3615ab7a48ca3f.png"></p>
+<h4 id="面试回答"><a href="#面试回答" class="headerlink" title="面试回答"></a>面试回答</h4><p>首先说下它整体是参考jemalloc –&gt; 说说设计原则（分规格，就是有不同规格的内存块，以及实现了每个线程都有自己的内存） —&gt; 列举下组件（poolArean，chunk，subpage，以及基础的分配单位page）–&gt; 分配流程（先检查请求分配的大小是tiny还是smaller，然后检查PoolThreadCache是否够，如果够就使用自己线程私有内存，然后再进行Arena分配，最终返回一个Bytebuffer给 用户）</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/21/JavaSE/Object%E6%96%B9%E6%B3%95/">Object方法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/19/Mybatis/#%E5%92%8C$/">#和$</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/21/JVM/%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84gc/">方法区的gc</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/10/Redis/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%9F%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97/">消息队列？延迟队列</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/09/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C%EF%BC%9A%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E6%B5%81%E5%BC%8F%E4%BC%A0%E8%BE%93%E4%B8%8EJSON%E7%BB%93%E6%9E%84%E5%8C%96%E7%9A%84%E7%9F%9B%E7%9B%BE/">用户体验：如何解决流式传输与JSON结构化的矛盾</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/21/JUC/juc%E6%BA%90%E7%A0%81/volatile%E6%BA%90%E7%A0%81/">volatile源码</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E6%8C%81%E4%B9%85%E5%8C%96/%E4%B8%89%E7%A7%8D%E6%8C%81%E4%B9%85%E5%8C%96%E7%AD%96%E7%95%A5/">三种持久化策略</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/07/%E5%9C%BA%E6%99%AF%E9%A2%98/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%82%B9%E8%B5%9E/">点赞</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B8%B8%E8%A7%84/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">享元模式</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B8%B8%E8%A7%84/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">单例模式</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/14/netty/%E5%90%83%E9%80%8Fnetty/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/14/netty/%E5%90%83%E9%80%8Fnetty/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/14/netty/%E5%90%83%E9%80%8Fnetty/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

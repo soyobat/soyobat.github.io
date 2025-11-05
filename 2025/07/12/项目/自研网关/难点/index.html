@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>难点 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>难点</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%9A%BE%E7%82%B9/">难点</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-07-12
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%9A%BE%E7%82%B9/">难点</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-07-12
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p>难点我觉得就是一整个netty的核心处理流程吧，就是我通过netty收到网络请求，然后应该如何通过AsyncHttpClient去调用下游，如何将下游返回结果返回，以及如何在这个过程中实现我们的一些功能，比如说灰度分流，负载均衡，弹性保护，路由转发等</p>
+<p>我的解决方案就是这样的，就是先从整体出发，把握全局，然后向内填充细节，比如整体是什么，我经过分析后发现，无非就是从netty这边收到netty的fullhttprequest这个类，返回的是FullHttpResponse，然后asyncHttpClient那边无非就是发送request，然后返回Response。首先，两头的请求和响应是不一样的，我要做的是外层的事就是转换，但转换其实不够啊，我肯定是需要加一些自定义的东西方便我去扩展网关功能。所以我还需要一套自定义的网关的请求和响应，然后充当中介来把netty和asynchttpclient连接起来</p>
+<p>这就是最外面的一层框架，然后我需要往里面去缩，去填充内部的细节，这毫无疑问地我的想法其实就是使用过滤器，过滤器的这种流水线思想在网关里是很常用的，包括像Spring cloud gateway，shenyu。还有就是责任链把这些过滤器给串起来</p>
+<p>到这里，我的想法就是实现一些默认的过滤器，然后也允许用户自定义过滤器去做功能增强。但是我的网关是没有依赖Spring的。所以我需要通过SPI来发现用户自定义的过滤器，这块我选的是jdk自带的ServiceLoader服务发现机制</p>
+<p>然后就是实现自己网关的一套过滤器，我先粗略地列出我能想到的过滤器，比如流控，灰度，负载均衡，路由，弹性。然后就安排我这些过滤器的顺序，经过一番思考，我觉得第一个应该是流控，因为你如果被限流的话，那以下的过滤器就没必要走了，第二个在最开始安排的就是负载均衡，因为我最开始是把负载均衡和灰度放一起的，因为我觉得负载均衡就是如果是灰度就是从灰度里挑一个节点出来，而如果是非灰度那就从非灰度里挑一个出来。但后面又觉得这样负载均衡和灰度的耦合度太高了，然后我就尝试分离这两个东西。灰度被我放到了前面，就是根据灰度策略决定是否走，然后根据负载均衡从后面挑一个节点出来。然后接下里就得考虑那个弹性和路由的，我一开始是把它分离开来的，但经过一番思考，我觉得他们放在一起比较好，因为我觉得那个弹性应该是路由的修饰封装，因为我们这些隔离，重试，熔断，降级这种应该是在路由转发后，根据返回的结果来决定来的，两者放一起更好工作，所以我最终把两个放在了一起，就是读取配置，如果用户没有开启配置，那就正常路由转发请求。然后如果开启的话，那就用弹性功能包装下路由转发功能</p>
+<p>然后这其实就是过滤器链的大概设计，接着就是过滤器的具体设计，首先就是过滤器接口的设计，其实就是四个方法，一个就是前过滤器方法，一个就是后过滤器方法，一个order标识顺序，一个mark标识过滤器名字。然后就是过滤器工厂，传入路由配置，读取里面的过滤器配置，构建返回这个服务的过滤器链</p>
+<p>首先是第一个过滤器，流控吧，流控的话我这边就是参考市面上一些常用的手段的吧。滑动窗口限流，令牌桶，漏桶。这其实就是三种策略，所以我用接口抽象了他们，然后读取配置决定走哪种。首先滑动窗口其实就是我用一个</p>
+<p>dq来存储请求的时间戳，然后请求过来的时候我会先去清理掉窗口之前的请求，然后判断队列长度是否超过上限，如果超过了的话就把请求对应的时间戳放进去队列。其实就是先清理窗口之前的旧请求，然后判断当前窗口是否容纳得下当前请求，如果容纳得下就放行，如果容纳不下就抛异常，返回429状态码。然后就是令牌桶，令牌桶的话就是初始化时开个定时任务，不断地去更新我们的tokens数量，然后我们通过原子方法getAndDecreament获取值是否大于0，如果是够的，那就接着走，如果不够的话，也是抛异常，然后返回429异常。接着就是漏桶的话，就是请求来的时候，先判断你的桶水位是否大于limit，如果没过就先入队列，然后请一个定时任务，以均定的速度放走请求，但是这里放行的请求仍然是交给netty的worker线程去处理的，定时任务只负责从队列里poll请求。</p>
+<p>PS：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private void startLeakTask(EventLoopGroup eventLoopGroup) &#123;</span><br><span class="line">        // 使用 Netty 的定时任务来按频率漏出请求</span><br><span class="line">        eventLoopGroup.scheduleAtFixedRate(() -&gt; &#123;</span><br><span class="line">            if (!waitingQueue.isEmpty() &amp;&amp; currentWaterLevel.get() &gt; 0) &#123;</span><br><span class="line">                GatewayContext gatewayContext = waitingQueue.poll();</span><br><span class="line">                if (gatewayContext != null) &#123;</span><br><span class="line">                    // 重新提交请求到 Netty 事件循环</span><br><span class="line">                    gatewayContext.getNettyCtx().executor().execute(() -&gt; &#123;</span><br><span class="line">                        currentWaterLevel.decrementAndGet();</span><br><span class="line">                        gatewayContext.doFilter();</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, leakInterval, leakInterval, TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后接下来就是灰度。灰度的话首先是实例列表里要有灰度实例，这个在每个实例的配置里可以标记</p>
+<p>有的话就根据策略决定当前请求是否走灰度，我这边默认提供了两种策略，一种是根据灰度流量，比如实例链表里有10%的灰度实例，那么就有10%的概率会走灰度。第二种是根据客户端IP，对客户端做hash，对100取模，然后如果小于10%，能保证同一ip的请求都能走到灰度上，更符合灰度的需求。</p>
+<p>然后就是负载均衡算法，负载均衡算法默认地话就是5种，轮询，随机，权重，hash，一致性hash。这些都是比较好实现的，就是 查出实例列表，然后从里面挑一个出来，主要是把他们封装成一个个策略，然后通过SPI加载，便于用户自定义扩展。</p>
+<p>接下来就是一个路由转发和弹性保护，路由转发这里我其实就是把网关内部请求转成Request，然后通过asyncHttpClient转发到下游，然后设置一些回调，但这里是异步，且我还要对其进行一些重试，熔断，降级，所以我这里就是把发请求这里动作封装成了JDK的suppiler类这个lambda表达式，然后对这个表达式进行修饰包，修饰后再执行这个lambda表达式，这里我就开始考虑修饰顺序，我首先想的顺序是重试、熔断、降级。这其实我觉得是正常逻辑顺序，就是请求失败的话，肯定是先重试几遍，如果重试几次后还失败，那就熔断，最后降级处理。但是我们后面在添加隔离措施时，又感觉这样写死顺序不太好，因为我可能会有这样的需求，就是我的隔离支持信号量隔离和线程池隔离，但也可以同时使用这两个，这个时候两种和的装饰顺序就很重要了，例如先使用线程池隔离，信号量隔离，那就是先获取线程池资源，再获取信号量资源，先使用信号量隔离，再用线程池隔离，就是先获取信号量资源，再获取线程池资源。所以我应该把这个弹性配置的顺序交给用户去配置，但是我提供默认的推荐顺序，所以我具体的装饰顺序是读取配置文件来进行装饰的。</p>
+<p>到了这里我的框架就是基本搞好了，然后我就开始思考其他的点，第一个想到的就是鉴权，但是我又仔细思考了一下，我觉得鉴权这个行为是很难做到统一的，就是后端模块我们是说不清的，可能有用户，有订单，有支付等，每个模块可能需要单独的一套鉴权，想把它统一到网关去我觉得能做，但它对上游请求有要求，对下游服务有侵入。但我的网关设计的最初思想就是对上游请求无要求，对下游服务无侵入，主打轻量高吞吐。所以我没在这里做文章，但因为我们的过滤器是SPI加载，所以如果真的要搞鉴权的，用户其实是自定义过滤器去实现的</p>
+<p>然后就是我想到的是日志收集以及监控这些，这个其实我也思考过。我觉得如果要引入这些功能，就是需要依托某个框架去的，例如ELK这些，首先，这些类似的日志收集框架太多了，我很难说去选择一个出来提供服务，因为这样的话就代表使用者必须搭建对应的日志框架环境。我觉得就是没必要为了丰富我么的网关功能或者让简历更服务去做一些实际不应该存在的东西，而且我觉得这些东西就是调用API传入数据这些，其实没有啥在技术上有太大的难点。而且我们对我网关的最初设计的想法还有一条就是除了服务发现以外，我不再对其他框架产生依赖，所以我是连Spring那一套框架都没引入的</p>
+<p>然后就是跨域问题，我觉得这个其实就是我需要实现那的，这也算网关一个比较经典的问题，解决方法也是比较简单通用的，就是返回的结果的请求头添加一些新，然后如果遇到Optional类型的请求就可以直接诶发那会200状态码，不需要往下走了</p>
+<p>然后我又想到了跨域问题，我觉得这个其实是我需要实现的，这也算是网关一个比较经典的问题吧，解决方法也是比较简单通用，就是返回结果的请求头中添加一些信息，然后如果遇到Options类型的请求可以直接返回200状态码，不需要往下走了。 </p>
+<p>然后这大概就是我感觉我整个项目遇到的问题以及解决方法吧。 </p>
+<hr>
+<hr>
+<p>项目难点我觉得就是一整个netty核心处理过程，就是我通过netty接收到网络请求，然后应该如何通过AsyncHttpClient去调用下游，如何将下游返回结果返回，以及如何在这个过程中实现我们的一些功能，比如灰度分流、负载均衡、弹性保护、路由转发等 </p>
+<p>我的解决方法是这样的，就是先从整体出发，把握全局，然后向内填充细节，比如整体是什么，我经过分析后发现其实我要做的无非就是从Netty这边收到netty的FullHttpRequest这个类，返回的是FullHttpResponse，然后AsyncHttpClient那边就是发送Request，返回结果是Response，所以首先，两头的请求和响应是不一样的，我要做的最外层的事就是转换，但转换其实不够呀，我肯定是需要加一些自定义的东西方便我扩展网关功能的，所以我还需要有一套自定义的网关的请求与响应，然后充当中介来去把Netty和AsyncHttpClient连接起来。 </p>
+<p>这就是最外面的一层框架，然后我需要往里去缩，去填充内部的细节，那毫无疑问地我的想法其实就是使用过滤器，过滤器这种流水线思想在网关是很常见的，包括像在其它地方，例如责任链模式我觉得其实都是一种很通用的思想。 </p>
+<p>我的想法是，实现一些通用的默认过滤器，然后也允许用户自定义过滤器去做功能增强，但是我的网关是没有依赖Spring那一套框架的，所以我需要通过SPI来发现用户自定义的过滤器，这块我选的是JDK自带的ServiceLoader服务发现机制。 </p>
+<p>  然后就是实现自己的一套网关自带的过滤器，我先粗略列出我能想到的过滤器，例如灰度、负载均衡、路由、弹性、流控。然后我就开始安排这些过滤器的顺序，经过一番思考设计，我第一个过滤器是流控，因为如果你流控这一关都过不了，被限流了那你后面的过滤器其实都不需要走了，第二个过滤器我一开始安排的是负载均衡，因为我最开始是把负载均衡和灰度放到一起去了，我觉得负载均衡就是，如果是灰度的，那就从灰度的实例中选择一个实例节点，如果不是灰度的，那就从非灰度实例节点选出一个节点，但是后面就是感觉这样做感觉灰度和负载均衡两个功能的耦合度太高了，我就尝试分离这两个功能，我把灰度安排在了前面，就是根据灰度策略，决定是否走灰度实例，如果走，后面的负载均衡就会从灰度实例中挑出一个实例节点，如果不走，后面的负载均衡就从非灰度实例中挑出一个节点，再过完灰度和负载均衡后，其实就是要考虑弹性和路由功能了，我最开始的想法其实是把这两个拆开，但是经过一番思考，我觉得弹性和路由两个功能反而放一起更好，弹性应该是对路由转发请求的修饰包装，因为我们的弹性功能，例如隔离、重试、熔断、降级这些，其实都是需要在我们路由转发请求之后，根据请求的结果来决定的，两者放到一起其实更好组合工作，所以我最终反而把这两个放到一起，就是读取配置，如果用户没开启弹性配置，那就正常路由转发请求，如果开启了弹性配置，那就用弹性功能对转发请求进行装饰者包装。</p>
+<p>然后这其实就是过滤器链的一套大概的整体设计，然后就是开始实现具体的过滤器链，首先就是过滤器接口的设计，其实就是四个方法，一个前过滤器方法，一个后过滤器方法，一个mark标识过滤器名字，一个order标识过滤器顺序。然后就是过滤器工厂，传入路由配置，读取里面的过滤器配置，构建返回这个服务的过滤器链条。 </p>
+<p>首先是第一个过滤器，流控吧，流控的话我是参考了市面上常见的流控手段，滑动窗口限流、令牌桶限流、漏桶限流，这其实就是三种策略，所以我是用接口抽象了他们，然后读取配置决定使用哪种限流方式。滑动窗口限流的话其实就是来一次请求，先剔除窗口内之前的旧请求，然后看目前的窗口大小还能不能容得下这次的新请求，如果可以的话就放行，不可以的话就抛异常，返回HTTP状态码429。令牌桶限流的话就是初始化令牌桶时起个定时任务，按照参数隔一段时间就将令牌数新增一些数量，但数量不会溢出最大容量，然后请求来了就先获取令牌，获取的到才方向，获取不到就抛异常，返回429。然后是漏桶限流，漏桶限流也是初始化漏桶时起个定时任务，按照参数隔一段时间去将队列中取出一个请求放行，但是这里放行的请求仍然是交给netty的worker线程去处理的，定时任务只负责取出请求放行，然后请求来的话就看队列是否满了，没满就放请求进队列，满了就返回429。这里就是第一个过滤器流控吧 </p>
+<p>然后就是第二个灰度，灰度首先是实例列表中有灰度实例，这个在实例元数据信息里面定义是否是灰度实例，有的话就根据策略决定当前流量是否走灰度，我默认提供了两种策略，一个是根据灰度流量，比如实例列表中有10%的灰度，那本请求就有10%的概率是灰度流量，另一种是进一步根据ip来进行划分，对客户端ip做哈希，对100取模，然后如果小于10%，这样能保证同一ip的请求都能走到灰度上，更符合灰度的需求。 </p>
+<p>然后是负载均衡，负载均衡的话就是提供默认五种模式，轮询、随机、权重、ip哈希、一致性哈希，这些其实都是比较好实现的，就是查出实例列表，然后选择一个出来，主要是把他们封装成一个个策略，然后通过SPI加载，也方便用户做自定义策略。 </p>
+<p>然后是路由转发和弹性保护，路由转发其实就是把请求转换成AsyncHttpClient的参数，然后发出请求，然后设置一些方法回调，但是这里是异步的，而我是可能需要进行一些重试、熔断、降级措施的，所以我是把发出请求这个动作封装成了JDK的Supplier类这个lambda表达式，然后对这个表达式进行装饰者修饰，修饰完之后再执行这个lambda表达式，这里我就开始考虑修饰顺序了，我首先想的顺序是重试、熔断、降级，我觉得这个其实就是正常的逻辑顺序了，就是请求失败的话肯定先重试几次，如果重试几次后还失败，那就进行熔断，然后降级处理。但是后面我再添加隔离措施的时候，又感觉这样写死顺序不太好，因为我可能有这样的需求，就是我的隔离支持信号量隔离和线程池隔离，但也可以同时使用这两个，这个时候两者的装饰顺序就重要了，例如先使用线程池隔离，再使用信号量隔离，那就是先获取线程池资源，再获取信号量资源，先使用信号量隔离，再用线程池隔离，就是先获取信号量资源，再获取线程池资源，所以我应该把这个弹性配置的顺序交给用户去配置，但是我提供默认的推荐顺序，所以我具体的装饰顺序是读取配置文件来进行装饰的。 </p>
+<p>到了这里我基本框架其实就弄完了，然后我就开始思考一些其它的点。第一个想到的是鉴权，但是我又仔细思考了下，我觉得鉴权这个行为是很难做到统一的，就是后端模块我们是说不清的，可能有用户，有订单，有支付等等，每个模块可能需要单独有一套鉴权，想把它统一到网关去做我觉得能做，但是他肯定对上游请求有要求，对下游服务有入侵，而我的网关设计的最初思想就是对上游请求无要求，对下游服务无入侵，主打轻量高吞吐。所以我没在网关做默认的鉴权过滤器，但是因为我们的过滤器是SPI加载的，所以如果真要搞鉴权，用户其实是可以自定义过滤器去实现的。 </p>
+<p>然后我想到的是日志收集、监控这些，这个其实我也思考过，我觉得如果要引入这些功能，是需要依托于某个框架的，例如ELK这些，首先，这些类似的日志收集框架太多了，我很难说去选择一个出来提供服务，因为这样的话就代表使用者必须搭建对应的日志框架环境，我觉得没必要好像为了丰富我们的网关功能或者说让简历更丰富去做一些实际上不应该存在的东西，而且这些东西本身就是调用api传入数据这样子，其实并没有在技术上有太大的难点。而且我对我网关的最初设计的想法中还有一条就是说除了服务发现以外，我不再对其它框架产生依赖，所以我是连Spring的那一套框架都没引入的。 </p>
+<p>然后我又想到了跨域问题，我觉得这个其实是我需要实现的，这也算是网关一个比较经典的问题吧，解决方法也是比较简单通用，就是返回结果的请求头中添加一些信息，然后如果遇到Options类型的请求可以直接返回200状态码，不需要往下走了。 </p>
+<p>然后这大概就是我感觉我整个项目遇到的问题以及解决方法吧。 </p>
+<hr>
+<h2 id="nacos配置变化，push还是pull"><a href="#nacos配置变化，push还是pull" class="headerlink" title="nacos配置变化，push还是pull"></a>nacos配置变化，push还是pull</h2><p>PUSH</p>
+<p>  从代码分析可以看出：</p>
+<ol>
+<li><p>Nacos监听机制：在NacosConfigCenter中使用了configService.addListener()方法注册监听器，这是典型的push模式       </p>
+</li>
+<li><p>实时回调：当Nacos配置发生变化时，Nacos服务端会主动推送变更通知到客户端，触发receiveConfigInfo()回调方法       </p>
+</li>
+<li><p>被动接收：网关不需要主动轮询或查询配置中心，而是被动接收配置变更通知</p>
+</li>
+</ol>
+<p>  这种push方式相比pull方式的优势是：</p>
+<ul>
+<li><p>实时性更好，配置变更能立即推送到网关</p>
+</li>
+<li><p>减少了不必要的轮询请求，降低了网络和服务器负载</p>
+</li>
+<li><p>基于事件驱动，只有在配置真正发生变化时才触发更新</p>
+</li>
+</ul>
+<p>  所以GraceGateway使用的是push方式来实现配置的动态更新。</p>
+<h2 id="配置动态更新"><a href="#配置动态更新" class="headerlink" title="配置动态更新"></a>配置动态更新</h2><p>配置更新到缓存的具体流程和代码如下：</p>
+<ol>
+<li>触发点：当配置中心（如Nacos）的配置发生变化时，会触发NacosConfigCenter中的监听器回调方法receiveConfigInfo()      </li>
+<li>调用链：</li>
+</ol>
+<ul>
+<li>receiveConfigInfo()解析新的配置内容  </li>
+<li>调用RoutesChangeListener.onRoutesChange()方法  </li>
+<li>在Bootstrap类中实现的监听器会调用DynamicConfigManager.getInstance().updateRoutes(newRoutes, true)</li>
+</ul>
+<ol start="3">
+<li>具体实现类：DynamicConfigManager</li>
+<li>核心方法：全量更新</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void updateRoutes(Collection&lt;RouteDefinition&gt; routes, boolean clear) &#123;</span><br><span class="line">        if (routes == null || routes.isEmpty()) return;</span><br><span class="line">        if (clear) &#123;</span><br><span class="line">            routeId2RouteMap.clear();</span><br><span class="line">            serviceName2RouteMap.clear();</span><br><span class="line">            uri2RouteMap.clear();</span><br><span class="line">        &#125;</span><br><span class="line">        for (RouteDefinition route : routes) &#123;</span><br><span class="line">            if (route == null) continue;</span><br><span class="line">            routeId2RouteMap.put(route.getId(), route);</span><br><span class="line">            serviceName2RouteMap.put(route.getServiceName(), route);</span><br><span class="line">            uri2RouteMap.put(route.getUri(), route);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>缓存数据结构：</li>
+</ol>
+<ul>
+<li><p>routeId2RouteMap：路由ID到路由定义的映射  </p>
+</li>
+<li><p>serviceName2RouteMap：服务名到路由定义的映射  </p>
+</li>
+<li><p>uri2RouteMap：URI路径到路由定义的映射</p>
+<p>这样就完成了从配置中心变更到本地缓存更新的全过程。</p>
+</li>
+</ul>
+<h2 id="如何用户使用配置中心还是本地配置文件"><a href="#如何用户使用配置中心还是本地配置文件" class="headerlink" title="如何用户使用配置中心还是本地配置文件"></a>如何用户使用配置中心还是本地配置文件</h2><p>通过分析代码，可以得出区分用户使用配置中心还是本地配置文件的方式：</p>
+<ol>
+<li>判断依据：通过ConfigCenter对象的enabled属性来区分</li>
+</ol>
+<pre><code>- 默认值为false（在ConfigCenterConstant中定义）
+
+- 如果用户在配置文件中将其设置为true，则使用配置中心
+
+- 如果保持默认值false，则使用本地配置文件
+</code></pre>
+<ol start="2">
+<li>具体实现：</li>
+</ol>
+<pre><code>- 在NacosConfigCenter和ZookeeperConfigCenter的init()和subscribeRoutesChange()方法中，都会先检查configCenter    
+</code></pre>
+<p>  .isEnabled()条件</p>
+<pre><code>- 只有当配置中心启用时，才会执行配置中心相关的初始化和监听逻辑
+</code></pre>
+<ol start="3">
+<li>配置文件示例：</li>
+</ol>
+<p>  在gateway.yaml中，用户可以通过以下配置启用配置中心：</p>
+<p>  configCenter:</p>
+<pre><code>enabled: true
+
+type: NACOS
+
+address: 127.0.0.1:8848
+</code></pre>
+<p>  因此，系统通过检查configCenter.enabled属性来决定是使用配置中心还是本地配置文件。</p>
+<h2 id="优雅退出"><a href="#优雅退出" class="headerlink" title="优雅退出"></a>优雅退出</h2><p>在Runtime.shutdown()里注册一个钩子方法</p>
+<ol>
+<li>注册关闭钩子：</li>
+</ol>
+<pre><code>- 在Bootstrap类中通过Runtime.getRuntime().addShutdownHook()注册了一个关闭钩子线程
+
+- 当JVM接收到关闭信号时，会执行这个钩子线程中的container.shutdown()方法
+</code></pre>
+<ol start="2">
+<li>分层关闭机制：</li>
+</ol>
+<pre><code>- Container类实现了LifeCycle接口，统一管理所有核心组件的生命周期
+
+- 关闭时按顺序调用：
+
+    i. nettyProcessor.stop() - 停止Netty处理器
+
+  ii. nettyHttpServer.shutdown() - 关闭HTTP服务端
+
+  iii. nettyHttpClient.shutdown() - 关闭HTTP客户端
+</code></pre>
+<ol start="3">
+<li>Netty优雅关闭：</li>
+</ol>
+<pre><code>- NettyHttpServer使用eventLoopGroupBoss.shutdownGracefully()优雅关闭Netty线程组
+
+- NettyHttpClient通过asyncHttpClient.close()关闭异步HTTP客户端
+</code></pre>
+<ol start="4">
+<li>资源释放：</li>
+</ol>
+<pre><code>- 各组件在shutdown方法中释放占用的资源
+
+- 线程池使用executorService.shutdown()优雅关闭
+</code></pre>
+<p>  这种分层、有序的关闭机制确保了网关在退出时能够处理完正在执行的请求，避免数据丢失和连接异常。</p>
+<h2 id="SPI机制原理"><a href="#SPI机制原理" class="headerlink" title="SPI机制原理"></a>SPI机制原理</h2><p><img src="/images/6b83c465fda9e5eb6c90dd6b52c53af4.webp"></p>
+<p>SPI是Java提供的一种服务发现机制，允许第三方为接口提供实现。核心原理：</p>
+<ol>
+<li><p>约定：在META-INF&#x2F;services&#x2F;目录下创建以接口全限定名为文件名的文件</p>
+</li>
+<li><p>配置：文件内容为接口实现类的全限定名列表</p>
+</li>
+<li><p>发现：通过ServiceLoader.load()方法自动加载并实例化实现类</p>
+</li>
+</ol>
+<p>特点：</p>
+<p>懒加载的，只有迭代时才会去初始化创建实例对象并且缓存起来，所以它又是动态，即</p>
+<p><font style="color:#DF2A3F;">可以在程序运行时添加或删除实现类，而无需修改代码或重新编译</font></p>
+<p><font style="color:#DF2A3F;">当然这只针对于多次调用Load</font></p>
+<p>使用时，ServiceLoader.load(xxx接口.Class).返回ServiceLoader，它继承了迭代器</p>
+<p>🔑 ServiceLoader 的两个迭代器</p>
+<ol>
+<li>已加载服务提供者集合的迭代器（providers iterator）<ul>
+<li>保存已经实例化过的服务实现类对象。</li>
+<li>每次 <code>next()</code> 先从这里取。</li>
+</ul>
+</li>
+<li>延迟查找的迭代器（lazy lookup iterator）<ul>
+<li>当第一个迭代器取完时，它才会去 <code>META-INF/services/</code> 文件里查找还没加载过的实现类。</li>
+<li>查到一个，就用反射创建实例，放入第一个迭代器的集合，下次就可以直接从集合里拿，不需要再查。</li>
+</ul>
+</li>
+</ol>
+<p>👉 这样就实现了 延迟加载：只在真正需要的时候才去找并实例化实现类，而不是一开始全加载。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;S&gt; ServiceLoader&lt;S&gt; load(Class&lt;S&gt; service) &#123;</span><br><span class="line">        ClassLoader cl = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        return new ServiceLoader&lt;&gt;(Reflection.getCallerClass(), service, cl);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 Java SPI 时，需要<strong>注意以下几点</strong>：</p>
+<ul>
+<li><strong>接口必须是公共的，且只能包含抽象方法。</strong></li>
+<li><strong>实现类必须有一个无参构造函数。</strong></li>
+<li><strong>配置文件中指定的类必须是实现了相应接口的非抽象类。</strong></li>
+<li><strong>配置文件必须放在 META-INF&#x2F;services 目录下。</strong></li>
+<li><strong>配置文件的文件名必须为接口的全限定名。</strong></li>
+</ul>
+<h2 id="整个链路"><a href="#整个链路" class="headerlink" title="整个链路"></a>整个链路</h2><ol>
+<li><p>Netty底层处理链路</p>
+</li>
+<li><p>连接接收：NettyHttpServer通过Boss线程组接收客户端连接</p>
+</li>
+<li><p>通道初始化：为新连接创建ChannelPipeline，添加以下处理器：</p>
+</li>
+</ol>
+<pre><code>- HttpServerCodec：HTTP编解码器
+
+- HttpObjectAggregator：聚合HTTP请求分段
+
+- HttpServerExpectContinueHandler：处理HTTP 100 Continue请求
+
+- NettyHttpServerHandler：自定义请求处理器
+</code></pre>
+<ol start="3">
+<li><p>请求解码：HttpServerCodec将字节流解码为FullHttpRequest对象</p>
+</li>
+<li><p>事件传递：NettyHttpServerHandler接收channelRead事件，调用NettyProcessor处理</p>
+</li>
+<li><p>网关核心处理链路</p>
+</li>
+<li><p>Disruptor缓冲：DisruptorNettyCoreProcessor将请求放入RingBuffer队列</p>
+</li>
+<li><p>核心处理：NettyCoreProcessor.process()方法处理请求</p>
+</li>
+<li><p>上下文构建：ContextHelper.buildGatewayContext()构建GatewayContext</p>
+</li>
+<li><p>过滤器链构建：FilterChainFactory.buildFilterChain()创建服务特定的过滤器链</p>
+</li>
+<li><p>过滤器链处理</p>
+</li>
+<li><p>前置过滤：</p>
+</li>
+</ol>
+<pre><code>- CORS过滤器：处理跨域请求
+
+- 流量控制过滤器：限流控制
+
+- 灰度路由过滤器：灰度发布控制
+
+- 负载均衡过滤器：选择服务实例
+</code></pre>
+<ol start="2">
+<li><p>核心路由：RouteFilter发送请求到下游服务</p>
+</li>
+<li><p>后置过滤：按相反顺序执行过滤器的后置方法</p>
+</li>
+<li><p>路由和负载均衡</p>
+</li>
+<li><p>负载均衡：LoadBalanceFilter从DynamicConfigManager获取服务实例</p>
+</li>
+<li><p>策略选择：根据配置选择负载均衡策略（轮询、权重等）</p>
+</li>
+<li><p>实例选择：选定具体的服务实例并设置请求目标主机</p>
+</li>
+<li><p>请求路由：RouteFilter通过AsyncHttpClient发送HTTP请求</p>
+</li>
+<li><p>响应返回链路</p>
+</li>
+<li><p>响应处理：异步获取下游服务响应</p>
+</li>
+<li><p>响应构建：ResponseHelper.buildHttpResponse()构建Netty响应</p>
+</li>
+<li><p>连接管理：</p>
+</li>
+</ol>
+<pre><code>- 短连接：writeAndFlush().addListener(ChannelFutureListener.CLOSE)
+
+- 长连接：设置Keep-Alive头并发送响应
+</code></pre>
+<ol start="4">
+<li>资源释放：Netty自动释放FullHttpRequest引用计数</li>
+</ol>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/20/JavaSE/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E6%9C%89%E9%BB%98%E8%AE%A4%E5%80%BC%E8%80%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E6%B2%A1%E6%9C%89/">为什么成员变量有默认值而局部变量没有</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/11/Codetop%E5%88%B7%E9%A2%98/%E5%8D%95%E8%B0%83%E6%A0%88/">单调栈</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/12/MySQL/other%20sql%20db/">other sql db</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/08/Spring/Spring-Retry/">Spring-Retry</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/13/JVM/jvm%E6%BA%90%E7%A0%81/">jvm源码</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/15/kafka/kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB/">kafka为什么这么快</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E7%B4%A2%E5%BC%95%E8%B7%B3%E8%B7%83%E6%89%AB%E6%8F%8F/">索引跳跃扫描</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B8%B8%E8%A7%84/%E5%BB%BA%E9%80%A0%E8%80%85/">建造者</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/HTTP/%E6%9C%89HTTP%E4%BA%86%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E8%A6%81WebSocket/">有HTTP了为什么还要WebSocket</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E8%AE%A1%E7%BD%91/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/OSI,TCP!IP/">OSI,TCP/IP</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%9A%BE%E7%82%B9/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%9A%BE%E7%82%B9/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%9A%BE%E7%82%B9/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

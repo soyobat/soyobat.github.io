@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>限流 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>限流</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/07/15/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E9%99%90%E6%B5%81/">限流</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-07-15
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/07/15/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E9%99%90%E6%B5%81/">限流</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-07-15
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><strong><font style="color:rgb(77, 77, 77);">目录</font></strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#jbwk0"><font style="color:rgb(78, 161, 219);">1、路由转发</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#TSDPC"><font style="color:rgb(78, 161, 219);">2、失败重试</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#UNxZK"><font style="color:rgb(78, 161, 219);">3、熔断降级</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#VLXKd"><font style="color:rgb(78, 161, 219);">4、实现过程</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#rmplc"><font style="color:rgb(78, 161, 219);">4.1 正常路由转发</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#pgcZe"><font style="color:rgb(78, 161, 219);">4.2 请求重试</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e423b5dd-6bbb-40da-9634-04564e3a4924#A9uoI"><font style="color:rgb(78, 161, 219);">4.3 熔断降级</font></a></p>
+<hr>
+<h2 id="1、路由转发"><a href="#1、路由转发" class="headerlink" title="1、路由转发"></a><font style="color:rgb(79, 79, 79);">1、路由转发</font></h2><p><strong><font style="color:rgb(77, 77, 77);">路由转发</font>****<font style="color:rgb(77, 77, 77);"> </font></strong><font style="color:rgb(77, 77, 77);">是网关处理完毕所有过虑逻辑之后的最后一个要执行的操作，它负责将请求最终转发到某一个指定的后端服务，这里参考 Spring Cloud Gateway 的实现方式来模拟一个路由转发过滤器</font></p>
+<p><font style="color:rgb(77, 77, 77);">在 Spring Cloud Gateway 这一先进的微服务网关解决方案中，路由转发过滤器扮演着至关重要的角色，负责对进站的 HTTP 请求进行精细化处理与精准调度。以下详述其核心功能及在微服务体系中的价值：</font></p>
+<ol>
+<li><strong><font style="color:rgb(51, 51, 51);">请求适配与重定向</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：路由转发过滤器具备强大的请求修饰能力，能够对请求的各组成部分进行灵活调整，包括但不限于请求头、主体内容、查询参数等。这种机制使得网关能够在请求抵达目标服务前对其进行定制化改造，确保其完全符合服务接口规范。此外，过滤器还支持动态重定向请求至其他目标服务，实现复杂路由场景下的精准投递。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">安全屏障</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：作为微服务架构的入口防线，路由转发过滤器承载了关键的安全防护功能。通过集成身份验证与授权机制，过滤器能有效拦截未经授权的访问请求，确保仅授权用户方可触及特定服务资源。这一特性对于构建坚实的服务边界，防止未授权渗透，保障整个微服务生态系统安全至关重要。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">智能缓存</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：为了提升系统性能、缓解服务压力并降低响应延迟，过滤器可集成缓存策略。针对特定请求或响应，过滤器能够识别其是否适合缓存，并在必要时直接从缓存中返回结果，避免对后端服务产生不必要的调用。这种机制在面对高并发、数据复用性强的场景时尤为高效，显著提升了系统的整体响应速度与吞吐能力。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">日志审计与监控洞察</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：路由转发过滤器充当了微服务交互的透明观察者，实时捕获并记录请求与响应的详细信息。这些数据不仅可用于生成详细的访问日志，便于问题排查与合规审计，还能作为关键性能指标输入到监控系统，助力运维人员实时掌握服务状态，快速定位异常，确保微服务集群稳定运行。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">流量治理与韧性保障</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：借助路由转发过滤器，网关得以实施精细的流量控制策略，如限流、熔断、降级等，以防止服务因瞬时流量激增而过载崩溃。通过智能调节进入服务的请求速率，过滤器在保障服务质量的同时，增强了系统的弹性和稳定性，为微服务架构应对各种突发情况提供了有力支撑。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">负载均衡与服务发现</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：路由转发过滤器的核心职能之一在于实现请求到多个后端服务实例的透明转发，并依据预设的负载均衡算法，确保请求在各实例间均匀分布，最大限度利用服务资源，实现系统的水平扩展。同时，过滤器通常与服务注册与发现机制紧密集成，确保网关始终能准确找到并连接到可用的服务实例，实现服务间的无缝通信。</font></li>
+</ol>
+<p><font style="color:rgb(77, 77, 77);">综上所述，Spring Cloud Gateway中的路由转发过滤器凭借其丰富的功能集与高度的可配置性，为微服务架构提供了全方位的请求处理、安全防护、性能优化、监控洞察与流量管理能力，是构建健壮、高效、易运维的微服务生态体系不可或缺的关键组件。</font></p>
+<h2 id="2、失败重试"><a href="#2、失败重试" class="headerlink" title="2、失败重试"></a><font style="color:rgb(79, 79, 79);">2、失败重试</font></h2><p><font style="color:rgb(77, 77, 77);">请求重试是指在请求失败之后再次尝试请求，一般情况下重试可以减少请求因为服务GC卡顿、网络丢包、网络阻塞等短暂问题而导致的失败；然而重试会增加请求总数量，不合理的重试策略甚至可能在服务端不稳定时，导致重试流量风暴，从而压垮服务端导致故障。</font></p>
+<p><font style="color:rgb(77, 77, 77);">请求失败一般可以按照层级划分为连接失败和请求失败；而请求一般可分为幂等和非幂等请求。</font></p>
+<p><font style="color:rgb(77, 77, 77);">连接失败：由于TCP握手失败，实际业务请求并未发送至服务端，所以对此类错误是可以安全的重试的，配合超时配置将链接超时设置在毫秒级别，可以有效的避免偶发网络拥塞、网络丢包等网络故障导致的报错，提升整体稳定性。</font></p>
+<p><font style="color:rgb(77, 77, 77);">请求失败：由于网络连接已经完成，实际业务请求可能已经发送至服务端，服务端的业务逻辑可能已经执行过了；比如服务端超时，而实际服务端业务逻辑会继续执行完成。因此对于幂等请求相对安全，但是对于非幂等的请求，重试可能会有较大风险。</font></p>
+<p><font style="color:rgb(77, 77, 77);">在短视频APP例子中，比如获取账户信息的请求就是幂等请求，不会有服务端数据的修改，重试操作是比较安全的；但是对于添加评论的请求，如果请求超时进行重试，就可能导致评论服务最终收到多个添加评论的请求，最终添加多个重复的评论，显然这是不正确的，会最终导致数据异常。</font></p>
+<p><font style="color:rgb(77, 77, 77);">因此重试配置一般可归于以下几类</font></p>
+<ul>
+<li><strong><font style="color:rgb(51, 51, 51);">连接重试</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">: 因为连接重试风险低，收益高，一般情况下默认开启。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">超时重试</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">: 需要判断业务接口是否幂等，如非幂等风险是否可控，来决定是否启用；提供重试退避策略：重试等待固定时长或逐次提升等待时长。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">Backup Request</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">: 为减少服务的延迟波动。在设置时间内未返回，再次发送请求；例如使用P99作为阈值，来降低长尾问题。</font></li>
+</ul>
+<p><font style="color:rgb(77, 77, 77);">同时为了防止大规模重试导致请求量总量成倍上升，最终压垮服务，重试一般需提供熔断错误率阈值，当请求错误率超过阈值时停止重试。</font></p>
+<h2 id="3、熔断降级"><a href="#3、熔断降级" class="headerlink" title="3、熔断降级"></a><font style="color:rgb(79, 79, 79);">3、熔断降级</font></h2><p><font style="color:rgb(77, 77, 77);">服务降级是在服务所发出「实际请求需求」大于下游「稳定&#x2F;可提供QPS」阈值时所使用的一种「服务维稳手段」，保障在部分极端情况下整体系统可以通过牺牲部分能力方式换来一定程度的可用性，而不是超出阈值后导致系统雪崩。</font></p>
+<p><font style="color:rgb(77, 77, 77);">服务降级常见有两种方式，业务根据自身需求进行对应选择：</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">弃车保帅：按一定丢弃规则，仅丢弃部分请求，保障部分高优&#x2F;核心 请求可以获得稳定服务。</font></li>
+<li><font style="color:rgb(51, 51, 51);">贫富相均：对于所有请求一视同仁，按照相同比例丢弃。</font></li>
+</ul>
+<p><font style="color:rgb(77, 77, 77);">对于基础系统&#x2F;核心业务&#x2F;关键服务，其组件可用性有着极高要求，如果因其承载资源需求过高而整体完全不可用，会导致大面积服务调用链直接断裂，并使故障进一步扩散，引起「系统雪崩」，其造成的巨大损失是我们不能接受的。</font></p>
+<p><font style="color:rgb(77, 77, 77);">在短视频APP的例子中，如下图，假如因为突发事件流量，导致账户服务的流量增加触发了限流；但是对于短视频的场景下，视频播放功能价值显然高于评论功能的价值，在有限的资源情况下，账户服务如果主动将评论服务的流量进行降级，将资源腾挪给视频信息服务，舍弃评论功能，保护视频播放能力显然能获得更高性价比。</font></p>
+<p><img src="/images/d2e46a6460d633f714c190ef06cf1eec.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">服务降级究其根本，即是“断臂求生”。对于实际业务场景而言，降级方式的评估即是对「付出成本」和「实际收获」的评估，可以从以下三个维度去抽象细化：</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">尽可能少丢弃—— “每一个请求都有价值”</font></li>
+<li><font style="color:rgb(51, 51, 51);">尽可能丢弃价值较低的请求—— “请求与请求的价值是不同的”</font></li>
+<li><font style="color:rgb(51, 51, 51);">尽可能丢弃性价比低的请求—— “吃了两份资源却只能产出一份价值的请求”</font></li>
+</ul>
+<h2 id="4、实现过程"><a href="#4、实现过程" class="headerlink" title="4、实现过程"></a><font style="color:rgb(79, 79, 79);">4、实现过程</font></h2><h3 id="4-1-正常路由转发"><a href="#4-1-正常路由转发" class="headerlink" title="4.1 正常路由转发"></a><font style="color:rgb(79, 79, 79);">4.1 正常路由转发</font></h3><p><font style="color:rgb(77, 77, 77);">在这里创建两个服务，方便测试负载均衡和路由转发效果</font></p>
+<p><img src="/images/5c694fed653b5ecba495362c84d5b802.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">这段代码和之前请求服务模块一样，将服务弄到注册中心</font></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63208096/article/details/137754033?spm=1001.2014.3001.5502"><font style="color:rgb(78, 161, 219);">【自研网关系列】请求服务模块和客户端模块实现-CSDN博客</font></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@ApiService(serviceId = &quot;backend-http-server&quot;, protocol = ApiProtocol.HTTP, patternPath = &quot;/http-server/**&quot;)</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HttpController</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> ApiProperties apiProperties;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@ApiInvoker(path = &quot;/http-server/ping&quot;)</span></span><br><span class="line">	<span class="meta">@GetMapping(&quot;/http-server/ping&quot;)</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">ping</span><span class="params">()</span> &#123;</span><br><span class="line">		log.info(<span class="string">&quot;&#123;&#125;&quot;</span>, apiProperties);</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;pong1&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">配置文件就是端口号和 Nacos 地址</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8201</span><br><span class="line"></span><br><span class="line">api:</span><br><span class="line">  registerAddress: 127.0.0.1:8848</span><br><span class="line">  env: dev</span><br><span class="line">  gray: false</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">启动三个类</font></p>
+<p><img src="/images/7d4f997854a69cbfdf7756e7612c5c6b.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">继续 debug 来讲解流程</font></p>
+<p><font style="color:rgb(77, 77, 77);">进入过滤器后，会根据配置中是否有熔断降级的逻辑，不是就正常路由</font></p>
+<p><img src="/images/e900ca709ccc8e122d9bf9162600fb1f.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">这里使用 Http 异步操作来提高性能和响应速度：</font></p>
+<p><font style="color:rgb(77, 77, 77);">在传统的同步HTTP请求中，每个请求都需要等待服务器的响应，这会导致线程阻塞，从而降低程序的效率。而在异步HTTP请求中，请求发送后不需要等待服务器的响应，可以立即进行其他操作，当服务器响应到来时，会通过回调函数进行处理。这样可以大大提高程序的并发处理能力，从而提高程序的响应速度。</font></p>
+<ol>
+<li><strong><font style="color:rgb(51, 51, 51);">whenComplete</font><strong><strong><font style="color:rgb(51, 51, 51);"> </font></strong></strong><font style="color:rgb(51, 51, 51);">方法</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">:</font><ul>
+<li><strong><font style="color:rgb(51, 51, 51);">whenComplete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">是一个非异步的完成方法。</font></li>
+<li><font style="color:rgb(51, 51, 51);">当</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">CompletableFuture</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">的执行完成或者发生异常时，它提供了一个回调。</font></li>
+<li><font style="color:rgb(51, 51, 51);">这个回调将在</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">CompletableFuture</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">执行的相同线程中执行。这意味着，如果</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">CompletableFuture</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">的操作是阻塞的，那么回调也会在同一个阻塞的线程中执行。</font></li>
+<li><font style="color:rgb(51, 51, 51);">在这段代码中，如果</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">whenComplete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">为</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">true</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">，则在</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">future</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">完成时使用</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">whenComplete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">方法。这意味着</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">complete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">方法将在</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">future</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">所在的线程中被调用。</font></li>
+</ul>
+</li>
+<li><strong><font style="color:rgb(51, 51, 51);">whenCompleteAsync</font><strong><strong><font style="color:rgb(51, 51, 51);"> </font></strong></strong><font style="color:rgb(51, 51, 51);">方法</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">:</font><ul>
+<li><strong><font style="color:rgb(51, 51, 51);">whenCompleteAsync</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">是异步的完成方法。</font></li>
+<li><font style="color:rgb(51, 51, 51);">它也提供了一个在</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">CompletableFuture</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">执行完成或者发生异常时执行的回调。</font></li>
+<li><font style="color:rgb(51, 51, 51);">与</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">whenComplete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">不同，这个回调将在不同的线程中异步执行。通常情况下，它将在默认的</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">ForkJoinPool</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">中的某个线程上执行，除非提供了自定义的</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">Executor</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">。</font></li>
+<li><font style="color:rgb(51, 51, 51);">在代码中，如果</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">whenComplete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">为</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">false</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">，则使用</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">whenCompleteAsync</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">。这意味着</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">complete</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">方法将在不同的线程中异步执行。</font></li>
+<li><font style="color:rgb(51, 51, 51);">由于</font><font style="color:rgb(51, 51, 51);"> </font><strong><font style="color:rgb(51, 51, 51);">ForkJoinPool中的线程是共用的</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">，ParallelStream中的线程也是用的ForkJoinPool，因此我推荐手动设定这个线程池的大小，否则会出现一些异常哦。</font></li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 默认路由逻辑：</span></span><br><span class="line"><span class="comment"> * 根据 whenComplete 	判断执行回调的线程是否阻塞执行；</span></span><br><span class="line"><span class="comment"> * whenComplete 		当异步操作完成时（无论成功还是失败），会立即执行回调函数；</span></span><br><span class="line"><span class="comment"> * whenCompleteAsync 	当异步操作完成时，会创建一个新的异步任务来执行回调函数。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> CompletableFuture&lt;Response&gt; <span class="title function_">route</span><span class="params">(GatewayContext gatewayContext, Optional&lt;Rule.HystrixConfig&gt; hystrixConfig)</span> &#123;</span><br><span class="line">    <span class="comment">// 异步请求发送</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> gatewayContext.getRequest().build();</span><br><span class="line">    CompletableFuture&lt;Response&gt; future = AsyncHttpHelper.getInstance().executeRequest(request);</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">whenComplete</span> <span class="operator">=</span> ConfigLoader.getConfig().isWhenComplete();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 异步/非异步模型</span></span><br><span class="line">    <span class="keyword">if</span> (whenComplete) &#123;</span><br><span class="line">        future.whenComplete(((response, throwable) -&gt; &#123;</span><br><span class="line">            complete(request, response, throwable, gatewayContext);</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        future.whenCompleteAsync(((response, throwable) -&gt; &#123;</span><br><span class="line">            complete(request, response, throwable, gatewayContext);</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> future;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">然后就是处理HTTP响应，并根据处理过程中是否存在异常来设置不同的响应内容</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">handleResponse</span><span class="params">(Request request, Response response, Throwable throwable, GatewayContext gatewayContext)</span> &#123;</span><br><span class="line">	<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> request.getUrl();</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (Objects.nonNull(throwable)) &#123;</span><br><span class="line">			<span class="keyword">if</span> (throwable <span class="keyword">instanceof</span> TimeoutException) &#123;</span><br><span class="line">				log.warn(<span class="string">&quot;complete timeout &#123;&#125;&quot;</span>, url);</span><br><span class="line">				gatewayContext.setThrowable(throwable);</span><br><span class="line">				gatewayContext.setResponse(GatewayResponse.buildGatewayResponse(ResponseCode.REQUEST_TIMEOUT));</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (throwable <span class="keyword">instanceof</span> IOException) &#123;</span><br><span class="line">				gatewayContext.setThrowable(<span class="keyword">new</span> <span class="title class_">ConnectException</span>(throwable, gatewayContext.getUniqueId(), url, ResponseCode.HTTP_RESPONSE_ERROR));</span><br><span class="line">				gatewayContext.setResponse(GatewayResponse.buildGatewayResponse(ResponseCode.HTTP_RESPONSE_ERROR));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			gatewayContext.setResponse(GatewayResponse.buildGatewayResponse(response));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		gatewayContext.setThrowable(<span class="keyword">new</span> <span class="title class_">ResponseException</span>(ResponseCode.INTERNAL_ERROR));</span><br><span class="line">		gatewayContext.setResponse(GatewayResponse.buildGatewayResponse(ResponseCode.INTERNAL_ERROR));</span><br><span class="line">		log.error(<span class="string">&quot;complete process failed&quot;</span>, e);</span><br><span class="line">	&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">		gatewayContext.setContextStatus(ContextStatus.Written);</span><br><span class="line">		ResponseHelper.writeResponse(gatewayContext);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">最终就是将HTTP响应写回客户端</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 写回响应</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">writeResponse</span><span class="params">(IContext context)</span> &#123;</span><br><span class="line">    context.releaseRequest();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (context.judgeContextStatus(ContextStatus.Written)) &#123;</span><br><span class="line">        <span class="type">FullHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> getHttpResponse(context, (GatewayResponse) context.getResponse());</span><br><span class="line">        <span class="comment">// 如果不是保持连接的情况，响应后关闭通道</span></span><br><span class="line">        <span class="keyword">if</span> (!context.isKeepAlive()) &#123;</span><br><span class="line">            context.getNettyContext().writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);</span><br><span class="line">            context.getNettyContext().writeAndFlush(response);</span><br><span class="line">        &#125;</span><br><span class="line">        context.setContextStatus(ContextStatus.Completed);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (context.judgeContextStatus(ContextStatus.Completed)) &#123;</span><br><span class="line">        context.invokeCompletedCallBacks();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">这里顺便展示前面的负载均衡</font></p>
+<p><font style="color:rgb(77, 77, 77);">这里请求的网关核心的端口，但可以访问8201或8202的端口，这就是路由转发的效果</font></p>
+<p><img src="/images/e5267f26a7fbafb9e870218efd9ede1a.jpeg"></p>
+<p><img src="/images/fcbae022c72197a5e35b95c14cc21621.jpeg"></p>
+<h3 id="4-2-请求重试"><a href="#4-2-请求重试" class="headerlink" title="4.2 请求重试"></a><font style="color:rgb(79, 79, 79);">4.2 请求重试</font></h3><p><font style="color:rgb(77, 77, 77);">就是在处理响应请求之前就执行，然后如果有异常，且小于最大重试次数，就重新执行一遍过滤器</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">complete</span><span class="params">(Request request, Response response, Throwable throwable, GatewayContext gatewayContext)</span> &#123;</span><br><span class="line">	<span class="comment">// 请求已经处理完毕 释放请求资源</span></span><br><span class="line">	gatewayContext.releaseRequest();</span><br><span class="line">	<span class="comment">// 获取上下文请求配置规则</span></span><br><span class="line">	<span class="type">Rule</span> <span class="variable">rule</span> <span class="operator">=</span> gatewayContext.getRules();</span><br><span class="line">	<span class="comment">// 获取重试次数</span></span><br><span class="line">	<span class="type">int</span> <span class="variable">currentRetryTimes</span> <span class="operator">=</span> gatewayContext.getCurrentRetryTimes();</span><br><span class="line">	<span class="type">int</span> <span class="variable">confRetryTimes</span> <span class="operator">=</span> rule.getRetryConfig().getTimes();</span><br><span class="line">	<span class="comment">// 异常重试</span></span><br><span class="line">	<span class="keyword">if</span> ((throwable <span class="keyword">instanceof</span> TimeoutException</span><br><span class="line">			|| throwable <span class="keyword">instanceof</span> IOException)</span><br><span class="line">			&amp;&amp; currentRetryTimes &lt;= confRetryTimes) &#123;</span><br><span class="line">		doRetry(gatewayContext, currentRetryTimes);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 处理响应</span></span><br><span class="line">	handleResponse(request, response, throwable, gatewayContext);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 重试策略</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">doRetry</span><span class="params">(GatewayContext gatewayContext, <span class="type">int</span> retryTimes)</span> &#123;</span><br><span class="line">	gatewayContext.setCurrentRetryTimes(retryTimes + <span class="number">1</span>);</span><br><span class="line">	log.info(<span class="string">&quot;当前请求重试次数为&#123;&#125;&quot;</span>, gatewayContext.getCurrentRetryTimes());</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="comment">// 重新执行过滤器逻辑</span></span><br><span class="line">		doFilter(gatewayContext);</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		log.warn(<span class="string">&quot;重试请求失败, requestId=&#123;&#125;&quot;</span>, gatewayContext.getUniqueId(), e);</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id=""><a href="#" class="headerlink" title=""></a><img src="/images/e36de335cc0d4032e216172f99f6da86.jpeg"></h4><h3 id="4-3-熔断降级"><a href="#4-3-熔断降级" class="headerlink" title="4.3 熔断降级"></a><font style="color:rgb(79, 79, 79);">4.3 熔断降级</font></h3><p><font style="color:rgb(77, 77, 77);">首先在 nacos 配置中心中添加 hystrix 的配置</font></p>
+<p><img src="/images/e12a287867573c3c862eca4ee2282a4a.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">首先需要获得获取 hystrix 的配置</font></p>
+<ol>
+<li><font style="color:rgb(51, 51, 51);">会判断对比请求路径和注册中心注册的路径参数</font></li>
+<li><font style="color:rgb(51, 51, 51);">判断当前请求是否需要走熔断策略分支</font></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Optional&lt;Rule.HystrixConfig&gt; getHystrixConfig(GatewayContext gatewayContext) &#123;</span><br><span class="line">	<span class="type">Rule</span> <span class="variable">rule</span> <span class="operator">=</span> gatewayContext.getRules();</span><br><span class="line">	Optional&lt;Rule.HystrixConfig&gt; hystrixConfig = rule.getHystrixConfigs().stream()</span><br><span class="line">			.filter(c -&gt; StringUtils.equals(c.getPath(), gatewayContext.getRequest().getPath()))</span><br><span class="line">			.findFirst();</span><br><span class="line">	<span class="keyword">return</span> hystrixConfig;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/fb09df254b663c6d23583eb8d8f82d1a.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">熔断降级请求策略</font></p>
+<ol>
+<li><font style="color:rgb(51, 51, 51);">命令执行超过配置超时时间</font></li>
+<li><font style="color:rgb(51, 51, 51);">命令执行出现异常或错误</font></li>
+<li><font style="color:rgb(51, 51, 51);">连续失败率达到配置的阈值</font></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">routeWithHystrix</span><span class="params">(GatewayContext gatewayContext, Optional&lt;Rule.HystrixConfig&gt; hystrixConfig)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> gatewayContext.getUniqueId() + <span class="string">&quot;.&quot;</span> + gatewayContext.getRequest().getPath();</span><br><span class="line">    <span class="type">RouterHystrixCommand</span> <span class="variable">proxyCommand</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (commandMap.containsKey(key)) &#123;</span><br><span class="line">        proxyCommand = commandMap.get(key);</span><br><span class="line">        <span class="keyword">if</span> (!hystrixConfig.get().equals(commandMap.get(key))) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;previous HystrixCommand instance hashCode: &#123;&#125;&quot;</span>, proxyCommand.hashCode());</span><br><span class="line">            proxyCommand.updateHystrixCommandProperties(proxyCommand.getCommandKey().name());</span><br><span class="line">            proxyCommand = <span class="keyword">new</span> <span class="title class_">RouterHystrixCommand</span>(gatewayContext, hystrixConfig);</span><br><span class="line"></span><br><span class="line">            log.info(<span class="string">&quot;after HystrixCommand instance hashCode: &#123;&#125;&quot;</span>, proxyCommand.hashCode());</span><br><span class="line">            commandMap.put(key, proxyCommand);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        proxyCommand = <span class="keyword">new</span> <span class="title class_">RouterHystrixCommand</span>(gatewayContext, hystrixConfig);</span><br><span class="line">        commandMap.put(key, proxyCommand);</span><br><span class="line">    &#125;</span><br><span class="line">    proxyCommand.execute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">其中 RouterHystrixCommand 是路由转发的内部类，RouterHystrixCommand 类的主要功能是执行实际的路由操作和熔断降级操作，它使用了 Hystrix 来实现这些功能</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Hystrix命令集合</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">RouterHystrixCommand</span> <span class="keyword">extends</span> <span class="title class_">HystrixCommand</span>&lt;Object&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> GatewayContext context;</span><br><span class="line">    <span class="keyword">private</span> Optional&lt;Rule.HystrixConfig&gt; config;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RouterHystrixCommand</span><span class="params">(GatewayContext context, Optional&lt;Rule.HystrixConfig&gt; config)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(context.getUniqueId()))</span><br><span class="line">              .andCommandKey(HystrixCommandKey.Factory.asKey(context.getRequest().getPath()))</span><br><span class="line">              .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                                               <span class="comment">// 核心线程数</span></span><br><span class="line">                                               .withCoreSize(config.get().getCoreThreadSize()))</span><br><span class="line">              .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()</span><br><span class="line">                                            <span class="comment">// 线程隔离类型</span></span><br><span class="line">                                            .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)</span><br><span class="line">                                            <span class="comment">// 命令执行超时</span></span><br><span class="line">                                            .withExecutionTimeoutInMilliseconds(config.get().getTimeoutInMilliseconds())</span><br><span class="line">                                            <span class="comment">// 超时中断</span></span><br><span class="line">                                            .withExecutionIsolationThreadInterruptOnTimeout(<span class="literal">true</span>)</span><br><span class="line">                                            .withExecutionTimeoutEnabled(<span class="literal">true</span>)));</span><br><span class="line">        <span class="built_in">this</span>.config = config;</span><br><span class="line">        <span class="built_in">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">run</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 实际路由操作</span></span><br><span class="line">        route(context, config).get();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 熔断降级操作</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">getFallback</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 是否是超时引发的熔断</span></span><br><span class="line">        <span class="keyword">if</span> (isFailedExecution() || getExecutionException() <span class="keyword">instanceof</span> HystrixTimeoutException) &#123;</span><br><span class="line">            <span class="comment">// 针对超时的异常处理</span></span><br><span class="line">            context.setResponse(GatewayResponse.buildGatewayResponse(ResponseCode.GATEWAY_FALLBACK_TIMEOUT));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 其它类型异常熔断处理</span></span><br><span class="line">            context.setResponse(GatewayResponse.buildGatewayResponse(ResponseCode.GATEWAY_FALLBACK_ERROR, config.get().getFallbackResponse()));</span><br><span class="line">        &#125;</span><br><span class="line">        context.setContextStatus(ContextStatus.Written);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 动态更新 CommandProperties 配置</span></span><br><span class="line"><span class="comment">	 * 1.因为 Hystrix 内部使用了缓存，如果仅仅修改 HystrixCommand.Setter 是没有用的；</span></span><br><span class="line"><span class="comment">	 * 2.利用反射获取 HystrixPropertiesFactory 的 commandProperties 字段，并更新</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">updateHystrixCommandProperties</span><span class="params">(String commandKey)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Field</span> <span class="variable">field</span> <span class="operator">=</span> HystrixPropertiesFactory.class.getDeclaredField(<span class="string">&quot;commandProperties&quot;</span>);</span><br><span class="line">            field.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            ConcurrentHashMap&lt;String, HystrixCommandProperties&gt; commandProperties = (ConcurrentHashMap&lt;String, HystrixCommandProperties&gt;) field.get(<span class="literal">null</span>);</span><br><span class="line">            log.info(<span class="string">&quot;before update HystrixCommandProperties: &#123;&#125;&quot;</span>, commandProperties.get(commandKey));</span><br><span class="line">            commandProperties.remove(commandKey);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException | IllegalAccessException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;Remove cache in HystrixCommandFactory failed, commandKey: &#123;&#125;&quot;</span>, commandKey, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">执行结果</font></p>
+<p><img src="/images/07e2f6825c89b7cda9a6c70fcb4258d1.jpeg"></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/11/Codetop%E5%88%B7%E9%A2%98/">Codetop刷题</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/13/Codetop%E5%88%B7%E9%A2%98/java%20API/">java API</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/16/Codetop%E5%88%B7%E9%A2%98/%E9%93%BE%E8%A1%A8/">链表</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/12/Redis/%E4%B8%8Ememcached%E5%AF%B9%E6%AF%94%EF%BC%8C%E6%8C%BA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E4%B8%AD%E9%97%B4%E4%BB%B6/">与memcached对比，挺有意思的中间件</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E9%94%81/%E9%A1%B5%E9%94%81/">页锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/%E4%BD%BF%E7%94%A8%20TCP%20%E7%9A%84%E5%8D%8F%E8%AE%AE%E6%9C%89%E5%93%AA%E4%BA%9B!%E4%BD%BF%E7%94%A8%20UDP%20%E7%9A%84%E5%8D%8F%E8%AE%AE%E6%9C%89%E5%93%AA%E4%BA%9B/">使用 TCP 的协议有哪些?使用 UDP 的协议有哪些?</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E9%9D%A2%E7%BB%8F/">面经</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/18/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/HTTP%E5%AE%A2%E6%88%B7%E7%AB%AF/">HTTP客户端</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/12/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E5%B8%82%E9%9D%A2%E4%B8%8A%E5%B8%B8%E8%A7%81%E7%BD%91%E5%85%B3/">市面上常见网关</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/18/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E9%99%90%E6%B5%81%E5%92%8C%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9A%94%E7%A6%BB/">限流和信号量隔离</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/07/15/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E9%99%90%E6%B5%81/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/07/15/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E9%99%90%E6%B5%81/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/07/15/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E9%99%90%E6%B5%81/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

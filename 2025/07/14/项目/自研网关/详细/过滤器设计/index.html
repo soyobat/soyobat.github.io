@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>过滤器设计 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>过滤器设计</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/07/14/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AE%BE%E8%AE%A1/">过滤器设计</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-07-14
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/07/14/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AE%BE%E8%AE%A1/">过滤器设计</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-07-14
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p><strong><font style="color:rgb(77, 77, 77);">目录</font></strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e601d105-4afc-4fc7-9eef-0c000f63453a#aiCwI"><font style="color:rgb(78, 161, 219);">1、什么是过滤器</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e601d105-4afc-4fc7-9eef-0c000f63453a#dvw0L"><font style="color:rgb(78, 161, 219);">2、实现过滤器</font></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiwk.com/a/read?uid=e601d105-4afc-4fc7-9eef-0c000f63453a#ethFf"><font style="color:rgb(78, 161, 219);">3、实现流程</font></a></p>
+<h2 id="1、什么是过滤器"><a href="#1、什么是过滤器" class="headerlink" title="1、什么是过滤器"></a><font style="color:rgb(79, 79, 79);">1、什么是过滤器</font></h2><p><font style="color:rgb(77, 77, 77);">在我们的微服务架构中，构建了一个关键组件——网关服务，它作为系统的入口，负责对所有进、出流量进行统一管理和控制。为了实现这一功能，前面文章已成功将其注册至注册中心，并从配置中心获取了相关配置。接下来，我们将深入探讨如何构建网关服务的核心部分——</font><font style="color:rgb(77, 77, 77);"> </font><strong><font style="color:rgb(77, 77, 77);">过滤器链</font>****<font style="color:rgb(77, 77, 77);"> </font></strong><font style="color:rgb(77, 77, 77);">。</font></p>
+<p><font style="color:rgb(77, 77, 77);">过滤器链，顾名思义，是由一系列有序排列的过滤器构成的执行链条。每个过滤器承载特定的业务逻辑，对经过的请求和响应进行特定处理。当一个过滤器完成其预设的过滤流程后，会遵循链条顺序，将请求传递给下一个过滤器继续执行。通过这种方式，过滤器链实现了对请求与响应的深度定制化处理。</font></p>
+<p><font style="color:rgb(77, 77, 77);">过滤器链中的成员可根据其作用范围分为全局过滤器和局部过滤器两种类型：</font></p>
+<ol>
+<li><strong><font style="color:rgb(51, 51, 51);">全局过滤器</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：这类过滤器具有广泛的适用性，对所有进入网关的请求均进行处理。它们通常负责执行诸如身份验证、权限校验、日志记录、跨域支持等通用性操作，确保所有请求在到达具体业务服务前符合系统的基本规范和要求。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">局部过滤器</font>****<font style="color:rgb(51, 51, 51);"> </font></strong><font style="color:rgb(51, 51, 51);">：Spring Cloud框架已为我们预置了一套局部过滤器，用于应对特定场景下的请求处理。尽管如此，我们依然可以根据实际需求，通过继承并实现相关接口来自定义局部过滤器，以满足特定业务逻辑或优化性能。</font></li>
+</ol>
+<p><font style="color:rgb(77, 77, 77);">过滤器链的运作机制遵循严格的流程：</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">请求首先被送入链首的过滤器进行处理。</font></li>
+<li><font style="color:rgb(51, 51, 51);">每个过滤器依据自身职责对请求进行检查、修改或增强，然后将处理后的请求传递给链中的下一个过滤器。</font></li>
+<li><font style="color:rgb(51, 51, 51);">这一过程持续进行，直到链尾的路由过滤器接收到请求。路由过滤器的核心职责是根据请求信息和预设的路由规则，准确地将请求转发至相应的后台服务进行实际业务处理。</font></li>
+<li><font style="color:rgb(51, 51, 51);">后台服务完成任务后，将响应返回给路由过滤器。</font></li>
+<li><font style="color:rgb(51, 51, 51);">路由过滤器再将响应沿着过滤器链逆序传递，让每个过滤器有机会对响应进行必要的后期处理。</font></li>
+<li><font style="color:rgb(51, 51, 51);">最终，经过完整过滤器链洗礼的响应被写回客户端。</font></li>
+</ul>
+<p><font style="color:rgb(77, 77, 77);">在过滤器链执行过程中，若遇到任何异常情况，可通过设置专门的异常处理过滤器来捕获并妥善处理这些异常，如返回友好的错误信息、记录异常日志等，确保系统的稳定性和用户体验。</font></p>
+<p><font style="color:rgb(77, 77, 77);">当请求在整个生命周期中均正常流转且后台服务处理完毕后，使用 context.writeAndFlush() 方法将处理结果（即响应数据）高效地写回客户端，标志着一次完整的请求响应流程在过滤器链的保驾护航下圆满结束。</font></p>
+<p><font style="color:rgb(77, 77, 77);">综上所述，过滤器链作为网关服务的核心组件，通过串联各个具有特定功能的过滤器，对进出系统的请求与响应进行全方位、多层次的精细化管理，实现了微服务架构下流量的有效管控与优化。</font></p>
+<p><font style="color:rgb(77, 77, 77);">大概流程图：</font></p>
+<p><img src="/images/926502b68dc2db338687e37b12b1d5bf.jpeg"></p>
+<h2 id="2、实现过滤器"><a href="#2、实现过滤器" class="headerlink" title="2、实现过滤器"></a><font style="color:rgb(79, 79, 79);">2、实现过滤器</font></h2><p><font style="color:rgb(77, 77, 77);">项目结构图</font></p>
+<p><img src="/images/3a6deede7954c149efa8e04f24e6ba85.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">具体代码在 github 上，不一一展示</font></p>
+<ol>
+<li><font style="color:rgb(51, 51, 51);">Filter：这是一个接口，定义了过滤器需要实现的方法。所有的过滤器都需要实现这个接口，并实现doFilter方法来执行具体的过滤操作。getOrder方法用于获取过滤器的执行顺序。</font></li>
+<li><font style="color:rgb(51, 51, 51);">FilterAspect：这是一个注解，用于标记过滤器的一些属性，如ID、名称和执行顺序。这个注解被应用在实现了Filter接口的类上。</font></li>
+<li><font style="color:rgb(51, 51, 51);">FilterChainFactory：这是一个接口，定义了过滤器链工厂需要实现的方法。过滤器链工厂的主要职责是根据给定的上下文构建过滤器链。</font></li>
+<li><font style="color:rgb(51, 51, 51);">GatewayFilterChain：这是一个类，代表了过滤器链。它包含了一个过滤器列表，并提供了添加过滤器和执行过滤器链的方法。</font></li>
+<li><font style="color:rgb(51, 51, 51);">GatewayFilterChainFactory：这个类的具体实现可能会根据你的应用有所不同，但一般来说，它应该是FilterChainFactory接口的一个实现，负责创建GatewayFilterChain实例。这个类可能会使用单例模式，以确保整个应用只有一个GatewayFilterChainFactory实例。</font></li>
+</ol>
+<p><font style="color:rgb(77, 77, 77);">总的来说，这些类和接口共同工作，以创建和管理过滤器链。过滤器链是由一系列过滤器组成的，这些过滤器按照特定的顺序执行，以对通过网关的请求进行处理。</font></p>
+<h2 id="3、实现流程"><a href="#3、实现流程" class="headerlink" title="3、实现流程"></a><font style="color:rgb(79, 79, 79);">3、实现流程</font></h2><p><font style="color:rgb(77, 77, 77);">和之前一样，通过 debug 的方式来讲解过滤器链的实现</font></p>
+<p><font style="color:rgb(77, 77, 77);">首先过滤器工厂具体实现类的无参构造</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * SPI加载本地过滤器实现类对象</span></span><br><span class="line"><span class="comment"> * 过滤器存储映射 过滤器id - 过滤器对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="title function_">GatewayFilterChainFactory</span><span class="params">()</span> &#123;</span><br><span class="line">	<span class="comment">//加载所有过滤器</span></span><br><span class="line">	ServiceLoader&lt;Filter&gt; serviceLoader = ServiceLoader.load(Filter.class);</span><br><span class="line">	serviceLoader.stream().forEach(filterProvider -&gt; &#123;</span><br><span class="line">		<span class="type">Filter</span> <span class="variable">filter</span> <span class="operator">=</span> filterProvider.get();</span><br><span class="line">		<span class="type">FilterAspect</span> <span class="variable">annotation</span> <span class="operator">=</span> filter.getClass().getAnnotation(FilterAspect.class);</span><br><span class="line">		log.info(<span class="string">&quot;load filter success:&#123;&#125;,&#123;&#125;,&#123;&#125;,&#123;&#125;&quot;</span>, filter.getClass(), annotation.id(), annotation.name(), annotation.order());</span><br><span class="line">		<span class="comment">//添加到过滤集合</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">filterId</span> <span class="operator">=</span> annotation.id();</span><br><span class="line">		<span class="keyword">if</span> (StringUtils.isEmpty(filterId)) &#123;</span><br><span class="line">			filterId = filter.getClass().getName();</span><br><span class="line">		&#125;</span><br><span class="line">		processorFilterIdMap.put(filterId, filter);</span><br><span class="line">		processFilterIdName.put(filterId, annotation.name());</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">这里还是和注册和配置中心一样的思路，用 SPI 来加载类，加载实时可用的过滤器，组装为网关过滤器链</font></p>
+<p><img src="/images/14fbe701177a292f7deefb10eb5b1b53.jpeg"></p>
+<p><img src="/images/ca242fc0b17bc643adc00c06a964dbf4.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">然后就将各个过滤器的id，名称，排序弄到 ConcurrentHashMap 中</font></p>
+<p><img src="/images/6d9fd0dd1638650366e5094058f1cda8.jpeg"></p>
+<p><img src="/images/9065e6b2d0a190f0d533b83c90f2943b.jpeg"></p>
+<p><font style="color:rgb(77, 77, 77);">其中 GatewayFilterChainFactory 类采用的是单例模式</font></p>
+<p><font style="color:rgb(77, 77, 77);">在网关之中，GatewayFilterChainFactory 负责创建和管理过滤器链。由于过滤器链在整个应用中是</font><font style="color:rgb(77, 77, 77);"> </font><strong><font style="color:rgb(77, 77, 77);">共享</font>****<font style="color:rgb(77, 77, 77);"> </font></strong><font style="color:rgb(77, 77, 77);">的，因此没有必要为每个请求创建一个新的 GatewayFilterChainFactory 实例。</font></p>
+<p><font style="color:rgb(77, 77, 77);">使用单例模式可以确保所有的请求都使用同一个GatewayFilterChainFactory实例，这样可以避免重复创建实例，节省内存，并</font><font style="color:rgb(77, 77, 77);"> </font><strong><font style="color:rgb(77, 77, 77);">保证所有请求使用的过滤器链的一致性</font>****<font style="color:rgb(77, 77, 77);"> </font></strong><font style="color:rgb(77, 77, 77);">。</font></p>
+<p><font style="color:rgb(77, 77, 77);">此外，GatewayFilterChainFactory 在初始化时会加载所有的过滤器，这可能是一个</font><font style="color:rgb(77, 77, 77);"> </font><strong><font style="color:rgb(77, 77, 77);">耗时</font>****<font style="color:rgb(77, 77, 77);"> </font></strong><font style="color:rgb(77, 77, 77);">的操作。如果每个请求都创建一个新的 GatewayFilterChainFactory 实例，那么这个耗时的初始化操作就会被重复执行，这会影响应用的性能。</font></p>
+<p><font style="color:rgb(77, 77, 77);">使用单例模式，初始化操作只会执行一次，可以提高应用的性能。 总的来说，这里使用单例模式是为了保证过滤器链的一致性，节省内存，提高性能。</font></p>
+<p><font style="color:rgb(77, 77, 77);">在 NettyCoreProcessor 会获取 GatewayFilterChainFactory 这个单例的</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 过滤器链工厂</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">FilterChainFactory</span> <span class="variable">chainFactory</span> <span class="operator">=</span> GatewayFilterChainFactory.getInstance();</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">在 process 方法中调用构建过滤器链条这个功能</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建并填充 GatewayContext 以保存有关传入请求的信息。</span></span><br><span class="line"><span class="type">GatewayContext</span> <span class="variable">gatewayContext</span> <span class="operator">=</span> RequestHelper.doContext(request, ctx);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组装过滤器并执行过滤操作</span></span><br><span class="line">chainFactory.buildFilterChain(gatewayContext).doFilter(gatewayContext);</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">构建过滤器链条利用本地缓存，主要确保对于同一规则ID的请求，可以复用已经构建的过滤器链，而不需要每次都重新构建，从而提高了性能</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 过滤器链缓存（服务ID ——&gt; 过滤器链）</span></span><br><span class="line"><span class="comment"> * ruleId —— GatewayFilterChain</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> Cache&lt;String, GatewayFilterChain&gt; chainCache = Caffeine.newBuilder().recordStats().expireAfterWrite(<span class="number">10</span>, TimeUnit.SECONDS).build();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 构建过滤器链条</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> GatewayFilterChain <span class="title function_">buildFilterChain</span><span class="params">(GatewayContext ctx)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="comment">// 获取规则ID</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">ruleId</span> <span class="operator">=</span> ctx.getRules().getId();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从缓存中获取过滤器链</span></span><br><span class="line">    <span class="type">GatewayFilterChain</span> <span class="variable">chain</span> <span class="operator">=</span> chainCache.getIfPresent(ruleId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果缓存中没有过滤器链，那么构建一个新的过滤器链</span></span><br><span class="line">    <span class="keyword">if</span> (chain == <span class="literal">null</span>) &#123;</span><br><span class="line">        chain = doBuildFilterChain(ctx.getRules());</span><br><span class="line">        <span class="comment">// 将新构建的过滤器链添加到缓存中</span></span><br><span class="line">        chainCache.put(ruleId, chain);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回过滤器链</span></span><br><span class="line">    <span class="keyword">return</span> chain;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><font style="color:rgb(77, 77, 77);">构建一个新的过滤器链</font></strong></p>
+<p><font style="color:rgb(77, 77, 77);">根据给定的规则构建一个过滤器链，这个过滤器链用于处理 HTTP 请求</font></p>
+<p><strong><font style="color:rgb(77, 77, 77);">为什么每个服务请求最终最后需要添加路由过滤器</font></strong></p>
+<p><font style="color:rgb(77, 77, 77);">在网关中，路由过滤器的作用是将</font><font style="color:rgb(77, 77, 77);"> </font><strong><font style="color:rgb(77, 77, 77);">请求路由（转发）到适当的后端服务</font>****<font style="color:rgb(77, 77, 77);"> </font></strong><font style="color:rgb(77, 77, 77);">。</font></p>
+<p><font style="color:rgb(77, 77, 77);">在过滤器链中，路由过滤器通常是最后一个执行的过滤器，因为它需要在所有其他过滤器（如权限、限流、负载均衡等）成功执行后才进行路由。</font></p>
+<p><font style="color:rgb(77, 77, 77);">这个方法中，路由过滤器被添加到过滤器链的末尾，这是因为在执行所有其他过滤器并对请求进行各种检查和处理后，最后的步骤是将请求路由到适当的后端服务。</font></p>
+<p><font style="color:rgb(77, 77, 77);">如果没有路由过滤器，那么即使请求通过了所有其他过滤器，也无法到达任何后端服务，因此每个服务请求最终都需要添加路由过滤器。</font></p>
+<p><font style="color:rgb(77, 77, 77);">在 NettyCoreProcessor 中还会执行 doFilter() 方法，就是遍历过滤器链，逐个执行过滤</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 组装过滤器并执行过滤操作</span></span><br><span class="line">chainFactory.buildFilterChain(gatewayContext).doFilter(gatewayContext);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行过滤器链</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> GatewayContext <span class="title function_">doFilter</span><span class="params">(GatewayContext ctx)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> (filters.isEmpty()) &#123;</span><br><span class="line">		<span class="keyword">return</span> ctx;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="keyword">for</span> (Filter filter : filters) &#123;</span><br><span class="line">			filter.doFilter(ctx);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		log.error(<span class="string">&quot;执行过滤器发生异常: &#123;&#125;&quot;</span>, e.getMessage());</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ctx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(77, 77, 77);">大概的过滤器设计就这样，还是需要自己根据代码 debug 一下才能根据清晰，点个 </font><font style="color:rgb(77, 77, 77);">⭐</font><font style="color:rgb(77, 77, 77);"> ！！！</font></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/15/JUC/%E4%BF%A1%E5%8F%B7%E9%87%8F/">信号量</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Codetop%E5%88%B7%E9%A2%98/%E5%A5%97%E8%B7%AF/">套路</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">深分页如何解决</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/RabbitMQ/%E6%9E%B6%E6%9E%84/">架构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/Bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/">Bean的作用域</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">虚拟内存</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">cookie，session，Token</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/04/MySQL/%E4%BA%8B%E5%8A%A1/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A4%A7%E5%8E%82%E8%A6%81%E6%8A%8ARR%E6%94%B9%E6%88%90RC/">为什么大厂要把RR改成RC</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E4%BA%8B%E5%8A%A1/redis%E4%BA%8B%E5%8A%A1/">redis事务</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/14/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/Mybatis%20Cursor/">Mybatis Cursor</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/07/14/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AE%BE%E8%AE%A1/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/07/14/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AE%BE%E8%AE%A1/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/07/14/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E8%AF%A6%E7%BB%86/%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AE%BE%E8%AE%A1/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

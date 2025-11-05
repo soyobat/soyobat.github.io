@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>InnoDB关键特性 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>InnoDB关键特性</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/10/14/MySQL/%E5%BC%95%E6%93%8E/InnoDB/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/">InnoDB关键特性</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-10-14
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/10/14/MySQL/%E5%BC%95%E6%93%8E/InnoDB/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/">InnoDB关键特性</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-10-14
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a><font style="color:#DF2A3F;">插入缓冲</font></h2><p>当要插入数据时，对于唯一索引来说：</p>
+<p>若索引页在内存的话，则往内存插入。若不在，则先把对应的索引页加载到内存，然后判断是否重，然后插入</p>
+<p>对于非唯一索引而言，对应的索引页在内存的话，同上，然后写redo。</p>
+<p>而对于不在的情况，则是将“插入xxx数据”记录到insert buffer（其实insert buffer是一个 b+树）里，同时将</p>
+<p>写 insert buffer这个行为写一条日志到redo log（此时的redo就不是传统意义上的物理日志），<strong>整个操作没</strong></p>
+<p><strong>有磁盘IO</strong></p>
+<hr>
+<p>change buffer是InnoDB1.0x对insert buffer的升级，扩展了delete buffer（标记删除），purge buffer（真</p>
+<p>正删除）。change buffer不仅可以缓冲插入，更改和删除也可以。change buffer位于buffer pool中，大小</p>
+<p>由innodb_change_buffer_max_size。默认为25，最多占buffer pool的25%，最大有效值可为50，超50还是</p>
+<p>50</p>
+<p>insert buffer 里有个bitmap用来追踪每个二级索引页的可用空间</p>
+<p><img src="/images/d00e3f87236c412e53b824b7c0875898.png"></p>
+<h2 id="什么时候合并insert-pool到真正的二级索引页中？"><a href="#什么时候合并insert-pool到真正的二级索引页中？" class="headerlink" title="什么时候合并insert pool到真正的二级索引页中？"></a><font style="color:#DF2A3F;">什么时候合并insert pool到真正的二级索引页中？</font></h2><pre><code>1. 当二级索引页加载时，通过bitmap发现内存存在了，这时候就会合并
+2. 发现二级索引页缓冲的数据占用已经小于1/32，则会强制从磁盘里读数据然后合并数据
+3. master Thead 后台线程每10秒一次
+4. 数据库正常关闭
+</code></pre>
+<h2 id="什么时候change-buffer落盘"><a href="#什么时候change-buffer落盘" class="headerlink" title="什么时候change buffer落盘"></a><font style="color:#DF2A3F;">什么时候change buffer落盘</font></h2><pre><code>1. 数据库空闲时，后台进程落盘
+2. 缓冲池不够用了
+3. 数据库正常关闭时
+4. redo写满了
+</code></pre>
+<h2 id="为什么要把change-buffer中的记录写redo"><a href="#为什么要把change-buffer中的记录写redo" class="headerlink" title="为什么要把change buffer中的记录写redo"></a><font style="color:#DF2A3F;">为什么要把change buffer中的记录写redo</font></h2><p>同样也是为了持久化么。当使用到change buffer意味着内存还没有这数据，如果这时候宕机了，数据就没了</p>
+<p>这时候做redo就是为了宕机重启后可以恢复内存数据。</p>
+<p>当宕机重启时：</p>
+<p>先看事务是否提交，无提交直接回滚。提交了就看change buffer是否落盘，有，则直接使用change buffer</p>
+<p>恢复数据；没有就通过redo 恢复changbuffer，再通过change buffer恢复数据</p>
+<h2 id="可以不使用change-buffer，只使用redo记录吗"><a href="#可以不使用change-buffer，只使用redo记录吗" class="headerlink" title="可以不使用change buffer，只使用redo记录吗"></a><font style="color:#DF2A3F;">可以不使用change buffer，只使用redo记录吗</font></h2><p>PS：（虽然说redo log是顺序磁盘IO，某种情况是要比change buffer的随机内存速度快的）。<strong>change只是记</strong></p>
+<p><strong>录了插入这个操作，并没有真正地插入到真正的索引页上！！！</strong></p>
+<p>不行，因为change buffer里维护了insert bit map。用来快速追踪哪些页是需要合并插入缓冲的，当这些页</p>
+<p>被加载到内存时，就可以被合并了。如果单靠redo log的话，当被合并的页加载到内存是无法感知的。而且</p>
+<p>redo log是循环记载，会被加载到磁盘，也就是写入磁盘前必须** 合并插入缓冲区（因为redo log里有change **</p>
+<p><strong>buffer的插入记录），这会加重redo log的负担</strong></p>
+<blockquote>
+<p><strong>Change Buffer &#x3D; 存着很多“等待插入索引页的记录”</strong><br>那么“哪些页需要合并”就是 <strong>哪些页已经有“待插入的缓存记录”但还没真正写入</strong>。<br> 合并（Merge） &#x3D; 把 Change Buffer 中某页的缓存记录，真正插入到该页中。  	</p>
+</blockquote>
+<h2 id="写了redo-log，为什么buffer-pool还要落盘？"><a href="#写了redo-log，为什么buffer-pool还要落盘？" class="headerlink" title="写了redo log，为什么buffer pool还要落盘？"></a><font style="color:#DF2A3F;">写了redo log，为什么buffer pool还要落盘？</font></h2><p>缓冲池大小有限，如果需要insert的页一直没被加载，insert pool会一直积累，需要落盘腾空间</p>
+<p><img src="/images/d33e993a9870149ad552a359eee4ec8c.png"></p>
+<h2 id="两次写？"><a href="#两次写？" class="headerlink" title="两次写？"></a><font style="color:#DF2A3F;">两次写？</font></h2><p>double write由两个部分组成，一个double buffer位于内存，2mb，另外一个位于磁盘上，buffer area上，</p>
+<p>同样也是2mb</p>
+<p>刷新脏页时，并不是直接把脏页数据直接刷到磁盘对应的表空间，而是先copy到double write buffer。然后</p>
+<p>由double write buffer顺序写入double write area（这时候意味着这些页数据已经被持久化了）。然后再从</p>
+<p>double write buffer执行fsync 将里的数据刷到各自的表空间，多了两个步骤</p>
+<p>1.脏页数据被copy到了double write buffer</p>
+<p>2.直接落到各自的表空间前顺序写入到了double write area里</p>
+<h2 id="为什么要这么搞？"><a href="#为什么要这么搞？" class="headerlink" title="为什么要这么搞？"></a><font style="color:#DF2A3F;">为什么要这么搞？</font></h2><p>如果刷脏页，一个脏页16kb，如果写一半宕机了，就会出现磁盘的表数据人不人鬼不鬼的。 有了double </p>
+<p>write area后，如果宕机重启后，<strong>会检查double write area是否有对应完整页数据，如果有的话就完整恢复</strong></p>
+<p><strong>没有的话，则意味着没落盘</strong>。（其实细想的话也是一种先写日志的操作）</p>
+<p>那么这种丢失能否通过redo恢复？答案是不行！因为<strong>redo是物理日志，记录要对页文件进行的物理修改</strong>，它记载了：对xx页偏移量500的位置写入aaa、将xx页偏移量650的位置的数据由bbb改为ccc。但现在的问题是，你的页是缺失或者只更改了一部分的！页已经发生了损坏，再对其重做是没有意义的</p>
+<p><img src="/images/79b173dc328ae43da1ff2efceea74a94.png"></p>
+<p><img src="/images/470a51fdca4f18b13d4ef9b07b351cf2.png"></p>
+<h2 id="如果脏页在从内存中的doublewrite-buffer-写入到磁盘中的doublewrite-中发生了宕机怎么办？"><a href="#如果脏页在从内存中的doublewrite-buffer-写入到磁盘中的doublewrite-中发生了宕机怎么办？" class="headerlink" title="如果脏页在从内存中的doublewrite buffer 写入到磁盘中的doublewrite 中发生了宕机怎么办？ "></a><font style="color:#DF2A3F;">如果脏页在从内存中的doublewrite buffer 写入到磁盘中的doublewrite 中发生了宕机怎么办？ </font></h2><p>没有影响，这说明你还没向磁盘中刷新脏页，磁盘中的数据是完整的，宕机重启后可以根据redolog进行数据恢复 </p>
+<h2 id="为什么要双写"><a href="#为什么要双写" class="headerlink" title="为什么要双写"></a><font style="color:#DF2A3F;">为什么要双写</font></h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>Doublewrite 帮你解决什么？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>写盘时崩溃可能导致页“写了一半”</td>
+<td>有 Doublewrite 做缓冲区，保证每个页要么完整写入，要么完整回滚</td>
+</tr>
+<tr>
+<td>随机写很慢</td>
+<td>先顺序写到 doublewrite area → 再随机写本体，提升整体效率</td>
+</tr>
+</tbody></table>
+<p>两次写默认打开，可通过innodb_doublewrite关闭 </p>
+<h2 id="自适应hash索引"><a href="#自适应hash索引" class="headerlink" title="自适应hash索引"></a><font style="color:#DF2A3F;">自适应hash索引</font></h2><p>InnoDB自动根据访问的频率和模式自动地为某些热点页建立哈希索引 </p>
+<h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a><font style="color:#DF2A3F;">异步IO</font></h2><p>刷盘和从磁盘加载页数据都是异步IO，且会根据实际情况进行IO merge，如发现读取的页是连续的，就会连</p>
+<p>续读取，而不是一页页读</p>
+<h2 id="刷新邻接页："><a href="#刷新邻接页：" class="headerlink" title="刷新邻接页： "></a><font style="color:#DF2A3F;">刷新邻接页： </font></h2><p>刷新一个脏页时，会检测该页所在区的所有页，如果是脏页，一起刷新，多次IO合并为一个IO，但可能有以下问题： 是否将不怎么脏的页刷新了？该页很快又变脏了 固态硬盘有较高的IOPS，是否还需要这个特性？ 为此，InnoDB1.2.x版本开始提供参数innodb_flush_neighbors决定是否启动该功能，默认为0，不启动  </p>
+<p><img src="/images/bf5cb7e27f9e3dad3d51a404ac07f9d0.png"></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JUC/CopyOnWrite/">CopyOnWrite</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/13/MySQL/MySQL%E7%9A%84varchar(50)%E5%92%8Cvarchar(500)%E5%8C%BA%E5%88%AB/">MySQL的varchar(50)和varchar(500)区别?</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/20/MySQL/%E6%9E%B6%E6%9E%84/">架构</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/06/kafka/Kafka%20%E5%B9%82%E7%AD%89%E6%80%A7/">Kafka 幂等性</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/30/%E5%9C%BA%E6%99%AF%E9%A2%98/%E6%8E%A8%E7%89%B9%E6%B7%B7%E5%90%88%E6%9E%B6%E6%9E%84%EF%BC%8C%E5%B9%B3%E8%A1%A1%E5%88%A9%E5%BC%8A%E7%9A%84%E4%BC%98%E9%9B%85%E8%AE%BE%E8%AE%A1/">推特混合架构，平衡利弊的优雅设计</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8E%86%E5%8F%B2/">历史</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">组提交</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%EF%BC%88%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%EF%BC%89/">聚簇索引（主键索引）</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/09/Redis/Redisson/Redisson%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97/">Redisson延迟队列</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/07/Redis/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E5%8E%9F%E7%90%86/">布隆过滤器原理</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/10/14/MySQL/%E5%BC%95%E6%93%8E/InnoDB/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/10/14/MySQL/%E5%BC%95%E6%93%8E/InnoDB/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/10/14/MySQL/%E5%BC%95%E6%93%8E/InnoDB/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

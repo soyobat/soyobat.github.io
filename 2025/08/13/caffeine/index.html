@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>caffeine | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>caffeine</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/08/13/caffeine/">caffeine</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-08-13
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/08/13/caffeine/">caffeine</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-08-13
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="meta">@SneakyThrows</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Cache&lt;String, Integer&gt; cache =</span><br><span class="line">                Caffeine.newBuilder()</span><br><span class="line">                        .maximumSize(<span class="number">1000</span>)</span><br><span class="line">                        .recordStats()</span><br><span class="line"><span class="comment">//                        .expireAfterWrite(5, TimeUnit.SECONDS)</span></span><br><span class="line"><span class="comment">//                        .expireAfterAccess(2, TimeUnit.SECONDS)</span></span><br><span class="line">                        .expireAfter(<span class="keyword">new</span> <span class="title class_">Expiry</span>&lt;String, Integer&gt;() &#123;</span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">expireAfterCreate</span><span class="params">(<span class="meta">@NonNull</span> String key, <span class="meta">@NonNull</span> Integer value, <span class="type">long</span> currentTime)</span> &#123;</span><br><span class="line">                                <span class="keyword">return</span> currentTime;</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">expireAfterUpdate</span><span class="params">(<span class="meta">@NonNull</span> String key, <span class="meta">@NonNull</span> Integer value, <span class="type">long</span> currentTime, <span class="meta">@NonNegative</span> <span class="type">long</span> currentDuration)</span> &#123;</span><br><span class="line">                                <span class="keyword">return</span> currentDuration;</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">expireAfterRead</span><span class="params">(<span class="meta">@NonNull</span> String key, <span class="meta">@NonNull</span> Integer value, <span class="type">long</span> currentTime, <span class="meta">@NonNegative</span> <span class="type">long</span> currentDuration)</span> &#123;</span><br><span class="line">                                <span class="keyword">return</span> currentDuration;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;)</span><br><span class="line">                        .removalListener(<span class="keyword">new</span> <span class="title class_">RemovalListener</span>&lt;String, Integer&gt;() &#123;</span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onRemoval</span><span class="params">(<span class="meta">@Nullable</span> String key, <span class="meta">@Nullable</span> Integer value, <span class="meta">@NonNull</span> RemovalCause cause)</span> &#123;</span><br><span class="line"></span><br><span class="line">                                System.out.println(<span class="string">&quot;移除了key：&quot;</span> + key + <span class="string">&quot; value :&quot;</span> + value + <span class="string">&quot; cause : &quot;</span> + cause);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;)</span><br><span class="line">                        .build();</span><br><span class="line"></span><br><span class="line">        cache.put(<span class="string">&quot;cliffcw1&quot;</span>, <span class="number">1</span>);</span><br><span class="line">        System.out.println(cache.getIfPresent(<span class="string">&quot;cliffcw1&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//可变过期时间策略有没有提供，如果有，就put，</span></span><br><span class="line">        cache.policy().expireVariably().ifPresent(policy -&gt; &#123;</span><br><span class="line">            policy.put(<span class="string">&quot;cliffcw2&quot;</span>, <span class="number">2</span>, <span class="number">13</span>, TimeUnit.SECONDS);</span><br><span class="line">            policy.put(<span class="string">&quot;cliffcw3&quot;</span>, <span class="number">2</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;cliffcw2:&quot;</span> + cache.getIfPresent(<span class="string">&quot;cliffcw2&quot;</span>));</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">11000</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;cliffcw22:&quot;</span> + cache.getIfPresent(<span class="string">&quot;cliffcw2&quot;</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;cliffcw3:&quot;</span> + cache.getIfPresent(<span class="string">&quot;cliffcw3&quot;</span>));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//删除是惰性删除</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>用本地需要考虑的点</p>
+<ol>
+<li>功能能满足，get，put，过期</li>
+<li>不能OOM，内存管理</li>
+<li>监控展示（肯定不能是黑盒，无提示性语句）</li>
+<li>统计（热key，大key，命中率 ….）</li>
+</ol>
+<p>caffeine的缺点</p>
+<ol>
+<li>功能基本满足，但多个业务场景，多种过期时间，不满足</li>
+<li>只有key个数上限（不设置默认是）无法设置使用内存上限</li>
+</ol>
+<p>解决：</p>
+<ol>
+<li>给不同kv设置不同的过期时间</li>
+</ol>
+<p>:::info<br>其实是有的，只是隐藏得比较深</p>
+<p>&#x2F;&#x2F; 可变过期时间策略没有提供，如果有，那就put。如果不可变那什么都没有</p>
+<p>cache.policy().expireVariably().ifPresent( policy -&gt; { policy.put( xx,xx,xx,xx ) })</p>
+<p>:::</p>
+<ol start="2">
+<li>可以给内存设置上限</li>
+</ol>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><h3 id="build"><a href="#build" class="headerlink" title="build()"></a>build()</h3><p>BoundedLocalManualCache 和 NoBoundedLocalManualCache</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BoundedLocalManualCache(Caffeine&lt;K, V&gt; builder, <span class="meta">@Nullable</span> CacheLoader&lt;? <span class="built_in">super</span> K, V&gt; loader) &#123;</span><br><span class="line">    cache = LocalCacheFactory.newBoundedLocalCache(builder, loader, <span class="comment">/* async */</span> <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> BoundedLocalCache&lt;K, V&gt; <span class="title function_">cache</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> cache;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">build:</span><br><span class="line"></span><br><span class="line">BoundedLocalCache -&gt; LocalCache -&gt; ConcurrentHashMap</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">LocalCacheFactory</span>:</span><br><span class="line"><span class="comment">//针对每种配置，caffeine会生成每种配置类，但它们都继承于LocalCache，这样的话就不用在代码中进行if判断，因为if判断哪在cpu底层也是需要耗时的，所以说优化到极致</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这是根据配置生成对应配置类的类名，然后根据这个类名去找到对应的配置类</span></span><br><span class="line"><span class="comment">//思想：就是用元数据空间换 if分支判断时间</span></span><br><span class="line"><span class="comment">//想象有什么特殊的应用场景？？？？</span></span><br><span class="line"><span class="keyword">static</span> String <span class="title function_">getClassName</span><span class="params">(Caffeine&lt;?, ?&gt; builder)</span> &#123;</span><br><span class="line">    <span class="type">var</span> <span class="variable">className</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(LocalCacheFactory.class.getPackageName()).append(<span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (builder.isStrongKeys()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;S&#x27;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;W&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.isStrongValues()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;S&#x27;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;I&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.removalListener != <span class="literal">null</span>) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;L&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.isRecordingStats()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;S&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.evicts()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;M&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (builder.isWeighted()) &#123;</span><br><span class="line">            className.append(<span class="string">&#x27;W&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            className.append(<span class="string">&#x27;S&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.expiresAfterAccess() || builder.expiresVariable()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;A&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.expiresAfterWrite()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;W&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (builder.refreshAfterWrite()) &#123;</span><br><span class="line">        className.append(<span class="string">&#x27;R&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> className.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="put"><a href="#put" class="headerlink" title="put"></a>put</h3><p>底层其实就是一个data:ConcurrentHashMap</p>
+<p>put -&gt; data -&gt; writeBuffer.offer(全局有界队列)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法作用：将键值对放入缓存，如果键已存在则覆盖旧值（除非onlyIfAbsent为true）</span></span><br><span class="line"><span class="comment">// 参数说明：</span></span><br><span class="line"><span class="comment">//   key: 缓存键</span></span><br><span class="line"><span class="comment">//   value: 缓存值</span></span><br><span class="line"><span class="comment">//   expiry: 过期策略，用于计算条目的过期时间</span></span><br><span class="line"><span class="comment">//   onlyIfAbsent: 如果为true，则仅当键不存在时才放入（类似putIfAbsent）</span></span><br><span class="line"><span class="comment">// 返回值：如果键已存在且被覆盖，则返回旧值；否则返回null</span></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">V <span class="title function_">put</span><span class="params">(K key, V value, Expiry&lt;K, V&gt; expiry, <span class="type">boolean</span> onlyIfAbsent)</span> &#123;</span><br><span class="line">    <span class="comment">// 参数校验：确保键和值不为空</span></span><br><span class="line">    requireNonNull(key);</span><br><span class="line">    requireNonNull(value);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化节点变量，用于在键不存在时创建新节点</span></span><br><span class="line">    Node&lt;K, V&gt; node = <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// 获取当前时间（用于过期时间计算）</span></span><br><span class="line">    <span class="type">long</span> <span class="variable">now</span> <span class="operator">=</span> expirationTicker().read();</span><br><span class="line">    <span class="comment">// 计算新值的权重（用于基于权重的容量控制）</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">newWeight</span> <span class="operator">=</span> weigher.weigh(key, value);</span><br><span class="line">    <span class="comment">// 创建用于查找的键对象（可能是弱引用或强引用，根据配置）</span></span><br><span class="line">    <span class="type">Object</span> <span class="variable">lookupKey</span> <span class="operator">=</span> nodeFactory.newLookupKey(key);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通过自旋循环处理并发情况，attempts为重试次数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">attempts</span> <span class="operator">=</span> <span class="number">1</span>; ; attempts++) &#123;</span><br><span class="line">        <span class="comment">// 从底层ConcurrentHashMap中获取已存在的节点</span></span><br><span class="line">        Node&lt;K, V&gt; prior = data.get(lookupKey);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// ========== 场景1：键不存在（新增缓存条目） ==========</span></span><br><span class="line">        <span class="keyword">if</span> (prior == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 如果尚未创建新节点，则创建它</span></span><br><span class="line">            <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 创建新节点，包含键、值、权重和创建时间</span></span><br><span class="line">                node = nodeFactory.newNode(key, keyReferenceQueue(), value, valueReferenceQueue(), newWeight, now);</span><br><span class="line">                <span class="comment">// 设置节点的可变过期时间（基于创建时间计算）</span></span><br><span class="line">                setVariableTime(node, expireAfterCreate(key, value, expiry, now));</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 尝试将新节点原子性地放入缓存Map</span></span><br><span class="line">            prior = data.putIfAbsent(node.getKeyReference(), node);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 如果成功放入（prior为null表示没有其他线程抢先放入）</span></span><br><span class="line">            <span class="keyword">if</span> (prior == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 执行写后操作：将添加任务提交到写缓冲区，异步处理缓存维护</span></span><br><span class="line">                afterWrite(<span class="keyword">new</span> <span class="title class_">AddTask</span>(node, newWeight));</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">null</span>; <span class="comment">// 新增条目，返回null</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (onlyIfAbsent) &#123;</span><br><span class="line">                <span class="comment">// 如果其他线程抢先放入了该键，且onlyIfAbsent为true，则尝试快速返回现有值</span></span><br><span class="line">                <span class="type">V</span> <span class="variable">currentValue</span> <span class="operator">=</span> prior.getValue();</span><br><span class="line">                <span class="keyword">if</span> ((currentValue != <span class="literal">null</span>) &amp;&amp; !hasExpired(prior, now)) &#123;</span><br><span class="line">                    <span class="comment">// 记录访问时间并返回当前值（不覆盖）</span></span><br><span class="line">                    <span class="keyword">if</span> (!isComputingAsync(prior)) &#123;</span><br><span class="line">                        tryExpireAfterRead(prior, key, currentValue, expiry(), now);</span><br><span class="line">                        setAccessTime(prior, now);</span><br><span class="line">                    &#125;</span><br><span class="line">                    afterRead(prior, now, <span class="comment">/* recordHit */</span> <span class="literal">false</span>);</span><br><span class="line">                    <span class="keyword">return</span> currentValue;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">// ========== 场景2：键存在且onlyIfAbsent为true ==========</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (onlyIfAbsent) &#123;</span><br><span class="line">            <span class="comment">// 快速路径：不覆盖现有值，只返回当前值</span></span><br><span class="line">            <span class="type">V</span> <span class="variable">currentValue</span> <span class="operator">=</span> prior.getValue();</span><br><span class="line">            <span class="keyword">if</span> ((currentValue != <span class="literal">null</span>) &amp;&amp; !hasExpired(prior, now)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!isComputingAsync(prior)) &#123;</span><br><span class="line">                    tryExpireAfterRead(prior, key, currentValue, expiry(), now);</span><br><span class="line">                    setAccessTime(prior, now);</span><br><span class="line">                &#125;</span><br><span class="line">                afterRead(prior, now, <span class="comment">/* recordHit */</span> <span class="literal">false</span>);</span><br><span class="line">                <span class="keyword">return</span> currentValue;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ========== 处理节点状态异常情况 ==========</span></span><br><span class="line">        <span class="comment">// 如果之前获取的节点已失效（可能被其他线程移除），则重试</span></span><br><span class="line">        <span class="keyword">if</span> (!prior.isAlive()) &#123;</span><br><span class="line">            <span class="comment">// 如果重试次数达到一定阈值（如自旋等待后仍无效），则通过计算操作确保节点状态</span></span><br><span class="line">            <span class="keyword">if</span> ((attempts &amp; MAX_PUT_SPIN_WAIT_ATTEMPTS) != <span class="number">0</span>) &#123;</span><br><span class="line">                Thread.onSpinWait(); <span class="comment">// 提示CPU进行自旋等待优化</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 通过computeIfPresent方法处理，确保在节点存活状态下进行操作</span></span><br><span class="line">            data.computeIfPresent(lookupKey, (k, n) -&gt; &#123;</span><br><span class="line">                requireIsAlive(key, n);</span><br><span class="line">                <span class="keyword">return</span> n;</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ========== 场景3：键存在且需要更新值 ==========</span></span><br><span class="line">        <span class="comment">// 以下变量用于记录更新过程中的状态</span></span><br><span class="line">        V oldValue;</span><br><span class="line">        <span class="type">long</span> varTime; <span class="comment">// 新的可变过期时间</span></span><br><span class="line">        <span class="type">int</span> oldWeight; <span class="comment">// 旧权重值</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">expired</span> <span class="operator">=</span> <span class="literal">false</span>; <span class="comment">// 标记旧值是否已过期</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">mayUpdate</span> <span class="operator">=</span> <span class="literal">true</span>; <span class="comment">// 是否允许更新</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">exceedsTolerance</span> <span class="operator">=</span> <span class="literal">false</span>; <span class="comment">// 是否超过时间容忍度</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 对现有节点加锁，确保更新操作的原子性</span></span><br><span class="line">        <span class="keyword">synchronized</span> (prior) &#123;</span><br><span class="line">            <span class="comment">// 再次检查节点是否存活（防止在获取锁期间状态变化）</span></span><br><span class="line">            <span class="keyword">if</span> (!prior.isAlive()) &#123;</span><br><span class="line">                <span class="keyword">continue</span>; <span class="comment">// 如果节点不再存活，重试</span></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 获取旧值和旧权重</span></span><br><span class="line">            oldValue = prior.getValue();</span><br><span class="line">            oldWeight = prior.getWeight();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 根据不同的情况计算新的过期时间</span></span><br><span class="line">            <span class="keyword">if</span> (oldValue == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 旧值已被垃圾回收，视为新创建</span></span><br><span class="line">                varTime = expireAfterCreate(key, value, expiry, now);</span><br><span class="line">                notifyEviction(key, <span class="literal">null</span>, RemovalCause.COLLECTED);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (hasExpired(prior, now)) &#123;</span><br><span class="line">                <span class="comment">// 节点已过期，按新创建处理</span></span><br><span class="line">                expired = <span class="literal">true</span>;</span><br><span class="line">                varTime = expireAfterCreate(key, value, expiry, now);</span><br><span class="line">                notifyEviction(key, oldValue, RemovalCause.EXPIRED);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (onlyIfAbsent) &#123;</span><br><span class="line">                <span class="comment">// 如果onlyIfAbsent为true，则不更新值，只更新访问时间</span></span><br><span class="line">                mayUpdate = <span class="literal">false</span>;</span><br><span class="line">                varTime = expireAfterRead(prior, key, value, expiry, now);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 正常更新，计算更新后的过期时间</span></span><br><span class="line">                varTime = expireAfterUpdate(prior, key, value, expiry, now);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 如果允许更新值，则执行更新操作</span></span><br><span class="line">            <span class="keyword">if</span> (mayUpdate) &#123;</span><br><span class="line">                <span class="comment">// 检查是否超过写入容忍度（用于控制更新频率，避免频繁维护）</span></span><br><span class="line">                exceedsTolerance = (expiresAfterWrite() &amp;&amp; (now - prior.getWriteTime()) &gt; EXPIRE_WRITE_TOLERANCE)</span><br><span class="line">                        || (expiresVariable() &amp;&amp; Math.abs(varTime - prior.getVariableTime()) &gt; EXPIRE_WRITE_TOLERANCE);</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 更新节点的值和权重</span></span><br><span class="line">                prior.setValue(value, valueReferenceQueue());</span><br><span class="line">                prior.setWeight(newWeight);</span><br><span class="line">                setWriteTime(prior, now);</span><br><span class="line">                discardRefresh(prior.getKeyReference()); <span class="comment">// 丢弃可能的刷新任务</span></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 设置节点的可变时间（用于过期策略）和访问时间</span></span><br><span class="line">            setVariableTime(prior, varTime);</span><br><span class="line">            setAccessTime(prior, now);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ========== 通知相关事件 ==========</span></span><br><span class="line">        <span class="keyword">if</span> (expired) &#123;</span><br><span class="line">            notifyRemoval(key, oldValue, RemovalCause.EXPIRED);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldValue == <span class="literal">null</span>) &#123;</span><br><span class="line">            notifyRemoval(key, <span class="comment">/* oldValue */</span> <span class="literal">null</span>, RemovalCause.COLLECTED);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mayUpdate) &#123;</span><br><span class="line">            notifyOnReplace(key, oldValue, value); <span class="comment">// 通知值被替换</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ========== 决定后续维护操作 ==========</span></span><br><span class="line">        <span class="comment">// 计算权重变化</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">weightedDifference</span> <span class="operator">=</span> mayUpdate ? (newWeight - oldWeight) : <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 根据条件决定执行写后操作还是读后操作</span></span><br><span class="line">        <span class="keyword">if</span> ((oldValue == <span class="literal">null</span>) || (weightedDifference != <span class="number">0</span>) || expired) &#123;</span><br><span class="line">            <span class="comment">// 需要执行写后维护（如大小调整、驱逐检查等）</span></span><br><span class="line">            afterWrite(<span class="keyword">new</span> <span class="title class_">UpdateTask</span>(prior, weightedDifference));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!onlyIfAbsent &amp;&amp; exceedsTolerance) &#123;</span><br><span class="line">            <span class="comment">// 即使值未变，但时间偏差超过容忍度，也需要写后维护</span></span><br><span class="line">            afterWrite(<span class="keyword">new</span> <span class="title class_">UpdateTask</span>(prior, weightedDifference));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 仅记录访问（轻量级操作）</span></span><br><span class="line">            <span class="keyword">if</span> (mayUpdate) &#123;</span><br><span class="line">                setWriteTime(prior, now);</span><br><span class="line">            &#125;</span><br><span class="line">            afterRead(prior, now, <span class="comment">/* recordHit */</span> <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 返回旧值（如果过期则返回null）</span></span><br><span class="line">        <span class="keyword">return</span> expired ? <span class="literal">null</span> : oldValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>data.put(keyRef,node)</p>
+<p>writeBuffer.offer(task);</p>
+<p>schedule</p>
+<p>end</p>
+<p>&#x2F;&#x2F;写入writeBuffer</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">afterWrite</span><span class="params">(Runnable task)</span> &#123;</span><br><span class="line">  <span class="comment">//写入然后满了 就会重试 默认140次</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; WRITE_BUFFER_RETRIES; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (writeBuffer.offer(task)) &#123;</span><br><span class="line">      scheduleAfterWrite();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    scheduleDrainBuffers();</span><br><span class="line">    Thread.onSpinWait();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// In scenarios where the writing threads cannot make progress then they attempt to provide</span></span><br><span class="line">  <span class="comment">// assistance by performing the eviction work directly. This can resolve cases where the</span></span><br><span class="line">  <span class="comment">// maintenance task is scheduled but not running. That might occur due to all of the executor&#x27;s</span></span><br><span class="line">  <span class="comment">// threads being busy (perhaps writing into this cache), the write rate greatly exceeds the</span></span><br><span class="line">  <span class="comment">// consuming rate, priority inversion, or if the executor silently discarded the maintenance</span></span><br><span class="line">  <span class="comment">// task. Unfortunately this cannot resolve when the eviction is blocked waiting on a long-</span></span><br><span class="line">  <span class="comment">// running computation due to an eviction listener, the victim is being computed on by a writer,</span></span><br><span class="line">  <span class="comment">// or the victim residing in the same hash bin as a computing entry. In those cases a warning is</span></span><br><span class="line">  <span class="comment">// logged to encourage the application to decouple these computations from the map operations.</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">//重试后还是写入不了，就会主动同步调起maintenance：消费Buffer 清理key 淘汰key</span></span><br><span class="line">  lock();</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    maintenance(task);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">    logger.log(Level.ERROR, <span class="string">&quot;Exception thrown when performing the maintenance task&quot;</span>, e);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    evictionLock.unlock();</span><br><span class="line">  &#125;</span><br><span class="line">  rescheduleCleanUpIfIncomplete();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>maintenance</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GuardedBy(&quot;evictionLock&quot;)</span></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">maintenance</span><span class="params">(<span class="meta">@Nullable</span> Runnable task)</span> &#123;</span><br><span class="line">    setDrainStatusRelease(PROCESSING_TO_IDLE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      drainReadBuffer();</span><br><span class="line"></span><br><span class="line">      drainWriteBuffer();</span><br><span class="line">      <span class="keyword">if</span> (task != <span class="literal">null</span>) &#123;</span><br><span class="line">        task.run();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      drainKeyReferences();</span><br><span class="line">      drainValueReferences();</span><br><span class="line"></span><br><span class="line">      expireEntries();</span><br><span class="line">      evictEntries();</span><br><span class="line"></span><br><span class="line">      climb();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> ((drainStatusOpaque() != PROCESSING_TO_IDLE)</span><br><span class="line">          || !casDrainStatus(PROCESSING_TO_IDLE, IDLE)) &#123;</span><br><span class="line">        setDrainStatusOpaque(REQUIRED);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>若：writeBuffer满了，offer return false。异步任务处理不过来，循环完成后，会主动同步调其maintance（这时候put就会被阻塞，其实是同步的，也是一种保护措施，因为写太多，会OOM，阻塞也会去减慢写的速度）：就会去消费Buffer，节点过期，节点淘汰。如果非常爆炸性的put的画，性能就不是很好了</p>
+<p>读多写少用的才是本地缓存</p>
+<h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><p>get -&gt; data -&gt; readBuffer.offer(每个线程一个队列，减少了竞争) </p>
+<h3 id="异步任务"><a href="#异步任务" class="headerlink" title="异步任务"></a>异步任务</h3><p>会被包装成PerformCleanUpTask它其实是一个Runnable，然后丢到线程池去执行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GuardedBy(&quot;evictionLock&quot;)</span></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">maintenance</span><span class="params">(<span class="meta">@Nullable</span> Runnable task)</span> &#123;</span><br><span class="line">    setDrainStatusRelease(PROCESSING_TO_IDLE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      drainReadBuffer();</span><br><span class="line"></span><br><span class="line">      drainWriteBuffer();</span><br><span class="line">      <span class="keyword">if</span> (task != <span class="literal">null</span>) &#123;</span><br><span class="line">        task.run();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      drainKeyReferences();</span><br><span class="line">      drainValueReferences();</span><br><span class="line"></span><br><span class="line">      expireEntries();</span><br><span class="line">      evictEntries();</span><br><span class="line"></span><br><span class="line">      climb();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> ((drainStatusOpaque() != PROCESSING_TO_IDLE)</span><br><span class="line">          || !casDrainStatus(PROCESSING_TO_IDLE, IDLE)) &#123;</span><br><span class="line">        setDrainStatusOpaque(REQUIRED);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="内存管理，（淘汰策略：key上限），W-TinyLFU"><a href="#内存管理，（淘汰策略：key上限），W-TinyLFU" class="headerlink" title="内存管理，（淘汰策略：key上限），W-TinyLFU"></a>内存管理，（淘汰策略：key上限），W-TinyLFU</h3><p>像内存管理，我肯定是有内存的数据才能进行管理，而像这些数据我肯定是不能在put or get 的主线程去做的，有些内存组件其实就是这么去做的，所以性能才差</p>
+<p>writeBuffer和readBuffer的作用：就是把统计操作和读写操作分离了（一定情况下），两者不会相互影响</p>
+<p><img src="/images/ca25f76684eeb3f6c83a18c5002568ab.png"></p>
+<p>内存模型：</p>
+<p>过期策略</p>
+<ol>
+<li>全局统一key一个过期时间</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">expireAfterWriteEntries</span><span class="params">(<span class="type">long</span> now)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!expiresAfterWrite()) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">long</span> <span class="variable">duration</span> <span class="operator">=</span> expiresAfterWriteNanos();<span class="comment">//全局过期时间 如 10秒</span></span><br><span class="line">  <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">    Node&lt;K, V&gt; node = writeOrderDeque().peekFirst();</span><br><span class="line">    <span class="keyword">if</span> ((node == <span class="literal">null</span>) || ((now - node.getWriteTime()) &lt; duration) <span class="comment">//判断是否过期</span></span><br><span class="line">        || !evictEntry(node, RemovalCause.EXPIRED, now)) &#123; <span class="comment">//去淘汰</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//判断是否过期</span></span><br><span class="line"><span class="keyword">if</span> (expiresAfterWrite()) &#123;</span><br><span class="line">  expired |= ((now - n.getWriteTime()) &gt;= expiresAfterWriteNanos());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//已过期</span></span><br><span class="line">makeDead(n);</span><br><span class="line"></span><br><span class="line"><span class="comment">//已过期</span></span><br><span class="line">removed[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"><span class="comment">//把date 给 put(key， null)；</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//..</span></span><br><span class="line"><span class="comment">//移除写顺序队列，好等下一次循环再次peekFirst进行过期检查</span></span><br><span class="line">writeOrderDeque().remove(node);</span><br><span class="line"></span><br><span class="line"><span class="comment">//..</span></span><br><span class="line"><span class="comment">//发出移除key通知，可自定义监听器</span></span><br><span class="line">notifyRemoval(key, value[<span class="number">0</span>], actualCause[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>每个key单独一个过期时间</li>
+</ol>
+<p>使用的是时间轮算法，时间轮算法过期</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">expireVariableEntries</span><span class="params">(<span class="type">long</span> now)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (expiresVariable()) &#123;</span><br><span class="line">    timerWheel().advance(now);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>时间轮：本质其实就是 数组 + 链表</p>
+<p>定时器tick从时间轮里取任务时，整体时间复杂度可以为O(1);</p>
+<p>包括put也是</p>
+<p>而像Linux的双层时间轮，在次基础上还优化了。采用了双层时间轮，支持高延迟，其设计思想类似于分针和秒针</p>
+<p><img src="/images/725032b3a5d94b99a4b035ed40373971.png"></p>
+<p>【层1：秒轮（快速轮）】<br>slot0 slot1 slot2 … slot59</p>
+<p>【层2：分轮（慢速轮）】<br>slot0 slot1 … slot59</p>
+<p>Tick 推进时：</p>
+<ul>
+<li>秒轮每走一格</li>
+<li>秒轮走满一圈 → 分轮前进一步，并将该分轮槽内的任务下沉到秒轮对应槽</li>
+</ul>
+</blockquote>
+<p>淘汰策略：W-TinyLFU</p>
+<p>思想大体就是我觉得就很像jvm的那种分代思想。像这个W-TinyLFU算法，它的话就是把内存总的分成了两端，一个main cache，一个是windows Cache，而main cache里又分为probation(LRU)（试用期） 和 protected(LRU)（受保护的）。（W-TinyLRU 通常包含 <strong>两个主要组件</strong>：windowCache和mainCache）</p>
+<p>工作流程：</p>
+<ol>
+<li>当前一个新的item进来时，会先进入我们的windowCache。这里的windowCache比较小，且内存管理就直接使用传统LRU了。</li>
+<li>若有item从我们的windowCache淘汰出来的话，会尝试进入mainCache<ol>
+<li>能否进入看TinyCache对该item的计数是否 大于  主缓存中频率最低的候选淘汰对象 的 频率计数。可以就进入并，不可以就out</li>
+</ol>
+</li>
+<li>mainCache整体采用的也是LRU（但是）</li>
+<li>整体流程呈现一种 先接纳后淘汰的流程</li>
+</ol>
+<p><img src="/images/88b1020d3586dfb2c4d17a7f8a74d5c1.png"></p>
+<p>MainCache里的状态流转</p>
+<p><img src="/images/70736641535eb3b446ad5109a8923980.png"></p>
+<p><img src="/images/f1839f3881e11e6dd3e65f33b027fbc1.png"></p>
+<p>W-TinyLFU解决了LRU和LFU什么问题？</p>
+<ol>
+<li>LRU：突发流量污染问题</li>
+<li>LFU：老资历不腾空给 新数据</li>
+</ol>
+<p><img src="/images/af8fd933ab4f066bbdcb040455c3cf9c.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//淘汰节点</span></span><br><span class="line">evictEntries();</span><br><span class="line"><span class="comment">//..</span></span><br><span class="line"><span class="comment">//先window 再main</span></span><br><span class="line"><span class="type">int</span> <span class="variable">candidates</span> <span class="operator">=</span> evictFromWindow();</span><br><span class="line">evictFromMain(candidates);</span><br><span class="line"></span><br><span class="line"><span class="comment">//evictFromWindow</span></span><br><span class="line">Node&lt;K, V&gt; node = accessOrderWindowDeque().peek();</span><br><span class="line"><span class="comment">//设100个size</span></span><br><span class="line"><span class="comment">//1个给window  99个给main区</span></span><br><span class="line"><span class="keyword">while</span> (windowWeightedSize() &gt; windowMaximum()) &#123;</span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">    accessOrderWindowDeque().remove(node);</span><br><span class="line">    accessOrderProbationDeque().add(node);</span><br><span class="line"></span><br><span class="line"><span class="comment">//..</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//evictFromMain</span></span><br><span class="line"><span class="comment">//probation区的第一个</span></span><br><span class="line">Node&lt;K, V&gt; victim = accessOrderProbationDeque().peekFirst();</span><br><span class="line"><span class="comment">//probation区的末尾个，也就是刚才从window移过来的</span></span><br><span class="line">Node&lt;K, V&gt; candidate = accessOrderProbationDeque().peekLast();</span><br><span class="line"><span class="comment">//key个数有没有超过上限</span></span><br><span class="line"><span class="keyword">while</span> (weightedSize() &gt; maximum()) &#123;</span><br><span class="line">    <span class="comment">//........</span></span><br><span class="line">    <span class="comment">//对比频率</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//W - TinyLFU的精髓</span></span><br><span class="line">    <span class="comment">//计数</span></span><br><span class="line">    admit(candidateKey, victimKey)；<span class="comment">//frequencySketch() 很好的思想，特殊的位计数法，</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">    evictEntry(evict, RemovalCause.SIZE, <span class="number">0L</span>);</span><br><span class="line">    </span><br><span class="line">&#125;    </span><br><span class="line"></span><br><span class="line"><span class="comment">//自动调节各区域大小</span></span><br><span class="line">climb();</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(38, 38, 38);">W-TinyLFU 的精髓是 位计数法</font></p>
+<p><font style="color:rgb(38, 38, 38);">如何一个高性能的本地缓存组件，caffeine在拼多多高并发业务场景下性能还是不行</font></p>
+<h2 id="改进缺点"><a href="#改进缺点" class="headerlink" title="改进缺点"></a><font style="color:rgb(38, 38, 38);">改进缺点</font></h2><ol>
+<li>给不同key设置不同的过期时间，API不够好</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(K key, V value, Duration timeout)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(timeout == <span class="literal">null</span>) cache.put(k, v);</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        cache.policy() </span><br><span class="line">            .expireVariably()</span><br><span class="line">            .ifPresent(policy -&gt; policy.put(key, value, timeout));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2. </p>
+<h2 id="对比guava-架构"><a href="#对比guava-架构" class="headerlink" title="对比guava 架构"></a><font style="color:rgb(38, 38, 38);">对比guava 架构</font></h2>
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/11/Codetop%E5%88%B7%E9%A2%98/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/groupby/">groupby</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/RabbitMQ/%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/">死信队列</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/09/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C%EF%BC%9A%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E6%B5%81%E5%BC%8F%E4%BC%A0%E8%BE%93%E4%B8%8EJSON%E7%BB%93%E6%9E%84%E5%8C%96%E7%9A%84%E7%9F%9B%E7%9B%BE/">用户体验：如何解决流式传输与JSON结构化的矛盾</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/13/JVM/jvm%E6%BA%90%E7%A0%81/parallell%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%92%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">parallell内存分配和垃圾回收</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/10/Redis/%E6%BA%90%E7%A0%81/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/">主从同步</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/29/%E5%9C%BA%E6%99%AF%E9%A2%98/why%E6%80%BB/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%8E%92%E6%9F%A5/">内存泄漏排查</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/HTTP/%E6%9C%89HTTP%E4%BA%86%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E8%A6%81WebSocket/">有HTTP了为什么还要WebSocket</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/06/03/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B/">TCP三次握手</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/06/27/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/k-job/grpc%E5%85%A5%E9%97%A8/">grpc入门</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/08/13/caffeine/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/08/13/caffeine/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/08/13/caffeine/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

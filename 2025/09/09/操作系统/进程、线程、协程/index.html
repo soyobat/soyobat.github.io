@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>进程、线程、协程 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>进程、线程、协程</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/">进程、线程、协程</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-09-09
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/">进程、线程、协程</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-09-09
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p>进程可以理解为一个动态的程序，进程是<strong>操作系统进行资源分配的基本单元</strong>。</p>
+<p>比如电脑上的QQ就是一个进程，微信也是</p>
+<p>线程是<strong>操作系统进行调度的基本单位</strong>，进程占一个虚拟内存空间，而进程内的线程可以共享进程内的虚拟内存</p>
+<p>线程的粒度更小，比如微信可以有多个线程，一个负责拉消息，一个负责发消息，一个负责下载文件</p>
+<p>协程可以理解为用户态的线程，和线程的区别</p>
+<ul>
+<li>内存占用更小，大概有2k，且可以动态扩容。而线程有2m，线程是操作系统管理的实体，包括时间片，cpu，线程栈之类的，它占用的资源就比较大么。而协程不归操作系统管理，因为占用的资源就比较少</li>
+<li>上下文切换开销小，无需在用户态和内核态之间切来切去。线程的切换就需要保存和回复想线程上下文，需要耗费一定的时间和资源。而协程的保存就只需要保存栈帧之类的东西，因此成本是要比线程低的</li>
+<li>线程是由操作系统调度的，而协程则是由程序员控制，可以在不同任务之间来回切换，不需要等待操作系统调度</li>
+<li>线程是面向操作系统的，而协程是面向任务的。线程需要使用操作系统提供的api进行线程之间的通信和同步。而协程则可以使用语言级别的协程库进行协作式多任务</li>
+</ul>
+<p>进程是怎么切换的</p>
+<p>进程切换的步骤有几个。</p>
+<p>第一个步骤是中断处理。也就是说进程切换其实是依赖中断来触发的，而后进入中断处理，开始执行切换的代码。</p>
+<p>第二个步骤是保存当前进程的上下文。</p>
+<p>第三个步骤是根据进程调度策略，选出下一个进程，这里叫做新进程。</p>
+<p>第四个步骤是标记新老进程的状态。</p>
+<p>第五个步骤是切换虚拟地址空间。</p>
+<p>第六个步骤恢复新进程的上下文空间。</p>
+<p>最后则是跳转到新进程的代码，开始执行。</p>
+<blockquote>
+<h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h4><p>中断处理，保存上下文，选择新进程，切换与恢复</p>
+<h4 id="引导"><a href="#引导" class="headerlink" title="引导"></a>引导</h4><p>进程上下文；虚拟地址空间切换；</p>
+</blockquote>
+<p>从进程切换的这些步骤也能看出来，它的性能是比较差。</p>
+<p>而作为对比，线程切换虽然看上去步骤也是类似的，但是实际上就要轻量很多。首先，线程切换不涉及虚拟地址空间切换，那么因为虚拟地址空间切换带来的各种缓存失效等问题都没有；其次，线程之间是共享很多资源的，如文件句柄等，这些共享资源在线程切换的时候都不需要处理。</p>
+<p>总之，线程切换比进程切换快，主要是因为线程共享地址空间和资源，减少了地址空间切换和资源管理的开销。这在多线程编程中提供了更高的并发性和性能</p>
+<p><font style="color:rgb(31, 41, 55);"></font></p>
+<p>为什么虚拟内存地址切换这么慢</p>
+<p>进程都有自己的虚拟地址空间，因此虚拟地址空间切换一般就意味着进程切换了。</p>
+<p>整个切换过程之所以慢，有很多因素。</p>
+<p>第一个是触发用户态和内核态切换。一般来说，虚拟地址空间切换，都会涉及到用户态和内核态的切换的，因此虚拟地址空间是被内核管理的；</p>
+<p>第二个是要重新加载 TLB。新的虚拟地址空间导致 TLB 缓存失效，所以需要重新加载新的页表项到 TLB 中；</p>
+<p>第三个是页表切换，主要是更新 CPU 中页表基址寄存器，指向新的页表；</p>
+<p>第四个是有可能触发 IO 操作，因为新的虚拟地址空间的内容可能在交换区上，需要重新加载进来内存中。</p>
+<p>这几个步骤叠加就导致了虚拟地址空间切换是一个比较慢的过程。那么相比之下，同一个进程内的线程都是共享虚拟地址空间的，所以就不会触发虚拟地址空间切换，因此线程切换效率高很多。</p>
+<p>进程状态</p>
+<p><font style="color:rgb(51, 51, 51);">进程一共有 5 种状态，分别是新建、就绪、运行、阻塞和终止。</font></p>
+<p><font style="color:rgb(31, 41, 55);">其中</font><font style="color:rgb(51, 51, 51);">运行状态就是进程正在 CPU 上运行。</font></p>
+<p><font style="color:rgb(51, 51, 51);">就绪则是说进程已处于准备运行的状态，万事俱备，只欠 CPU 了。</font></p>
+<p><font style="color:rgb(51, 51, 51);">而阻塞状态就是进程正在等待某一事件而暂停运行，比如等待某资源为可用或等待 I&#x2F;O 完成。即使CPU 空闲，该进程也不能运行。</font></p>
+<p><font style="color:rgb(31, 41, 55);">在这五种状态中有四个比较关键的转换。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第一个是就绪态到运行态，这一般是因为进程被调度了，获得了 CPU 时间片；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第二个是运行态到就绪态，这一般是因为 CPU 时间片耗尽了；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第三个是运行态到阻塞态，这一般是因为进程执行了一些会引起阻塞的操作，最典型的就是 IO 操作；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第四个是阻塞态到就绪态，这一般是因为达成了唤醒条件，例如说 IO 操作完成了；</font></p>
+<p><font style="color:rgb(31, 41, 55);">除了这五种状态以外，还有一种很特殊的状态，也就是所谓的僵尸进程。</font></p>
+<p><font style="color:rgb(31, 41, 55);">当一个进程已经执行完毕并退出时，它本应该被操作系统完全清理掉，但如果没有正确地被清理，它就会变成僵尸进程。例如说在子进程终止后，但其父进程没有正确地调用wait()或waitpid()系统调用来获取子进程的终止状态。这样一来，子进程虽然已经停止运行，但其在进程表中的条目仍然存在。</font></p>
+<p><font style="color:rgb(31, 41, 55);">简单来说，可以认为僵尸进程只会占一条进程表中的条目，但是如果僵尸进程太多了，导致这个进程表满了，那么操作系统就无法继续创建新的进程了。</font></p>
+<p>进程同步</p>
+<p><font style="color:rgb(31, 41, 55);">进程之间的同步方式有很多。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第一种是共享内存。也就是多个进程共享同一块内存区域，实现高效的数据交换，但是一般要配合别的同步机制来保护共享内存，避免出现并发问题；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第二种是管道。管道可以认为是一种数据结构，可以在进程之间传递数据，多用于父子进程之间；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第三种是信号量，它可以</font><font style="color:rgb(36, 41, 46);">控制多个进程对共享资源的访问数量，用来实现互斥和同步，允许多个进程按照一定的顺序访问资源；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第四种是信号，</font><font style="color:rgb(36, 41, 46);">用于通知进程某个事件的发生，是一种轻量级的异步通知机制；</font></p>
+<p><font style="color:rgb(31, 41, 55);">第五种是文件锁，即</font><font style="color:rgb(36, 41, 46);">通过锁定文件或文件的某一部分来实现进程间的同步；</font></p>
+<p><font style="color:rgb(31, 41, 55);">那当然，类似锁、原子操作的也可以用来同步。</font></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/31/JUC/MemorySafeLinkedBlockingQueue/">MemorySafeLinkedBlockingQueue</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/JUC/%E5%8E%9F%E5%AD%90%E7%B1%BB/">原子类</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/BeanFactory%E5%92%8CFactoryBean/">BeanFactory和FactoryBean</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/25/%E5%9C%BA%E6%99%AF%E9%A2%98/%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E5%9C%A8%E6%9C%AC%E5%9C%B0%EF%BC%9F/">日志文件为什么要写在本地？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8E%86%E5%8F%B2/">历史</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/15/%E6%89%8B%E5%86%99%E7%B3%BB%E5%88%97/%E6%89%8B%E5%86%99%E7%BA%BF%E7%A8%8B%E6%B1%A0/">手写线程池</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5/">缓存更新策略</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">TCP与UDP的不同之处</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/07/18/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E5%BC%B9%E6%80%A7%E6%8E%AA%E6%96%BD/">弹性措施</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

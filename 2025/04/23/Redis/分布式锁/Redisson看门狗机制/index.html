@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>Redisson看门狗机制 | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>Redisson看门狗机制</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/04/23/Redis/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/Redisson%E7%9C%8B%E9%97%A8%E7%8B%97%E6%9C%BA%E5%88%B6/">Redisson看门狗机制</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-04-23
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/04/23/Redis/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/Redisson%E7%9C%8B%E9%97%A8%E7%8B%97%E6%9C%BA%E5%88%B6/">Redisson看门狗机制</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-04-23
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>就是开一个定时任务，,然后每隔10s检查一次，并将其续约恢复至我们设置的<font style="color:rgb(25, 27, 31);">lockWatchdogTimeout（默</font></p>
+<p><font style="color:rgb(25, 27, 31);">认是30s）</font></p>
+<h2 id="jvm挂了，看门狗会一直续期下去吗"><a href="#jvm挂了，看门狗会一直续期下去吗" class="headerlink" title="jvm挂了，看门狗会一直续期下去吗"></a>jvm挂了，看门狗会一直续期下去吗</h2><p>挂了的话，不会一直续期的。看门狗是jvm线程，jvm挂了的话，会终止续期的</p>
+<h2 id="加锁线程挂了，但jvm没挂，看门狗会一直续期下去吗"><a href="#加锁线程挂了，但jvm没挂，看门狗会一直续期下去吗" class="headerlink" title="加锁线程挂了，但jvm没挂，看门狗会一直续期下去吗"></a>加锁线程挂了，但jvm没挂，看门狗会一直续期下去吗</h2><p><img src="/images/c218b26811c85081ef84084215352ca2.png"></p>
+<p><del>看门狗线程本质就是一个守护线程，且这个线程是和加锁线程绑定的，或者说它续期会去判断加锁线程是否存</del></p>
+<p><del>活，存活才会去续期</del></p>
+<p>并非守护线程</p>
+<h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><p>续期任务调度的实现</p>
+<p>这个方法是为锁开启续期任务，且一把锁只会有一个续期任务！！！由第一个持有该锁的线程开启，后续第</p>
+<p>n个持有该锁的线程只需要把threadId注册到一个concurrentHashMap里</p>
+<p>为什么？</p>
+<p>你续期任务本质就是一个开一个线程不断轮询，那一个线程配一个定时线程这显然是不合理的。肯定</p>
+<p>是不合理的，只需要一把锁对应一个续期任务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">scheduleExpirationRenewal</span><span class="params">(<span class="type">long</span> threadId)</span> &#123;</span><br><span class="line">    <span class="comment">//new一个续期任务</span></span><br><span class="line">    <span class="type">ExpirationEntry</span> <span class="variable">entry</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ExpirationEntry</span>();</span><br><span class="line">    <span class="comment">//EXPIRATION_RENEWAL_MAP：concurrentHashMap  k:锁 v：一个entry field有线程ID</span></span><br><span class="line">    <span class="comment">//Q：为什么要为concurrentHashMap来保证线程安全呢 </span></span><br><span class="line">    <span class="comment">//A：因为它是Redisson所有锁的基类，像读写锁这种，可能会有多个线程共同持有锁的情况</span></span><br><span class="line">    <span class="comment">//如果这个锁已经有一个续期任务在执行了，就不覆盖，返回旧的 entry；否则返回 null，表示可以放入</span></span><br><span class="line">    <span class="type">ExpirationEntry</span> <span class="variable">oldEntry</span> <span class="operator">=</span> (ExpirationEntry)EXPIRATION_RENEWAL_MAP.putIfAbsent(<span class="built_in">this</span>.getEntryName(), entry);</span><br><span class="line">    <span class="comment">//不为空，说明这把锁已经有续期任务了</span></span><br><span class="line">    <span class="keyword">if</span> (oldEntry != <span class="literal">null</span>) &#123;</span><br><span class="line">        oldEntry.addThreadId(threadId);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//首次为这把锁开 续期任务 并把当前线程注册到</span></span><br><span class="line">        entry.addThreadId(threadId);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//执行续期</span></span><br><span class="line">            <span class="built_in">this</span>.renewExpiration();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//如果线程被中断了 就取消续期</span></span><br><span class="line">            <span class="comment">//Q：什么情况下，线程会被中断？</span></span><br><span class="line">            <span class="keyword">if</span> (Thread.currentThread().isInterrupted()) &#123;</span><br><span class="line">                <span class="built_in">this</span>.cancelExpirationRenewal(threadId);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>续期的实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Redisson 分布式锁 —— 看门狗续期核心逻辑</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 功能：</span></span><br><span class="line"><span class="comment"> *  1. 定期（默认锁租期的 1/3）检查锁是否仍然被当前线程持有；</span></span><br><span class="line"><span class="comment"> *  2. 若锁仍在，则延长过期时间（防止业务执行过长锁被自动释放）；</span></span><br><span class="line"><span class="comment"> *  3. 若锁已不存在，则取消续期任务；</span></span><br><span class="line"><span class="comment"> *  4. 若发生异常（如 Redis 宕机），则清理当前锁的续期状态。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 实现细节：</span></span><br><span class="line"><span class="comment"> *  - 使用 Netty 的时间轮（HashedWheelTimer）定时调度任务；</span></span><br><span class="line"><span class="comment"> *  - 使用异步命令（CompletionStage）执行 Redis 脚本；</span></span><br><span class="line"><span class="comment"> *  - 通过回调 whenComplete 处理续期结果或异常。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">renewExpiration</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 获取当前锁对应的续期任务信息（存放于全局 Map）</span></span><br><span class="line">    <span class="type">ExpirationEntry</span> <span class="variable">ee</span> <span class="operator">=</span> (ExpirationEntry) EXPIRATION_RENEWAL_MAP.get(<span class="built_in">this</span>.getEntryName());</span><br><span class="line">    <span class="keyword">if</span> (ee != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 使用 Netty 时间轮延迟执行任务（间隔 = 租期时间 / 3）</span></span><br><span class="line">        <span class="comment">//newTimeout: </span></span><br><span class="line">        <span class="type">Timeout</span> <span class="variable">task</span> <span class="operator">=</span> <span class="built_in">this</span>.getServiceManager().newTimeout(<span class="keyword">new</span> <span class="title class_">TimerTask</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">(Timeout timeout)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                <span class="comment">// 再次确认该锁的续期任务仍存在（防止任务被取消）</span></span><br><span class="line">                <span class="type">ExpirationEntry</span> <span class="variable">ent</span> <span class="operator">=</span> (ExpirationEntry) RedissonBaseLock.EXPIRATION_RENEWAL_MAP.get(RedissonBaseLock.<span class="built_in">this</span>.getEntryName());</span><br><span class="line">                <span class="keyword">if</span> (ent != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// 获取该锁第一个持有线程的 threadId（可能是重入锁）</span></span><br><span class="line">                    <span class="type">Long</span> <span class="variable">threadId</span> <span class="operator">=</span> ent.getFirstThreadId();</span><br><span class="line">                    <span class="keyword">if</span> (threadId != <span class="literal">null</span>) &#123;</span><br><span class="line">                        <span class="comment">/**</span></span><br><span class="line"><span class="comment">                         * 续期逻辑：</span></span><br><span class="line"><span class="comment">                         * 调用 Lua 脚本检测锁是否仍属于当前线程，</span></span><br><span class="line"><span class="comment">                         * 若是，则执行 pexpire 延长过期时间；</span></span><br><span class="line"><span class="comment">                         * 返回值：</span></span><br><span class="line"><span class="comment">                         *   true  -&gt; 锁还在，续期成功；</span></span><br><span class="line"><span class="comment">                         *   false -&gt; 锁已不存在或非本线程持有。</span></span><br><span class="line"><span class="comment">                         */</span></span><br><span class="line">                        CompletionStage&lt;Boolean&gt; future = RedissonBaseLock.<span class="built_in">this</span>.renewExpirationAsync(threadId);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">/**</span></span><br><span class="line"><span class="comment">                         * Q：为什么是异步？</span></span><br><span class="line"><span class="comment">                         * A：</span></span><br><span class="line"><span class="comment">                         *   - renewExpiration() 是周期性执行的；</span></span><br><span class="line"><span class="comment">                         *   - 如果同步等待 Redis 响应，Netty 时间轮线程会被阻塞；</span></span><br><span class="line"><span class="comment">                         *   - 异步执行可以充分利用线程池，提高续期稳定性；</span></span><br><span class="line"><span class="comment">                         *   - 防止 Redis 网络抖动造成时间轮延迟。</span></span><br><span class="line"><span class="comment">                         */</span></span><br><span class="line"></span><br><span class="line">                        <span class="comment">// 注册异步回调：处理续期结果与异常</span></span><br><span class="line">                        future.whenComplete((res, e) -&gt; &#123;</span><br><span class="line">                            <span class="comment">/**</span></span><br><span class="line"><span class="comment">                             * e：表示异步任务执行过程中发生的异常（如 Redis 连接错误、脚本超时等）</span></span><br><span class="line"><span class="comment">                             * res：表示 Redis 脚本返回结果（true=锁还在，false=锁不存在）</span></span><br><span class="line"><span class="comment">                             */</span></span><br><span class="line">                            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                                <span class="comment">// 出现异常，打印日志 + 清理续期任务（避免死循环）</span></span><br><span class="line">                                RedissonBaseLock.log.error(</span><br><span class="line">                                    <span class="string">&quot;Can&#x27;t update lock &#123;&#125; expiration&quot;</span>,</span><br><span class="line">                                    RedissonBaseLock.<span class="built_in">this</span>.getRawName(), e</span><br><span class="line">                                );</span><br><span class="line">                                RedissonBaseLock.EXPIRATION_RENEWAL_MAP.remove(RedissonBaseLock.<span class="built_in">this</span>.getEntryName());</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                <span class="keyword">if</span> (res) &#123;</span><br><span class="line">                                    <span class="comment">// res == true：锁仍被当前线程持有，继续下一次续期</span></span><br><span class="line">                                    RedissonBaseLock.<span class="built_in">this</span>.renewExpiration();</span><br><span class="line">                                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                    <span class="comment">// res == false：锁不存在（可能已释放或超时），停止续期任务</span></span><br><span class="line">                                    RedissonBaseLock.<span class="built_in">this</span>.cancelExpirationRenewal(<span class="literal">null</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="built_in">this</span>.internalLockLeaseTime / <span class="number">3L</span>, TimeUnit.MILLISECONDS);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将定时任务句柄存回 ExpirationEntry（便于后续取消）</span></span><br><span class="line">        ee.setTimeout(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Redisson的定时任务是基于Netty中的时间轮来实现的</p>
+<p>时间轮是什么？<a target="_blank" rel="noopener" href="https://www.yuque.com/u48024670/ui3u5m/obz6tige79v469mx">时间轮算法</a></p>
+<p>Redisson执行定时任务的work线程</p>
+<p>timer就是一个HashedWheelTimer（Netty的时间轮）</p>
+<p><img src="/images/7e8bcd113ea74c32f7aeb62a5d291379.png"></p>
+<p>return 一个Timeout（表示你刚刚注册的这个定时任务，你可以通过这个timeout来查看任务状态等等）</p>
+<p><img src="/images/b81169d9291cf3b55ddd6204d69ef463.png"></p>
+<p>newTimeout：往时间轮里面 注册一个定时任务</p>
+<p><img src="/images/4e709e20b972b1ed467f8bd7167617f9.png"></p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/05/JavaSE/ArrayList/">ArrayList</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/05/JavaSE/%E5%B0%81%E8%A3%85%EF%BC%8C%E7%BB%A7%E6%89%BF%EF%BC%8C%E5%A4%9A%E6%80%81/">封装，继承，多态</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Codetop%E5%88%B7%E9%A2%98/%E6%95%B0%E7%BB%84/">数组</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E5%87%BD%E6%95%B0/">函数</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/RabbitMQ/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">优先级队列</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/Spring/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3IOC/">如何理解IOC</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/Redis/Redis%E7%9A%84%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">Redis的虚拟内存</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/08/31/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D%EF%BC%88zero%20copy%EF%BC%89%E4%B8%8ELinux%E5%86%85%E6%A0%B8/">零拷贝（zero copy）与Linux内核</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">bin log 和redo log</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E9%A1%B9%E7%9B%AE%E9%9A%BE%E7%82%B9!%E4%BA%AE%E7%82%B9/">项目难点/亮点</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/04/23/Redis/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/Redisson%E7%9C%8B%E9%97%A8%E7%8B%97%E6%9C%BA%E5%88%B6/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/23/Redis/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/Redisson%E7%9C%8B%E9%97%A8%E7%8B%97%E6%9C%BA%E5%88%B6/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/23/Redis/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/Redisson%E7%9C%8B%E9%97%A8%E7%8B%97%E6%9C%BA%E5%88%B6/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>

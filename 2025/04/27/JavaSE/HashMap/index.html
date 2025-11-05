@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="lkl">
+    
+    
+    
+    
+    
+    
+    <title>HashMap | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+    <link href="https://www.soyorin.online" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/aos.css">
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/js/jquery.min.js"></script>
+
+    
+<script src="/js/bootstrap.min.js"></script>
+
+    
+<script src="/js/aos.js"></script>
+
+    
+<script src="/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://www.soyorin.online">
+                
+                <style>
+                    #gal-header .navbar-brand {
+                        height: 54px;
+                        line-height: 24px;
+                        font-size: 28px;
+                        opacity: 1;
+                        background-color: rgba(0,0,0,0);
+                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
+                    }
+                </style>
+                <!-- 这里使用文字(navbar_text or config.title) -->
+                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/categories">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/tags">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/aboutme">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://www.soyorin.online">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</a>
+        >
+        <span>HashMap</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/2025/04/27/JavaSE/HashMap/">HashMap</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2025-04-27
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/2025/04/27/JavaSE/HashMap/">HashMap</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2025-04-27
+            </p>
+            <p>
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p> 快速根据 key 找到 value 的“键值对集合” ，查询和插入平均时间复杂度都是o(1)</p>
+<p>底层数据结构</p>
+<p>1.7为数组+链表</p>
+<p>1.8为数组+红黑树&#x2F;链表</p>
+<p>为什么要用红黑树，为何不一上来就树化？ </p>
+<p>链表太长，会影响查询性能，出现树化意味着被DDoS攻击了，即 被人恶意哈希冲突攻击（构造大量相同</p>
+<p>的hashkey），树化可以缓解这种情况。</p>
+<p>而平衡二叉树在极端情况下也是有这个问题，相当于链表了，红黑树比二叉树好一点，因为<font style="color:rgb(51, 51, 51);">红黑树追求</font></p>
+<p><font style="color:rgb(51, 51, 51);">大致平衡，自平衡效率高。</font></p>
+<p><font style="color:rgb(51, 51, 51);">树化应该是一种偶然现象，链表短的情况下没必要，查询性能很高了，而且链表的占用内存要比树</font></p>
+<p><font style="color:rgb(51, 51, 51);">要少</font></p>
+<p>何时会树化，树化阈值为什么是8？ </p>
+<p><font style="color:#DF2A3F;">数组长度&gt;&#x3D;64 且链表长度&gt;&#x3D;8 就会进行扩容</font></p>
+<p>jdk开发者他们基于大量的实验验证出来的，什么泊松分布，在负载因子为0.75的情况下，链表长度为8</p>
+<p>的概率为0.00006，即选择8是让树化的概率最小</p>
+<p>红黑树何时退化</p>
+<pre><code>- 扩容拆分树时，发现树的元素小于6，也会链表化
+- remove树节点时，发现root,root.left,root.rigth,root.left.left为null（移除前检查），也会链表化
+</code></pre>
+<p>索引计算？为什么数组容量要为2的n次幂</p>
+<p>idnex&#x3D;hash&amp;(size-1)，相当于hash%size，但前提是size为2的n次幂</p>
+<p>这个是为了底层能通过位运算来提高性能，还有一个就是扩容的时候如果index&#x3D;oldCap&amp;(size-1)&#x3D;&#x3D;0，</p>
+<p>说明还在原位，如果不是newIndex&#x3D;oldIndex+oldSize。综上所叙，size为2的幂次方的好处挺多的</p>
+<p>数组容量可以不为2的n次幂吗</p>
+<p>可以的。size为2的n次幂虽然性能比较高，但如果hash全是偶数，运算出来的index就都是偶数，这</p>
+<p>就导致hash分布不均</p>
+<p>若追求更好的hash分布，可以用质数作为容量，这样还不用二次hash</p>
+<p>例如hashTable它的扩容策略就是 oldCap*2+1</p>
+<p>hashmap的容量如何设置？</p>
+<p><img src="/images/004d11d00c0364b9f76b2136ded576b7.png"></p>
+<p>hashCode都有了，为什么还要调用HashMap的hash()方法对hashCode进行二次哈希？为什么用异或？</p>
+<p>jdk1.8中是拿着hashcode()的高16位和低16位进行异或</p>
+<p>jdk1.7中是拿hashcode()多次移位,异或</p>
+<p>用异或是为了扰乱hash，让hash分布更加均匀，只要32位中的一位不同，hash()返回的结果就不同</p>
+<p>put方法流程？1.8和1.7的区别</p>
+<p>1.HashMap为懒加载，即初始化只会初始化负载因子，而不是初始化容量</p>
+<p>2.计算索引（桶下标）</p>
+<p>3.判断索引位置是否为null，为null就创建Node节点插入</p>
+<p>4.不为null，则判断是链表还是树，创建对应的节点走相应的添加or更新。如果是链表达到了树化的</p>
+<p>逻辑，就走树化的逻辑（链表长度&gt;&#x3D;8且数组长度&gt;&#x3D;64）</p>
+<p>5.添加后，判断是否需要扩容</p>
+<p>1.7和1.8的扩容也是有所不同</p>
+<p>1.7扩容时链表节点移动为头插入法，而1.8为尾插法</p>
+<p>1.7是大于阈值且插入的桶没空位才会扩容（懒扩容），1.8是大于阈值就会扩容（主动扩容）</p>
+<p>1.8扩容时计算Node的索引时，会有优化（位置不变+oldCap）。1.7是重新hash</p>
+<p><img src="/images/d289f3cb13fc5f836e4e571fb631188b.png"></p>
+<p>get()方法流程</p>
+<p>1.计算hash值</p>
+<p>2.定位桶索引</p>
+<p>3.通过hash()和equals方法和第一个桶节点比较是否相等，若相等就返回，不相等就进行链表or红黑树的</p>
+<p>查询逻辑</p>
+<p>加载因子为什么为0.75</p>
+<p>在空间和时间查询性能之间能取得较好平衡</p>
+<p>大了，链表长度容易长</p>
+<p>小了，就经常扩容，影响性能</p>
+<p>但其实根据二项分布，0.693是最好的选择，但考虑到size为2的n次幂，故取到了0.75，其实0.695….其</p>
+<p>实也可以，只不过从中位数的角度，0.75是最好的</p>
+<p>多线程下出现的问题</p>
+<p>1.7的时候扩容时为头插入法，就会出现死循环</p>
+<p><img src="/images/9961cd9f9e03f56059912e72f1fa087c.png"></p>
+<p>丢数据</p>
+<p>两个线程同时判断一个桶位置可以插入位置，就插入了，然后就造成数据被覆盖了，而不会走解决</p>
+<p>hash冲突的逻辑</p>
+<p>1.7为什么要采用头插入法</p>
+<p>首先HashMap本身就不是为多线程设计的，头插入法在线程安全的情况下完全是合适的，而且实现起来</p>
+<p>也很简单</p>
+<p>还有就是jdk开发者认为后插入的元素更加热点，放在头节点比较合适</p>
+<p>jdk8为什么采用了尾插入法</p>
+<p>1.jdk8引入的红黑树，那么可以顺便遍历一下链表的元素，统计个数，判断是否需要树化</p>
+<p>2.避免多线程下扩容可能产生的死循环</p>
+<p>key能否为null？key对象有什么要求？ </p>
+<p>HashMap的key可以为null。对象必须实现hashcode()和equals方法，hashcode()是定位，equals是比较</p>
+<p>两者是否相等，并且key的内容必须不能被修改</p>
+<p>hash冲突解决方法</p>
+<p>拉链法：hash冲突时，同一槽位的拉成一条链表，hashmap采用的</p>
+<p>开放寻址法：发生hash冲突时，寻找其他位置，这就保证了一个位置只有一个元素</p>
+<p>线性探测：hash冲突时，往后找，直到找到第一个为null的位置，ThreadLocalMap采用的</p>
+<p>二次探测：跟线性探测类似，只不过往后探测的步长是有规律的，2,4,8,16</p>
+<p>二次hash</p>
+
+    </div>
+</article>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            lkl
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"></p>
+        </div>
+    </div>
+</aside>
+    
+    <aside id="sidebar-recent_comments">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-comments"></i>
+            最新评论
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush"></ul>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/11/SQL%E9%9D%A2%E8%AF%95%E9%A2%98/">SQL面试题</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/11/Codetop%E5%88%B7%E9%A2%98/%E5%93%88%E5%B8%8C%E8%A1%A8/">哈希表</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/09/17/Spring/Spring%E7%BB%84%E4%BB%B6/">Spring组件</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/12/SpringMVC/%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/">请求处理流程</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/Redis/big%20key/">big key</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/10/11/%E6%89%8B%E5%86%99%E7%B3%BB%E5%88%97/%E6%97%A0%E6%A0%87%E9%A2%98%E6%96%87%E6%A1%A3/">无标题文档</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">bin log 和redo log</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/23/Redis/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/redis%E5%AE%9E%E7%8E%B0%E6%82%B2%E8%A7%82%E9%94%81/">redis实现悲观锁</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/05/22/%E5%AE%9E%E4%B9%A0/%E6%B8%B8%E6%97%8F%E7%BD%91%E7%BB%9C/%E7%BA%BF%E4%B8%8Ajvm%E5%86%85%E5%AD%98%E6%8E%92%E6%9F%A5/">线上jvm内存排查</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2025/04/25/%E9%A1%B9%E7%9B%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E5%99%A8/%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6/">重试机制</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+
+                
+                <li>
+                    <a href="/2025/04/27/JavaSE/HashMap/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/27/JavaSE/HashMap/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/2025/04/27/JavaSE/HashMap/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
+    </li>
+    
+    <li>
+        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
+    </li>
+    
+    <li>
+        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '6'
+    }
+</script>
+
+<script src="/js/hs.js"></script>
+<script src="/js/blog.js"></script>
+
+
+
+
+</html>
