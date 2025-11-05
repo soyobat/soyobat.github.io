@@ -1,1306 +1,1384 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="author" content="lkl">
-    
-    
-    
-    
-    
-    
-    <title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
-    <link href="https://www.soyorin.online" rel="prefetch" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
 
-    
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/aos.css">
-<link rel="stylesheet" href="/css/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-<script src="/js/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/main.css">
 
-    
-<script src="/js/bootstrap.min.js"></script>
 
-    
-<script src="/js/aos.js"></script>
 
-    
-<script src="/js/highslide/highslide-full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-    
-<link rel="stylesheet" href="/js/highslide/highslide.css">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.soyorin.online","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":10,"width":280,"onmobile":true},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac","show_result":true},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night eighties"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <style type="text/css">
-        @media (max-width: 768px) {
-            body {
-                background-color: #f0f0f0;
-                background: url('/imgs/xsbg.gif');
-                background-attachment: fixed;
-            }
-        }
-    </style>
-    
-    <!--<script type="text/javascript">
-      if (document.images) {
-        var avatar = new Image();
-        avatar.src = '/imgs/avatar.jpg'
-        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
-        var previewsPreLoad = []
-        for(var i = 0; i < length; i++) {
-          previewsPreLoad.push(new Image())
-          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
-        }
-      }
-    </script>-->
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <!-- 背景轮播图功能 -->
-    <section class="hidden-xs">
-    <ul class="cb-slideshow">
-        <li><span>天若</span></li>
-        <li><span>有情</span></li>
-        <li><span>天亦老</span></li>
-        <li><span>我为</span></li>
-        <li><span>长者</span></li>
-        <li><span>续一秒</span></li>
-    </ul>
-</section>
-    <!-- 欧尼酱功能, 谁用谁知道 -->
-    
-    <header class="navbar navbar-inverse" id="gal-header">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target=".bs-navbar-collapse"
-                    aria-expanded="false">
-                <span class="fa fa-lg fa-reorder"></span>
-            </button>
-            <a href="https://www.soyorin.online">
-                
-                <style>
-                    #gal-header .navbar-brand {
-                        height: 54px;
-                        line-height: 24px;
-                        font-size: 28px;
-                        opacity: 1;
-                        background-color: rgba(0,0,0,0);
-                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
-                    }
-                </style>
-                <!-- 这里使用文字(navbar_text or config.title) -->
-                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
-                
-            </a>
-        </div>
-        <div class="collapse navbar-collapse bs-navbar-collapse">
-            <ul class="nav navbar-nav" id="menu-gal">
-                
-                
-                <li class="">
-                    <a href="/">
-                        <i class="fa fa-home"></i>首页
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>归档
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/categories">
-                        <i class="fa fa-list"></i>分类
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/tags">
-                        <i class="fa fa-tags"></i>标签
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/aboutme">
-                        <i class="fa fa-user"></i>关于我
-                    </a>
-                </li>
-                
-                
-            </ul>
-        </div>
+    <meta property="og:type" content="website">
+<meta property="og:title" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:url" content="https://www.soyorin.online/page/40/index.html">
+<meta property="og:site_name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="lkl">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="日常">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.soyorin.online/page/40/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/40/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ε=(´ο｀*)))唉，学Java的这辈子有了</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-友链"><a href="/link/" rel="section"><i class="fas fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </header>
-    <div id="gal-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 gal-right" id="mainstay">
-                    
-<div class="alert well fade in" id="gal-issue" role="alert">
-    <!-- TODO 添加关闭公告框功能 -->
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <!-- 这里自行配置公告内容 -->
-    这里是公告内容
-    <br>
-    配置相关说明请看<strong>_config.yml</strong>
-    <!-- 自行配置公告内容结束 -->
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lkl"
+      src="/images/boqi.jpg">
+  <p class="site-author-name" itemprop="name">lkl</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">441</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/soyobat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;soyobat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/" class="post-title-link" itemprop="url">常见状态码</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 23:38:43" itemprop="dateCreated datePublished" datetime="2025-04-26T23:38:43+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-18 10:16:33" itemprop="dateModified" datetime="2025-09-18T10:16:33+08:00">2025-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/HTTP/" itemprop="url" rel="index"><span itemprop="name">HTTP</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<div id="article-list">
-     
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/">
-                    <span>常见状态码</span>
-                </a>
-            </h1>
         </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="常见状态码">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/">
-                        <span>常见状态码</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="常见状态码">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">
-                    <span>TCP与UDP的不同之处</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="TCP与UDP的不同之处">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">
-                        <span>TCP与UDP的不同之处</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="TCP与UDP的不同之处">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">
-                    <span>DNS</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="DNS">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">
-                        <span>DNS</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="DNS">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/">
-                    <span>HTTPS是怎么建立连接的</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="HTTPS是怎么建立连接的">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/">
-                        <span>HTTPS是怎么建立连接的</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="HTTPS是怎么建立连接的">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/">
-                    <span>HTTP基础</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="HTTP基础">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/">
-                        <span>HTTP基础</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="HTTP基础">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">
-                    <span>cookie，session，Token</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="cookie，session，Token">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">
-                        <span>cookie，session，Token</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="cookie，session，Token">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/">
-                    <span>SSL/TLS</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="SSL/TLS">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/">
-                        <span>SSL/TLS</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="SSL/TLS">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/">
-                    <span>TCP网络拥塞</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="TCP网络拥塞">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/">
-                        <span>TCP网络拥塞</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="TCP网络拥塞">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/">
-                    <span>TCP流量控制</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="TCP流量控制">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/">
-                        <span>TCP流量控制</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="TCP流量控制">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">26</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                    <span>多线程事务解决方案</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="多线程事务解决方案">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                        <span>多线程事务解决方案</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-26
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="多线程事务解决方案">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-</div>
-<!-- 前方最多7个 < 1 2 3 4 5 6 -->
-<!-- 前方超过第7页则分为 < 1 ... (n - 3) (n - 2) (n - 1) n, 此时前面为固定的6个 -->
+      </header>
 
-<!-- 后方最多8个 (n + 1) 到 (n + 7) > -->
-<!-- 如果末页和当前页相差超过7, 此时后面为固定的6个, (n + 1) (n + 2) (n + 3) ... total > -->
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>状态码： </p>
+<p><img src="/images/ee5e7d7dd976155db3aecb2e8fb1327e.png"></p>
+<p>1xx 类状态码属于提示信息，是协议处理中的一种中间状态，实际用到的比较少。 </p>
+<p>2xx 类状态码表示服务器成功处理了客户端的请求，也是我们最愿意看到的状态。 </p>
+<ul>
+<li>「200 OK」是最常见的成功状态码，表示一切正常。如果是非 HEAD 请求，服务器返回的响应头都会有 body 数据。 </li>
+<li>「204 No Content」也是常见的成功状态码，与 200 OK 基本相同，但响应头没有 body 数据。 </li>
+<li>「206 Partial Content」是应用于 HTTP 分块下载或断点续传，表示响应返回的 body 数据并不是资源的全部，而是其中的一部分，也是服务器处理成功的状态。</li>
+</ul>
+<p>3xx 类状态码表示客户端请求的资源发生了变动，需要客户端用新的 URL 重新发送请求获取资源，也就是重定向。 </p>
+<ul>
+<li>「301 Moved Permanently」表示永久重定向，说明请求的资源已经不存在了，需改用新的 URL 再次访问。 </li>
+<li>「302 Found」表示临时重定向，说明请求的资源还在，但暂时需要用另一个 URL 来访问。</li>
+</ul>
+<p>301 和 302 都会在响应头里使用字段 Location，指明后续要跳转的 URL，浏览器会自动重定向新的 URL。 </p>
+<ul>
+<li>「304 Not Modified」不具有跳转的含义，表示资源未修改，重定向已存在的缓冲文件，也称缓存重定向，也就是告诉客户端可以继续使用缓存资源，用于缓存控制。</li>
+</ul>
+<p>4xx 类状态码表示客户端发送的报文有误，服务器无法处理，也就是错误码的含义。 </p>
+<ul>
+<li>「400 Bad Request」表示客户端请求的报文有错误，但只是个笼统的错误。 </li>
+<li>「403 Forbidden」表示服务器禁止访问资源，并不是客户端的请求出错。 </li>
+<li>「404 Not Found」表示请求的资源在服务器上不存在或未找到，所以无法提供给客户端。</li>
+</ul>
+<p>5xx 类状态码表示客户端请求报文正确，但是服务器处理时内部发生了错误，属于服务器端的错误码。 </p>
+<ul>
+<li>「500 Internal Server Error」与 400 类型，是个笼统通用的错误码，服务器发生了什么错误，我们并不知道。 </li>
+<li>「501 Not Implemented」表示客户端请求的功能还不支持，类似“即将开业，敬请期待”的意思。 </li>
+<li>「502 Bad Gateway」通常是服务器作为网关或代理时返回的错误码，表示服务器自身工作正常，访问后端服务器发生了错误。 </li>
+<li>「503 Service Unavailable」表示服务器当前很忙，暂时无法响应客户端，类似“网络服务正忙，请稍后重试”的意思。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
 
 
-<div id="gal-pagination" class="clearfix">
-    <ul class="pagination pagination-gal pull-right">
-        
-        <li class="prev">
-            <a href="/page/39/">«</a>
-        </li>
-        
-        
-        <li>
-            <a href="/">1</a>
-        </li>
-        <li>
-            <span>...</span>
-        </li>
-        
-        <li>
-            <a href="/page/37 ">37</a>
-        </li>
-        
-        <li>
-            <a href="/page/38 ">38</a>
-        </li>
-        
-        <li>
-            <a href="/page/39 ">39</a>
-        </li>
-        
-        
-        <li class="current">
-            <span>40</span>
-        </li>
-        
-        
-        <li>
-            <a href="/page/41">41</a>
-        </li>
-        
-        <li>
-            <a href="/page/42">42</a>
-        </li>
-        
-        <li>
-            <a href="/page/43">43</a>
-        </li>
-        
-        <li>
-            <a href="/page/44">44</a>
-        </li>
-        
-        <li>
-            <a href="/page/45">45</a>
-        </li>
-        
-        
-        
-        <li class="next">
-            <a href="/page/41/">»</a>
-        </li>
-        
-    </ul>
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%8EUDP%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84/" class="post-title-link" itemprop="url">TCP与UDP的不同之处</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 23:02:53" itemprop="dateCreated datePublished" datetime="2025-04-26T23:02:53+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-21 21:53:03" itemprop="dateModified" datetime="2025-10-21T21:53:03+08:00">2025-10-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/" itemprop="url" rel="index"><span itemprop="name">TCP和UDP</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<!-- 加上这段代码原因： gitment在首页加载时, 如果找不到对应的控件会报错，此处加上，同时设置为none，防止报错 -->   
+        </div>
+      </header>
 
-                </div>
-                <aside class="col-md-4 gal-left" id="sidebar">
-    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
-<aside id="sidebar-search">
-    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <form class="form-inline clearfix" id="search-form" method="get"
-              action="/search/index.html">
-            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
-            <button class="btn btn-danger btn-gal" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-    </div>
-</aside>
-    <aside id="sidebar-author">
-    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
-        <div class="panel-heading" style="text-align: center">
-            <i class="fa fa-quote-left"></i>
-            lkl
-            <i class="fa fa-quote-right"></i>
-        </div>
-        <div class="author-panel text-center">
-            <img src="/imgs/avatar.jpg" width="140" height="140"
-                 alt="个人头像" class="author-image">
-            <p class="author-description"></p>
-        </div>
-    </div>
-</aside>
-    
-    <aside id="sidebar-recent_comments">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-comments"></i>
-            最新评论
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush"></ul>
-    </div>
-</aside>
-    
-    <!-- 要配置好leancloud才能开启此小工具 -->
     
     
-    <aside id="sidebar-recent_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            近期文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
     
-    
-    <aside id="sidebar-rand_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            随机文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/05/JavaSE/%E4%BD%A0%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3OOP/">你如何理解OOP</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/RabbitMQ/%E9%AB%98%E5%8F%AF%E7%94%A8/">高可用</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/JVM/%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/">内存结构</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/10/Redis/redis%E4%BD%BF%E7%94%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">redis使用最佳实践</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/12/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/">Redis高可用</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/25/%E5%9C%BA%E6%99%AF%E9%A2%98/%E8%BD%AC%E8%BD%AC%E5%9B%A2%E9%98%9F%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5%E7%BB%88%E6%9E%81%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/">转转团队批量插入终极优化技巧</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/07/30/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/LWP/">LWP</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/08/15/%E6%89%8B%E5%86%99%E7%B3%BB%E5%88%97/%E6%89%8B%E5%86%99IOC%E5%AE%B9%E5%99%A8/">手写IOC容器</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/10/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B2%A1%E6%9C%89listen%EF%BC%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E8%B5%B7%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B/">服务端没有listen，客户端发起连接建立</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/02/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E7%BD%91%E5%85%B3%E5%BC%B9%E5%8A%9B%E8%AE%BE%E8%AE%A1/%E5%B9%82%E7%AD%89%E6%80%A7%E8%AE%BE%E8%AE%A1/">幂等性设计</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
-    
-    
-    <aside id="gal-sets">
-        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-            <ul class="nav nav-pills pills-gal">
+    <div class="post-body" itemprop="articleBody">
+          <p><font style="color:rgb(31, 41, 55);">TCP和UDP的主要区别在于连接性、可靠性和传输方式。</font></p>
+<p><font style="color:rgb(31, 41, 55);">TCP是面向连接的，提供可靠的数据传输，适用于需要高可靠性的应用；而UDP是无连接的，传输速度快但不可靠，适用于实时性要求高的应用。</font></p>
+<p><font style="color:rgb(31, 41, 55);">此外，TCP具有流量控制和拥塞控制机制，头部开销较大；UDP则没有这些控制机制，头部开销较小。</font></p>
+<p><font style="color:rgb(31, 41, 55);">选择使用哪种协议取决于应用场景的具体需求。</font></p>
+<blockquote>
+<p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">TCP可靠的面向连接的传输方式，UDP不可靠的高效传输方式；</font></p>
+</blockquote>
+<p>各自的应用之处：</p>
+<p><font style="color:rgb(51, 51, 51);">UDP和TCP各有其独特的特点和适用场景。</font></p>
+<p><font style="color:rgb(51, 51, 51);">UDP是无连接的，传输速度快、延迟低，但不可靠，适用于对实时性要求高且可容忍少量丢包的应用，如视频会议、在线游戏、DNS查询和VoIP。</font></p>
+<p><font style="color:rgb(51, 51, 51);">而TCP是面向连接的，提供可靠的数据传输，保证数据包的顺序和完整性，适用于对数据可靠性要求高的应用，如网页浏览、电子邮件传输、文件下载和数据库访问。</font></p>
+<p><font style="color:rgb(51, 51, 51);">选择哪种协议主要取决于应用对实时性、可靠性和网络环境的特定需求。</font><font style="color:rgb(31, 41, 55);">对实时性要求高且可以容忍丢包的场景，适合使用UDP。对数据完整性、顺序和可靠性要求高的场景，适合使用TCP</font></p>
+<blockquote>
+<p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">可靠TCP，其它UDP；</font></p>
+</blockquote>
 
-                
-                <li>
-                    <a href="/page/40/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/40/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/40/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
-                </li>
-                
-            </ul>
-            <div class="tab-content">
-                
-                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
-    
-</div>
-                
-                
-                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
-    
-</div>
-                
-                
-                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
-    
-    <li>
-        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
-    </li>
-    
-    <li>
-        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
-    </li>
-    
-    <li>
-        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
-    </li>
-    
-</div>
-                
-            </div>
-        </div>
-    </aside>
-    
-</aside>
-            </div>
-        </div>
+      
     </div>
-    <footer id="gal-footer">
-    <div class="container">
-        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
-    </div>
-</footer>
 
-<!-- 回到顶端 -->
-<div id="gal-gotop">
-    <i class="fa fa-angle-up"></i>
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
 </div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/DNS/" class="post-title-link" itemprop="url">DNS</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-04-26 23:01:17 / 修改时间：23:36:28" itemprop="dateCreated datePublished" datetime="2025-04-26T23:01:17+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/HTTP/" itemprop="url" rel="index"><span itemprop="name">HTTP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><p>域名解析服务，把域名解析为目标的IP</p>
+<h2 id="解析流程"><a href="#解析流程" class="headerlink" title="解析流程"></a>解析流程</h2><p><img src="/images/9c5706345def25981b017e15d37f92d6.png"></p>
+<ol>
+<li>一开始就会去看浏览器本地缓存是否有</li>
+<li>没有就去本地host文件看看有没有</li>
+<li>host文件没有的话才会去向本地DNS服务发请求</li>
+<li>如果本都DNS服务器有缓存，就返回。没有就会去向根域的DNS服务器发请求，根域名服务器并不负责实际的域名解析，而是告诉本地DNS服务器应该去哪个顶级域的DNS服务器查询</li>
+<li>顶级域的DNS服务器也不负责具体的域名解析，而是告诉本地DNS服务器可以去哪个权威DNS服务器查询</li>
+<li>本地DNS服务器最后就会向权威DNS服务器发查询请求。权威DNS服务器就是负责将IP地址和域名进行映射存储的服务器，查到了就返回</li>
+<li>DNS服务器把IP返回给浏览器后，并且会把查询结果缓存到本地，以便下次快速查询。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTPS%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84/" class="post-title-link" itemprop="url">HTTPS是怎么建立连接的</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 22:37:50" itemprop="dateCreated datePublished" datetime="2025-04-26T22:37:50+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-22 00:48:38" itemprop="dateModified" datetime="2025-10-22T00:48:38+08:00">2025-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/HTTP/" itemprop="url" rel="index"><span itemprop="name">HTTP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/images/de5cc8eeb8e6193cf50fb6d821954e6e.png"></p>
+<p><font style="color:rgb(31, 41, 55);">整个 HTTPS 的通信过程还是比较复杂的，粗略的来说，可以分成四步。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第一步是 DNS 解析，将域名转换成 IP。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第二步是建立 TCP 连接，也就是三次握手过程。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第三步是在 TCP 的基础上完成 TLS 握手过程。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第四步就是利用 TLS 握手过程交换的密钥进行通信，发送数据的加密，接收数据的解密。</font></p>
+<p><font style="color:rgb(31, 41, 55);">这其中最复杂的就是 TLS 握手过程，具体来说，</font></p>
+<p><font style="color:rgb(31, 41, 55);">首先是打招呼，客户端和服务端就 TLS 版本，加密算法和压缩算法达成一致，并且交换随机数。</font></p>
+<p><font style="color:rgb(31, 41, 55);">其次，服务端发送证书，而客户端验证证书。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第三，客户端再次生成一个随机数 Pre-Master Secret，加密（</font><font style="color:#DF2A3F;">用CA证书里的公钥</font><font style="color:rgb(31, 41, 55);">）之后发送给服务端，服务端解密（</font><font style="color:#DF2A3F;">用服务端自己的私钥</font><font style="color:rgb(31, 41, 55);">）就能得到这个随机数。</font></p>
+<p><font style="color:rgb(31, 41, 55);">第四，利用交换的随机数和 Pre-Master Secret，按照算法生成密钥，这个就是会话密钥，后续 HTTPS 数据传输就是用这个密钥。</font></p>
+<p><font style="color:rgb(31, 41, 55);">最后完成握手，双方互相发送 Finished 结束握手过程。</font></p>
+<blockquote>
+<h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">简述</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">一打招呼，二验证书，三换随机数，四生密钥，完成握手；</font></p>
+<h4 id="重点"><a href="#重点" class="headerlink" title="重点"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">重点</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">TLS握手过程；</font></p>
+<h4 id="引导"><a href="#引导" class="headerlink" title="引导"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">引导</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">DNS解析；三次握手过程</font></p>
+</blockquote>
+<p>TLS为什么安全，效果更好</p>
+<p>从上面的过程也能看出来，TLS握手的安全性源于其多重保障机制：</p>
+<p>首先，通过密钥交换和随机数生成确保数据加密，防止窃听；</p>
+<p>其次，利用数字证书和证书链验证服务器身份，杜绝中间人攻击；</p>
+<p>第三，TLS 每个消息都有一个验证码（MAC），使用消息认证码保护消息完整性；</p>
+<p>最后协议的分层设计和版本协商进一步提升安全性，有效抵御重放、时序等常见攻击。</p>
+<p>因此虽然看上去 TLS 握手的前面打招呼和证书验证过程是明文传输，但是依靠着证书和三个随机数，还是能够保障很强的安全性</p>
+<p>用CA证书里的公钥对 会话密钥进行加密 （非对称加密）</p>
+<p>把加密后的 会话密钥发送给服务端，服务端用私钥进行解密 （非对称加密）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/HTTP/HTTP%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HTTP基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 22:22:42" itemprop="dateCreated datePublished" datetime="2025-04-26T22:22:42+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-22 00:34:55" itemprop="dateModified" datetime="2025-10-22T00:34:55+08:00">2025-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/HTTP/" itemprop="url" rel="index"><span itemprop="name">HTTP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>状态码…..</p>
+<p><font style="color:rgb(31, 41, 55);">常见的状态吗有很多，我列举几个：</font></p>
+<p><font style="color:rgb(31, 41, 55);">200 代表 OK，服务器处理了请求。201 代表已接收，一般是异步接口返回，表达请求已经收到了，但是不一定处理好了。</font></p>
+<p><font style="color:rgb(31, 41, 55);">301 代表永久重定向，302 代表临时重定向</font></p>
+<p><font style="color:rgb(31, 41, 55);">400 是请求有问题，401 是未授权，403 是禁止访问。</font></p>
+<p><font style="color:rgb(31, 41, 55);">500 是系统错误，503 是服务不可用，在触发了熔断的时候可以返回 503。</font></p>
+<p>缓存</p>
+<p>Http缓存分为两种，一种是那个强制缓存，一种是协商缓存</p>
+<p>强制缓存指的是只要浏览器的缓存没过期，那就使用缓存，决定是否使用缓存的决定权在浏览器这边</p>
+<p>浏览器第一次请求服务器的时候，服务器返回请求的同时会在请求头里塞Cache-control这个参数，</p>
+<p>这个参数注明了缓存的过期时间</p>
+<p>浏览器再次请求时，会先根据请求的时间和Cache-control 计算出缓存是否过期，如果没有就直接访问</p>
+<p>本地缓存，如果过期就发请求</p>
+<p>服务器收到请求后，会更新请求头里的Cache-control</p>
+<p>协商缓存</p>
+<p>就是通过服务端协商后，通过协商结果判断是否使用本地缓存</p>
+<p>报文格式： </p>
+<p>HTTP请求报文由四部分组成：</p>
+<p>第一部分是请求行，包含请求方法、URI和HTTP版本，如GET &#x2F;index.html HTTP&#x2F;1.1；</p>
+<p>第二部分是请求头部，它包含一系列键值对，传递附加信息，如Host: example.com；</p>
+<p>第三部分是空行，用来分隔头部和主体请求体；</p>
+<p>第四部分是请求体，这一部分是可选的，通常用来传递请求的具体内容；</p>
+<p>响应报文也是类似的。第一个部分是状态行，包含HTTP版本、状态码和状态消息，如HTTP&#x2F;1.1 200 OK。后续依次是响应头部、空行和响应体。</p>
+<p>请求方式</p>
+<p>GET 和 POST 是用得最多的两个方法。</p>
+<p>GET 主要用来访问服务器上的资源，并不改变资源的状态。而 POST 则是主要用于向服务端提交数据，更新或者创建资源，但是 POST 可以不是幂等的。</p>
+<p>除了这些，PUT 可以用来表达更新或者创建资源，但是操作应该是幂等的，大多数情况下是整体更新。PATCH 也是更新资源，但是一般是代表更新资源的一部分属性。DELETE 则是删除资源。</p>
+<p>还有一个很特殊的 OPTIONS，一般是浏览器遇到跨域问题时候发送的预检（preflight）请求就是使用 OPTIONS 方法。</p>
+<p>剩下的 HEAD，TRACE，CONNECT 方法就用得比较少了。</p>
+<p>HTTP短连接，HTTP长连接</p>
+<p>HTTP长连接和短连接主要区别在于TCP连接的持续时间和资源占用。长连接在一个TCP连接上可以发送多个HTTP请求和响应，通过Connection: keep-alive头部来维持连接，适用于频繁请求的场景，如加载多个资源的网页，减少了TCP握手的开销，提高了性能。</p>
+<p>而短连接则在每次HTTP请求完成后立即关闭TCP连接，适用于简单查询或对资源占用敏感的场景，虽然每次请求都需要进行TCP握手，但资源释放快。</p>
+<p>在 HTTP 1.1 以后就默认使用长连接了，如果没有遇到问题，就不要去修改这个配置。</p>
+<blockquote>
+<h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h4><p>长连接高性能，短连接释放快</p>
+</blockquote>
+<ul>
+<li><strong>HTTP&#x2F;TCP</strong> → 通信协议（规定如何传输数据）。</li>
+<li><strong>JSON&#x2F;Protobuf</strong> → 数据序列化协议（规定数据内容怎么编码）。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/cookie%EF%BC%8Csession%EF%BC%8CToken/" class="post-title-link" itemprop="url">cookie，session，Token</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 22:22:24" itemprop="dateCreated datePublished" datetime="2025-04-26T22:22:24+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-27 00:37:20" itemprop="dateModified" datetime="2025-04-27T00:37:20+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>他们都是用于管理用户状态和身份验证的技术。因为HTTP通信是无状态的，每次请求都是独立的。所以需要一种技术来存储用户的信息</p>
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>就是服务器向browser发的一小型文本，存在浏览器，用来存储用户信息。它会在下一次browser向服务器发请求时携带上，进行身份识别</p>
+<h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><h2 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h2><p>简单来说就是一字符串，用于用户的身份鉴权</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/SSL!TLS/" class="post-title-link" itemprop="url">SSL/TLS</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-04-26 22:22:16 / 修改时间：23:41:54" itemprop="dateCreated datePublished" datetime="2025-04-26T22:22:16+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><h2 id="如何保证安全通信的"><a href="#如何保证安全通信的" class="headerlink" title="如何保证安全通信的"></a>如何保证安全通信的</h2><ol>
+<li>内容加密</li>
+<li>身份验证：使用数字证书来验证通信双方的身份。但可以伪造证书</li>
+<li>内容摘要算法，确保内容在传输过程中不会被篡改or损失</li>
+</ol>
+<p><img src="/images/3c2a78f7e17c37664a0e95060fa513a6.jpeg"></p>
+<h2 id="非对称和对称加密的区别"><a href="#非对称和对称加密的区别" class="headerlink" title="非对称和对称加密的区别"></a>非对称和对称加密的区别</h2><p>对称：加密和解密都是用同一把密钥</p>
+<p>非对称：加密和解密不用密钥，一般有公钥和私钥之分，公钥用于加密，私钥用于解密</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E7%BD%91%E7%BB%9C%E6%8B%A5%E5%A1%9E/" class="post-title-link" itemprop="url">TCP网络拥塞</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 22:17:49" itemprop="dateCreated datePublished" datetime="2025-04-26T22:17:49+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-21 23:22:33" itemprop="dateModified" datetime="2025-10-21T23:22:33+08:00">2025-10-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/" itemprop="url" rel="index"><span itemprop="name">TCP和UDP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h2><p>在网络出现拥堵时，如果继续发送大量数据包，可能会导致数据包时延、丢失等，这时 TCP 就会重传数据，但是一重传就会导致网络的负担更重，于是会导致更大的延迟以及更多的丢包，这个情况就会进入恶性循环被不断地放大…… </p>
+<p>所以，TCP 不能忽略网络上发生的事，它被设计成一个无私的协议，当网络发送拥塞时，TCP 会自我牺牲，降低发送的数据量。 </p>
+<p>于是，就有了拥塞控制，控制的目的就是避免「发送方」的数据填满整个网络。 </p>
+<p>为了在「发送方」调节所要发送数据的量，定义了一个叫做「拥塞窗口」的概念。 </p>
+<p>拥塞窗口 cwnd是发送方维护的一个的状态变量，它会根据网络的拥塞程度动态变化的。 </p>
+<p>我们在前面提到过发送窗口 swnd 和接收窗口 rwnd 是约等于的关系，那么由于加入了拥塞窗口的概念后，此时发送窗口的值是swnd &#x3D; min(cwnd, rwnd)，也就是拥塞窗口和接收窗口中的较小值。 </p>
+<p>拥塞窗口 cwnd 变化的规则： </p>
+<p>只要网络中没有出现拥塞，cwnd 就会增大； </p>
+<p>但网络中出现了拥塞，cwnd 就减少； </p>
+<p>只要「发送方」没有在规定时间内接收到 ACK 应答报文，也就是发生了超时重传，就会认为网络出现了拥塞。 </p>
+<p>拥塞控制算法： </p>
+<ul>
+<li>慢启动：</li>
+</ul>
+<p>当发送方每收到一个 ACK，拥塞窗口 cwnd 的大小就会加 1（表示能发送1个MSS大小） </p>
+<p>有一个叫慢启动门限 ssthresh （slow start threshold，65535字节）状态变量。 </p>
+<pre><code>- 当 cwnd &lt; ssthresh 时，使用慢启动算法。 
+- 当 cwnd &gt;= ssthresh 时，就会使用「拥塞避免算法」。 
+</code></pre>
+<ul>
+<li>拥塞避免算法：</li>
+</ul>
+<p>每当收到一个 ACK 时，cwnd 增加 1&#x2F;cwnd。 </p>
+<ul>
+<li>拥塞发生：</li>
+</ul>
+<p>当网络出现拥塞，也就是会发生数据包重传，重传机制主要有两种： </p>
+<pre><code>- 超时重传，一直没收到ACK，从丢失的ACK开始超时重传 
+- 快速重传，收到三个相同的ACK，表明某个包丢失了，快速重传丢失的包 
+- 当发生了「超时重传」，则就会使用拥塞发生算法 
+</code></pre>
+<p>这个时候，ssthresh 和 cwnd 的值会发生变化： </p>
+<pre><code>    * ssthresh 设为 cwnd/2， 
+    * cwnd 重置为 1（假设为1，其实是恢复为 cwnd 初始化值，默认初始值为10） 
+</code></pre>
+<p>接着，就重新开始慢启动 </p>
+<p><img src="/images/f02a2390ca00014f391bc9047440d761.png"></p>
+<p>这种方案会导致如果只丢了一个包，却要立马刹车减速回到解放前， 重新慢启动 </p>
+<pre><code>- 当发生了「快速重传」，TCP 认为这种情况不严重，因为大部分没丢，只丢了一小部分，则 ssthresh 和 cwnd 变化如下： 
+    * cwnd = cwnd/2 ，也就是设置为原来的一半; 
+    * ssthresh = cwnd; 
+    * 进入快速恢复算法 
+    * 即慢启动门限和拥塞窗口都变为拥塞窗口的一半 
+</code></pre>
+<ul>
+<li>快速恢复：</li>
+</ul>
+<p>快速重传和快速恢复算法一般同时使用，快速恢复算法是认为，你还能收到 3 个重复 ACK 说明网络也不那么糟糕，所以没有必要像 RTO 超时那么强烈。算法如下： </p>
+<pre><code>- 拥塞窗口 cwnd = ssthresh + 3 （ 3 的意思是确认有 3 个数据包被收到了），之前设置为ssthresh = cwnd，所以其实这里就是设为cwnd = cwnd/2 + 3;如下图为12变成9 
+- 重传丢失的数据包； 
+- 如果再收到重复的 ACK，那么 cwnd 增加 1； 
+- 如果收到新数据的 ACK 后，把 cwnd 设置为第一步中的 ssthresh （cwnd / 2）的值，原因是该 ACK 确认了新的数据，说明从 duplicated ACK 时的数据都已收到，该恢复过程已经结束，可以回到恢复之前的状态了，也即再次进入拥塞避免状态； 
+</code></pre>
+<p><img src="/images/06e062fba70bf4d8fc99c2572b970609.png"></p>
+<p>为什么收到新数据后cwnd变为ssthresh？ </p>
+<p>首先，快速恢复是拥塞发生后慢启动的优化，其首要目的仍然是降低 cwnd 来减缓拥塞，所以必然会出现 cwnd 从大到小的改变。 </p>
+<p>其次，cwnd逐渐加1的存在是为了尽快将丢失的数据包发给目标，从而解决拥塞的根本问题（三次相同的 ACK 导致的快速重传），所以这一过程中 cwnd 反而是逐渐增大的。 </p>
+<h2 id="面试快答"><a href="#面试快答" class="headerlink" title="面试快答"></a>面试快答</h2><p><img src="/images/c38e441dae6d89fd09966fbbc6fd060c.png"></p>
+<p><font style="color:rgb(31, 41, 55);">TCP的拥塞控制主要通过慢启动、拥塞避免、快速重传和快速恢复等机制来运作。</font></p>
+<p><font style="color:rgb(31, 41, 55);">初始阶段，TCP使用慢启动算法，每次收到一个 ACK，窗口大小就翻倍，这个阶段窗口是指数增长。</font></p>
+<p><font style="color:rgb(31, 41, 55);">当拥塞窗口达到慢启动阈值后，进入拥塞避免阶段，此时窗口是线性增长。</font></p>
+<p><font style="color:rgb(31, 41, 55);">如果检测到数据包丢失（通过超时或重复ACK），TCP会启动快速重传机制，立即重传丢失的数据包。</font></p>
+<p><font style="color:rgb(31, 41, 55);">并且窗口会调整为原本窗口的 1&#x2F;2，也就是快开始。</font></p>
+<p><font style="color:rgb(31, 41, 55);">而后进入快速恢复（快开始）阶段，保持窗口线性增长。</font></p>
+<p><font style="color:rgb(31, 41, 55);">这些机制共同作用，确保了TCP在避免网络拥塞的同时，提供稳定可靠的数据传输。</font></p>
+<blockquote>
+<h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">简述</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">慢启动指数增长，拥塞避免线性增长，快速重传窗口减半，快速恢复线性增长；</font></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">TCP流量控制</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 22:17:19" itemprop="dateCreated datePublished" datetime="2025-04-26T22:17:19+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-21 23:22:46" itemprop="dateModified" datetime="2025-10-21T23:22:46+08:00">2025-10-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/" itemprop="url" rel="index"><span itemprop="name">TCP和UDP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="TCP滑动窗口"><a href="#TCP滑动窗口" class="headerlink" title="TCP滑动窗口"></a>TCP滑动窗口</h2><p><font style="color:rgb(31, 41, 55);">TCP的滑动窗口机制是用于控制数据传输流量和保证数据可靠性的重要机制。它通过动态调整窗口大小，来管理发送方和接收方之间的数据传输。</font></p>
+<p><font style="color:rgb(31, 41, 55);">首先，在 TCP 的发送方和接收方各有一个窗口。并且因为 TCP 是一个全双工通信的协议，所以大多数时候，客户端和服务端都是既有接收窗口，又有发送窗口。</font></p>
+<h3 id="发送窗口"><a href="#发送窗口" class="headerlink" title="发送窗口"></a><font style="color:rgb(31, 41, 55);">发送窗口</font></h3><p>整体分为三个部分：</p>
+<p><img src="/images/4e66a2f12f319e9db477cef02bc04939.png"></p>
+<ul>
+<li><font style="color:rgb(31, 41, 55);">在整个窗口左边的，就是已经发送并且 ACK 的报文。比如说上图中编号小于 100 的报文；</font></li>
+<li><font style="color:rgb(31, 41, 55);">滑动窗口内的报文，又可以分成三部分：</font><ul>
+<li><font style="color:rgb(31, 41, 55);">已经收到 ACK 的报文，例如说 101 和 102；</font></li>
+<li><font style="color:rgb(31, 41, 55);">已经发送但是没收到 ACK 的报文，比如说 100， 103 和 104；</font></li>
+<li><font style="color:rgb(31, 41, 55);">还没发送的报文，也就是 105，106 和 107；</font></li>
+</ul>
+</li>
+<li><font style="color:rgb(31, 41, 55);">在整个窗口右边的，窗口还没滑过去，所以暂时它们不可能被发送，在上图是编号大于 107 的报文；</font></li>
+</ul>
+<p><font style="color:rgb(31, 41, 55);"></font></p>
+<p><font style="color:rgb(31, 41, 55);">进一步看，这里有一个细节，就是虽然 100 编号比较小，但是它的 ACK 反而有可能比 101 和 102 后收到。假设说现在收到了 100 的 ACK，那么这时候窗口就要开始滑动了。滑动的距离就是从窗口的左边开始出发，直到遇到第一个还没收到 ACK 的报文，在这里就是 103。</font></p>
+<p><img src="/images/4f3b0c1bb842b30aba51c0ed9e1413e3.png"></p>
+<h3 id="接受窗口"><a href="#接受窗口" class="headerlink" title="接受窗口"></a><font style="color:rgb(31, 41, 55);">接受窗口</font></h3><p><font style="color:rgb(31, 41, 55);">而接收窗口，也是类似的：</font></p>
+<p><img src="/images/a8a801bc0a2da95eced47e68ddad0bc8.png"></p>
+<p><font style="color:rgb(31, 41, 55);">可以看到，在接收窗口也遇到不连续的问题，比如说先收到了 104。</font></p>
+<p><font style="color:rgb(31, 41, 55);">显然，一旦接收方收到了 100 之后，它的窗口也会开始移动，移动的逻辑是类似的，找到最小的没有收到的报文。如下图。但是要注意到，因为 100 之后的 101 和 102 都收到了，所以实际上它可以直接 ACK 102。</font></p>
+<p><img src="/images/577df2f91dc54d4c74f02c967d830a2c.png"></p>
+<p><font style="color:rgb(31, 41, 55);">因此你基本上可以想到整个</font><font style="color:rgb(31, 41, 55);">工作流程</font><font style="color:rgb(31, 41, 55);">：</font></p>
+<ul>
+<li><strong><font style="color:rgb(17, 24, 39);">初始化</font></strong><font style="color:rgb(31, 41, 55);">：连接建立时，双方协商初始窗口大小。协商是发生在 TCP 三次握手的第一次握手中。</font></li>
+<li><strong><font style="color:rgb(17, 24, 39);">发送数据</font></strong><font style="color:rgb(31, 41, 55);">：发送方根据窗口大小发送数据包，并等待接收方的确认。</font></li>
+<li><strong><font style="color:rgb(17, 24, 39);">接收确认</font></strong><font style="color:rgb(31, 41, 55);">：接收方收到数据包后，发送ACK确认，并更新接收窗口。</font></li>
+<li><strong><font style="color:rgb(17, 24, 39);">滑动窗口</font></strong><font style="color:rgb(31, 41, 55);">：发送方收到ACK后，滑动窗口向前移动，允许发送新的数据包。</font></li>
+<li><strong><font style="color:rgb(17, 24, 39);">动态调整</font></strong><font style="color:rgb(31, 41, 55);">：根据网络状况和接收方的处理能力，窗口大小可以动态调整。</font></li>
+</ul>
+<p><font style="color:rgb(31, 41, 55);"></font></p>
+<h3 id="动态调整窗口（最难）"><a href="#动态调整窗口（最难）" class="headerlink" title="动态调整窗口（最难）"></a><strong>动态调整窗口（最难）</strong></h3><p><font style="color:rgb(31, 41, 55);">这里的难点就是动态调整的策略。</font></p>
+<p><font style="color:rgb(31, 41, 55);">就接收方来说，它主要是考虑自己的缓冲区。如果要是还有很多空闲缓冲区，那么接收方就可以增大自己的窗口，并且在发给发送方的报文里面带上新的窗口大小。反之则是减小窗口。最极端的情况下，接收方会返回零缓冲区，也就是提醒发送方不要再发了，自己已经没有空闲缓冲区可用了。</font></p>
+<p><font style="color:rgb(31, 41, 55);">而发送方主要是受到两方面的影响。</font></p>
+<p><font style="color:rgb(31, 41, 55);">一方面是受到 TCP 协议内部的慢开始、拥塞避免、快开始、快重传和快恢复策略的影响。另外一方面则是还会受到接收方窗口大小的影响。</font></p>
+<p><font style="color:rgb(31, 41, 55);"></font></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/26/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">多线程事务解决方案</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-26 13:06:39" itemprop="dateCreated datePublished" datetime="2025-04-26T13:06:39+08:00">2025-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-03 14:56:27" itemprop="dateModified" datetime="2025-06-03T14:56:27+08:00">2025-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">AI学生发展性评价系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/images/8fca9e16a9715af7ed95b36dced370ce.png"></p>
+<p>@Transtional 的实现原理</p>
+<p>创建了个了代理对象，然后它就会帮我们创建事务，然后执行方法，最后提交事务，方法报错就可能回滚事务</p>
+<p>涉及到事务嵌套场景，默认的事务传播机制为 外层有事务就沿用外层的事务，没有内层就新建事务</p>
+<p>而事务是基于JDBC的connection来实现的，当创建事务时，会把connection放到ThreadLocal里。然后内层方法就会去从ThreadLocal拿到connection对象，实现对事务的控制</p>
+<p>但由于ThreadLocal每个线程都是独立，那么@ Transitional 在多线程情况下就会失效了。</p>
+<p>而我们要解决这个，无法就是解决线程之间connection无法传递的问题。</p>
+<p>TransactionSynchronizationManager+方法加注解 @Transactional</p>
+<p>缺点就是 事务粒度太大了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ConnectionHolder connectionHolder=(ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>2PC</p>
+<p><strong><font style="color:#DF2A3F;">成绩分析引入多线程后 事务问题的最终解决方案：</font></strong></p>
+<p>分析内容表脏了没关系，在分析总记录表中加一个字段为status：0表示进行中，1表示已完成</p>
+<p>如果分析过程中出错了，那分析记录状态就会一直为0，进行中是不能被查看的，只有已完成的分析才能被查</p>
+<p>看。后续会开一个定时任务每天 凌晨 根据分析记录时间和状态去把脏数据清空，即把前天的脏数据清空</p>
+<p>类似于事务的两阶段提交</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/39/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&hellip;</span><a class="page-number" href="/page/45/">45</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/41/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lkl</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/soyobat" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 </body>
-
-<script src="/js/activate-power-mode.js"></script>
-
-<script>
-
-    // 配置highslide
-	hs.graphicsDir = '/js/highslide/graphics/'
-    hs.outlineType = "rounded-white";
-    hs.dimmingOpacity = 0.8;
-    hs.outlineWhileAnimating = true;
-    hs.showCredits = false;
-    hs.captionEval = "this.thumb.alt";
-    hs.numberPosition = "caption";
-    hs.align = "center";
-    hs.transitions = ["expand", "crossfade"];
-    hs.lang.number = '共%2张图, 当前是第%1张';
-    hs.addSlideshow({
-      interval: 5000,
-      repeat: true,
-      useControls: true,
-      fixedControls: "fit",
-      overlayOptions: {
-        opacity: 0.75,
-        position: "bottom center",
-        hideOnMouseOut: true
-      }
-    })
-
-    // 初始化aos
-    AOS.init({
-      duration: 1000,
-      delay: 0,
-      easing: 'ease-out-back'
-    });
-
-</script>
-<script>
-	POWERMODE.colorful = 'true';    // make power mode colorful
-	POWERMODE.shake = 'true';       // turn off shake
-	// TODO 这里根据具体情况修改
-	document.body.addEventListener('input', POWERMODE);
-</script>
-<script>
-    window.slideConfig = {
-      prefix: '/imgs/slide/background',
-      ext: 'jpg',
-      maxCount: '6'
-    }
-</script>
-
-<script src="/js/hs.js"></script>
-<script src="/js/blog.js"></script>
-
-
-
-
 </html>

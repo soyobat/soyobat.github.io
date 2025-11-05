@@ -1,1301 +1,1351 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="author" content="lkl">
-    
-    
-    
-    
-    
-    
-    <title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
-    <link href="https://www.soyorin.online" rel="prefetch" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
 
-    
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/aos.css">
-<link rel="stylesheet" href="/css/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-<script src="/js/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/main.css">
 
-    
-<script src="/js/bootstrap.min.js"></script>
 
-    
-<script src="/js/aos.js"></script>
 
-    
-<script src="/js/highslide/highslide-full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-    
-<link rel="stylesheet" href="/js/highslide/highslide.css">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.soyorin.online","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":10,"width":280,"onmobile":true},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac","show_result":true},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night eighties"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <style type="text/css">
-        @media (max-width: 768px) {
-            body {
-                background-color: #f0f0f0;
-                background: url('/imgs/xsbg.gif');
-                background-attachment: fixed;
-            }
-        }
-    </style>
-    
-    <!--<script type="text/javascript">
-      if (document.images) {
-        var avatar = new Image();
-        avatar.src = '/imgs/avatar.jpg'
-        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
-        var previewsPreLoad = []
-        for(var i = 0; i < length; i++) {
-          previewsPreLoad.push(new Image())
-          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
-        }
-      }
-    </script>-->
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <!-- 背景轮播图功能 -->
-    <section class="hidden-xs">
-    <ul class="cb-slideshow">
-        <li><span>天若</span></li>
-        <li><span>有情</span></li>
-        <li><span>天亦老</span></li>
-        <li><span>我为</span></li>
-        <li><span>长者</span></li>
-        <li><span>续一秒</span></li>
-    </ul>
-</section>
-    <!-- 欧尼酱功能, 谁用谁知道 -->
-    
-    <header class="navbar navbar-inverse" id="gal-header">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target=".bs-navbar-collapse"
-                    aria-expanded="false">
-                <span class="fa fa-lg fa-reorder"></span>
-            </button>
-            <a href="https://www.soyorin.online">
-                
-                <style>
-                    #gal-header .navbar-brand {
-                        height: 54px;
-                        line-height: 24px;
-                        font-size: 28px;
-                        opacity: 1;
-                        background-color: rgba(0,0,0,0);
-                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
-                    }
-                </style>
-                <!-- 这里使用文字(navbar_text or config.title) -->
-                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
-                
-            </a>
-        </div>
-        <div class="collapse navbar-collapse bs-navbar-collapse">
-            <ul class="nav navbar-nav" id="menu-gal">
-                
-                
-                <li class="">
-                    <a href="/">
-                        <i class="fa fa-home"></i>首页
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>归档
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/categories">
-                        <i class="fa fa-list"></i>分类
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/tags">
-                        <i class="fa fa-tags"></i>标签
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/aboutme">
-                        <i class="fa fa-user"></i>关于我
-                    </a>
-                </li>
-                
-                
-            </ul>
-        </div>
+    <meta property="og:type" content="website">
+<meta property="og:title" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:url" content="https://www.soyorin.online/page/35/index.html">
+<meta property="og:site_name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="lkl">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="日常">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.soyorin.online/page/35/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/35/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ε=(´ο｀*)))唉，学Java的这辈子有了</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-友链"><a href="/link/" rel="section"><i class="fas fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </header>
-    <div id="gal-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 gal-right" id="mainstay">
-                    
-<div class="alert well fade in" id="gal-issue" role="alert">
-    <!-- TODO 添加关闭公告框功能 -->
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <!-- 这里自行配置公告内容 -->
-    这里是公告内容
-    <br>
-    配置相关说明请看<strong>_config.yml</strong>
-    <!-- 自行配置公告内容结束 -->
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lkl"
+      src="/images/boqi.jpg">
+  <p class="site-author-name" itemprop="name">lkl</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">441</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/soyobat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;soyobat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/" class="post-title-link" itemprop="url">深分页如何解决</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:49:30" itemprop="dateCreated datePublished" datetime="2025-04-27T01:49:30+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-24 15:42:34" itemprop="dateModified" datetime="2025-05-24T15:42:34+08:00">2025-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<div id="article-list">
-     
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
-                    <span>深分页如何解决</span>
-                </a>
-            </h1>
         </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="深分页如何解决">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
-                        <span>深分页如何解决</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="深分页如何解决">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/JavaSE/HashMap/">
-                    <span>HashMap</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/JavaSE/HashMap/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/JavaSE/HashMap/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="HashMap">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/JavaSE/HashMap/">
-                        <span>HashMap</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/JavaSE/HashMap/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="HashMap">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/JavaSE/HashMap/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">
-                    <span>两阶段提交</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="两阶段提交">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">
-                        <span>两阶段提交</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="两阶段提交">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">
-                    <span>bin log 和redo log</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="bin log 和redo log">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">
-                        <span>bin log 和redo log</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="bin log 和redo log">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">
-                    <span>组提交</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="组提交">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">
-                        <span>组提交</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="组提交">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/">
-                    <span>日志顺序</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="日志顺序">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/">
-                        <span>日志顺序</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="日志顺序">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/">
-                    <span>慢查询log</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="慢查询log">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/">
-                        <span>慢查询log</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="慢查询log">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/">
-                    <span>bin log</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="bin log">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/">
-                        <span>bin log</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="bin log">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/">
-                    <span>redo log </span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="redo log ">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/">
-                        <span>redo log </span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="redo log ">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">04月</span>
-        <span class="day">27</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/">
-                    <span>undo log</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="undo log">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/">
-                        <span>undo log</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-04-27
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="undo log">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-</div>
-<!-- 前方最多7个 < 1 2 3 4 5 6 -->
-<!-- 前方超过第7页则分为 < 1 ... (n - 3) (n - 2) (n - 1) n, 此时前面为固定的6个 -->
+      </header>
 
-<!-- 后方最多8个 (n + 1) 到 (n + 7) > -->
-<!-- 如果末页和当前页相差超过7, 此时后面为固定的6个, (n + 1) (n + 2) (n + 3) ... total > -->
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>为什么会造成深分页？</p>
+<p>假如有张百万数据的表，你想通过分页的方式来展示这些数据。当用户请求第1w页数据时，假设</p>
+<p>pagesize&#x3D;10，那么最终是9万9千，10。数据库必须先扫描前9万9千条数据，才能返回第1w页的数据，</p>
+<p>如果你查询返回的字段不在索引中，需要回表很多次，性能明显很低</p>
+<p>怎么优化？</p>
+<p>假设：SELECT c1, c2, cn… FROM table WHERE name &#x3D; “Hollis” LIMIT 1000000,10</p>
+<p>1.子查询+jion优化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SELECT c1, c2, cn...</span><br><span class="line">FROM table</span><br><span class="line">INNER <span class="title function_">JOIN</span> <span class="params">(</span></span><br><span class="line"><span class="params">    SELECT id</span></span><br><span class="line"><span class="params">    FROM table</span></span><br><span class="line"><span class="params">    WHERE name = <span class="string">&quot;Hollis&quot;</span></span></span><br><span class="line"><span class="params">    ORDER BY id</span></span><br><span class="line"><span class="params">    LIMIT <span class="number">1000000</span>, <span class="number">10</span></span></span><br><span class="line"><span class="params">)</span> AS subquery ON table.id = subquery.id</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这样的话就不需要每条记录都回表</p>
+<p>2.子查询+ID过滤</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT c1, c2, cn...</span><br><span class="line">FROM table</span><br><span class="line"><span class="type">WHERE</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span></span><br><span class="line">  AND id &gt;= (SELECT id FROM table <span class="type">WHERE</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;Hollis&quot;</span> ORDER BY id LIMIT <span class="number">1000000</span>, <span class="number">1</span>)</span><br><span class="line">ORDER BY id</span><br><span class="line">LIMIT <span class="number">10</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>缺点就是ID一定得是自增的</p>
+<p>3.记录上一个ID，即游标字段</p>
+<p>4.如果是基于文本的搜索，使用ES</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
 
 
-<div id="gal-pagination" class="clearfix">
-    <ul class="pagination pagination-gal pull-right">
-        
-        <li class="prev">
-            <a href="/page/34/">«</a>
-        </li>
-        
-        
-        <li>
-            <a href="/">1</a>
-        </li>
-        <li>
-            <span>...</span>
-        </li>
-        
-        <li>
-            <a href="/page/32 ">32</a>
-        </li>
-        
-        <li>
-            <a href="/page/33 ">33</a>
-        </li>
-        
-        <li>
-            <a href="/page/34 ">34</a>
-        </li>
-        
-        
-        <li class="current">
-            <span>35</span>
-        </li>
-        
-        
-        <li>
-            <a href="/page/36">36</a>
-        </li>
-        
-        <li>
-            <a href="/page/37">37</a>
-        </li>
-        
-        <li>
-            <a href="/page/38">38</a>
-        </li>
-        
-        <li>
-            <span>...</span>
-        </li>
-        
-        
-        <li class="next">
-            <a href="/page/36/">»</a>
-        </li>
-        
-    </ul>
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/JavaSE/HashMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/JavaSE/HashMap/" class="post-title-link" itemprop="url">HashMap</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:47:20" itemprop="dateCreated datePublished" datetime="2025-04-27T01:47:20+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-05 13:55:41" itemprop="dateModified" datetime="2025-05-05T13:55:41+08:00">2025-05-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<!-- 加上这段代码原因： gitment在首页加载时, 如果找不到对应的控件会报错，此处加上，同时设置为none，防止报错 -->   
+        </div>
+      </header>
 
-                </div>
-                <aside class="col-md-4 gal-left" id="sidebar">
-    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
-<aside id="sidebar-search">
-    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <form class="form-inline clearfix" id="search-form" method="get"
-              action="/search/index.html">
-            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
-            <button class="btn btn-danger btn-gal" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-    </div>
-</aside>
-    <aside id="sidebar-author">
-    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
-        <div class="panel-heading" style="text-align: center">
-            <i class="fa fa-quote-left"></i>
-            lkl
-            <i class="fa fa-quote-right"></i>
-        </div>
-        <div class="author-panel text-center">
-            <img src="/imgs/avatar.jpg" width="140" height="140"
-                 alt="个人头像" class="author-image">
-            <p class="author-description"></p>
-        </div>
-    </div>
-</aside>
-    
-    <aside id="sidebar-recent_comments">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-comments"></i>
-            最新评论
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush"></ul>
-    </div>
-</aside>
-    
-    <!-- 要配置好leancloud才能开启此小工具 -->
     
     
-    <aside id="sidebar-recent_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            近期文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
     
-    
-    <aside id="sidebar-rand_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            随机文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/JUC/%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">强引用、软引用、弱引用、虚引用分别是什么？</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/MySQL/%E6%B7%B1%E5%88%86%E9%A1%B5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">深分页如何解决</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/RabbitMQ/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97/">如何实现延迟队列</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/08/Spring/Spring-Retry/">Spring-Retry</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/07/21/netty/netty%E5%85%A5%E9%97%A8/">netty入门</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/26/%E8%AE%A1%E7%BD%91/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BE%93%E5%85%A5%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88/">浏览器输入网站后发生什么</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/06/03/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B/">TCP三次握手</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/10/%E8%AE%A1%E7%BD%91/tcp%E9%82%A3%E4%BA%9B%E4%BA%8B/%E4%B8%8B/">下</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/14/%E9%A1%B9%E7%9B%AE/AI%E5%AD%A6%E7%94%9F%E5%8F%91%E5%B1%95%E6%80%A7%E8%AF%84%E4%BB%B7%E7%B3%BB%E7%BB%9F/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/">自定义注解</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/24/%E5%AE%9E%E4%B9%A0/%E6%B8%B8%E6%97%8F%E7%BD%91%E7%BB%9C/%E6%96%B0%E7%9A%84%E7%9F%A5%E8%AF%86/akka%E6%A1%86%E6%9E%B6/">akka框架</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
-    
-    
-    <aside id="gal-sets">
-        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-            <ul class="nav nav-pills pills-gal">
+    <div class="post-body" itemprop="articleBody">
+          <p> 快速根据 key 找到 value 的“键值对集合” ，查询和插入平均时间复杂度都是o(1)</p>
+<p>底层数据结构</p>
+<p>1.7为数组+链表</p>
+<p>1.8为数组+红黑树&#x2F;链表</p>
+<p>为什么要用红黑树，为何不一上来就树化？ </p>
+<p>链表太长，会影响查询性能，出现树化意味着被DDoS攻击了，即 被人恶意哈希冲突攻击（构造大量相同</p>
+<p>的hashkey），树化可以缓解这种情况。</p>
+<p>而平衡二叉树在极端情况下也是有这个问题，相当于链表了，红黑树比二叉树好一点，因为<font style="color:rgb(51, 51, 51);">红黑树追求</font></p>
+<p><font style="color:rgb(51, 51, 51);">大致平衡，自平衡效率高。</font></p>
+<p><font style="color:rgb(51, 51, 51);">树化应该是一种偶然现象，链表短的情况下没必要，查询性能很高了，而且链表的占用内存要比树</font></p>
+<p><font style="color:rgb(51, 51, 51);">要少</font></p>
+<p>何时会树化，树化阈值为什么是8？ </p>
+<p><font style="color:#DF2A3F;">数组长度&gt;&#x3D;64 且链表长度&gt;&#x3D;8 就会进行扩容</font></p>
+<p>jdk开发者他们基于大量的实验验证出来的，什么泊松分布，在负载因子为0.75的情况下，链表长度为8</p>
+<p>的概率为0.00006，即选择8是让树化的概率最小</p>
+<p>红黑树何时退化</p>
+<pre><code>- 扩容拆分树时，发现树的元素小于6，也会链表化
+- remove树节点时，发现root,root.left,root.rigth,root.left.left为null（移除前检查），也会链表化
+</code></pre>
+<p>索引计算？为什么数组容量要为2的n次幂</p>
+<p>idnex&#x3D;hash&amp;(size-1)，相当于hash%size，但前提是size为2的n次幂</p>
+<p>这个是为了底层能通过位运算来提高性能，还有一个就是扩容的时候如果index&#x3D;oldCap&amp;(size-1)&#x3D;&#x3D;0，</p>
+<p>说明还在原位，如果不是newIndex&#x3D;oldIndex+oldSize。综上所叙，size为2的幂次方的好处挺多的</p>
+<p>数组容量可以不为2的n次幂吗</p>
+<p>可以的。size为2的n次幂虽然性能比较高，但如果hash全是偶数，运算出来的index就都是偶数，这</p>
+<p>就导致hash分布不均</p>
+<p>若追求更好的hash分布，可以用质数作为容量，这样还不用二次hash</p>
+<p>例如hashTable它的扩容策略就是 oldCap*2+1</p>
+<p>hashmap的容量如何设置？</p>
+<p><img src="/images/004d11d00c0364b9f76b2136ded576b7.png"></p>
+<p>hashCode都有了，为什么还要调用HashMap的hash()方法对hashCode进行二次哈希？为什么用异或？</p>
+<p>jdk1.8中是拿着hashcode()的高16位和低16位进行异或</p>
+<p>jdk1.7中是拿hashcode()多次移位,异或</p>
+<p>用异或是为了扰乱hash，让hash分布更加均匀，只要32位中的一位不同，hash()返回的结果就不同</p>
+<p>put方法流程？1.8和1.7的区别</p>
+<p>1.HashMap为懒加载，即初始化只会初始化负载因子，而不是初始化容量</p>
+<p>2.计算索引（桶下标）</p>
+<p>3.判断索引位置是否为null，为null就创建Node节点插入</p>
+<p>4.不为null，则判断是链表还是树，创建对应的节点走相应的添加or更新。如果是链表达到了树化的</p>
+<p>逻辑，就走树化的逻辑（链表长度&gt;&#x3D;8且数组长度&gt;&#x3D;64）</p>
+<p>5.添加后，判断是否需要扩容</p>
+<p>1.7和1.8的扩容也是有所不同</p>
+<p>1.7扩容时链表节点移动为头插入法，而1.8为尾插法</p>
+<p>1.7是大于阈值且插入的桶没空位才会扩容（懒扩容），1.8是大于阈值就会扩容（主动扩容）</p>
+<p>1.8扩容时计算Node的索引时，会有优化（位置不变+oldCap）。1.7是重新hash</p>
+<p><img src="/images/d289f3cb13fc5f836e4e571fb631188b.png"></p>
+<p>get()方法流程</p>
+<p>1.计算hash值</p>
+<p>2.定位桶索引</p>
+<p>3.通过hash()和equals方法和第一个桶节点比较是否相等，若相等就返回，不相等就进行链表or红黑树的</p>
+<p>查询逻辑</p>
+<p>加载因子为什么为0.75</p>
+<p>在空间和时间查询性能之间能取得较好平衡</p>
+<p>大了，链表长度容易长</p>
+<p>小了，就经常扩容，影响性能</p>
+<p>但其实根据二项分布，0.693是最好的选择，但考虑到size为2的n次幂，故取到了0.75，其实0.695….其</p>
+<p>实也可以，只不过从中位数的角度，0.75是最好的</p>
+<p>多线程下出现的问题</p>
+<p>1.7的时候扩容时为头插入法，就会出现死循环</p>
+<p><img src="/images/9961cd9f9e03f56059912e72f1fa087c.png"></p>
+<p>丢数据</p>
+<p>两个线程同时判断一个桶位置可以插入位置，就插入了，然后就造成数据被覆盖了，而不会走解决</p>
+<p>hash冲突的逻辑</p>
+<p>1.7为什么要采用头插入法</p>
+<p>首先HashMap本身就不是为多线程设计的，头插入法在线程安全的情况下完全是合适的，而且实现起来</p>
+<p>也很简单</p>
+<p>还有就是jdk开发者认为后插入的元素更加热点，放在头节点比较合适</p>
+<p>jdk8为什么采用了尾插入法</p>
+<p>1.jdk8引入的红黑树，那么可以顺便遍历一下链表的元素，统计个数，判断是否需要树化</p>
+<p>2.避免多线程下扩容可能产生的死循环</p>
+<p>key能否为null？key对象有什么要求？ </p>
+<p>HashMap的key可以为null。对象必须实现hashcode()和equals方法，hashcode()是定位，equals是比较</p>
+<p>两者是否相等，并且key的内容必须不能被修改</p>
+<p>hash冲突解决方法</p>
+<p>拉链法：hash冲突时，同一槽位的拉成一条链表，hashmap采用的</p>
+<p>开放寻址法：发生hash冲突时，寻找其他位置，这就保证了一个位置只有一个元素</p>
+<p>线性探测：hash冲突时，往后找，直到找到第一个为null的位置，ThreadLocalMap采用的</p>
+<p>二次探测：跟线性探测类似，只不过往后探测的步长是有规律的，2,4,8,16</p>
+<p>二次hash</p>
 
-                
-                <li>
-                    <a href="/page/35/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/35/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/35/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
-                </li>
-                
-            </ul>
-            <div class="tab-content">
-                
-                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
-    
-</div>
-                
-                
-                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
-    
-</div>
-                
-                
-                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
-    
-    <li>
-        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
-    </li>
-    
-    <li>
-        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
-    </li>
-    
-    <li>
-        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
-    </li>
-    
-</div>
-                
-            </div>
-        </div>
-    </aside>
-    
-</aside>
-            </div>
-        </div>
+      
     </div>
-    <footer id="gal-footer">
-    <div class="container">
-        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
-    </div>
-</footer>
 
-<!-- 回到顶端 -->
-<div id="gal-gotop">
-    <i class="fa fa-angle-up"></i>
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
 </div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" class="post-title-link" itemprop="url">两阶段提交</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:46:27" itemprop="dateCreated datePublished" datetime="2025-04-27T01:46:27+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-20 20:15:11" itemprop="dateModified" datetime="2025-10-20T20:15:11+08:00">2025-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>只有bin log开启的情况下才存在，默认情况下是不存在两阶段提交的</p>
+<p>默认情况下的流程</p>
+<p>把事务更改的数据记录到redo log中，当事务提交时，进入commit阶段，先把redo log的状态变为</p>
+<p>commit。然后根据innodb_flush_log_at_trx_commit有不同的行为</p>
+<p>如果宕机了要回滚，就看看redo log状态是否为commit，如果是就数据恢复。如果是prepare，就根据</p>
+<p>redo log的完整性，看看是否要回滚或者数据恢复</p>
+<p>在开启了redo log和bin log的情况下就需要考虑到两个的一致性了</p>
+<p>1.主节点宕机了，redo写了，但bin log没来得及写入，那么主节点重启数据恢复后，数据就会出现主从</p>
+<p>不一致</p>
+<p>2.主节点宕机，redo没写，但bin log已经写了，那么也会出现主从不一致的情况</p>
+<p>两阶段提交就是为了解决redo log和bin log不一致的情况</p>
+<p>它其实就是分布式事务协议，保证多个逻辑要么都成功，要么都失败</p>
+<p>它把单个事务的提交拆成了两个阶段，一个是 prepare阶段，一个是commit阶段</p>
+<p><img src="/images/923d7f9ce5bc684dbfff4493383e509f.png"></p>
+<p>prepare</p>
+<pre><code>    * 将XID（内部事务XA的ID）写入redo log，并将redo log的事务状态置为prepare。然后将redo log持久化到磁盘（InnoDB_flush_log_trx_id==1）
+</code></pre>
+<p>commit</p>
+<pre><code>    * &lt;font style=&quot;color:rgb(44, 62, 80);&quot;&gt;把 XID 写入到 binlog&lt;/font&gt;，并将其持久化到磁盘 （sync==1）
+    * &lt;font style=&quot;color:rgb(44, 62, 80);&quot;&gt;接着调用引擎层的接口，把redo log对应的事务状态置为commit，这时候不需要持久化，只需要进行write就可以了即存到os的page  cache。因为只有bin log写入成功，&lt;/font&gt;**&lt;font style=&quot;color:rgb(44, 62, 80);&quot;&gt;那么不管redo log的状态是不是commit&lt;/font&gt;**&lt;font style=&quot;color:rgb(44, 62, 80);&quot;&gt;，都是会认为事务已经是执行成功了的&lt;/font&gt;
+</code></pre>
+<p>出现的异常情况</p>
+<p><img src="/images/58181c306ad6989d21b00511ccc48050.png"></p>
+<p>不管是时刻a or b，此时的redo log的状态都为prepare</p>
+<p>MySQL重启后，如果发现redo log的状态为prepare，那么就会拿着redo log的XID去bin log里面寻</p>
+<p>找，是否存在。如果存在，表示bin log已经写入成功，即事务已经执行成功了，那么就做数据恢复</p>
+<p>如果没有，即事务没执行成功，就会做一个事务回滚操作</p>
+<p>ps：事务回滚时redo log会怎么变化？事务回滚redo log也会产生相应数据变更记录</p>
+<p><strong>所以说两阶段提交是以 bin log写入成功为事务提交成功的标识</strong></p>
+<p>两阶段提交有什么缺点吗？</p>
+<p>1.磁盘IO高，会刷两次盘，一次是redo，一次是binlog</p>
+<p>2.锁竞争激烈，早期MySQL，事务只有获取锁，才能进入prepare状态，一直到commit状态才会释放</p>
+<p>虽然加锁完美解决了一致性的问题，但在高并发的情况下性能不太行</p>
+<p>这时候<strong>组提交</strong>就出现了</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log%20%E5%92%8Credo%20log/" class="post-title-link" itemprop="url">bin log 和redo log</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:46:08" itemprop="dateCreated datePublished" datetime="2025-04-27T01:46:08+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-02 19:07:19" itemprop="dateModified" datetime="2025-05-02T19:07:19+08:00">2025-05-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>两者的不同</p>
+<p>适用对象</p>
+<p>写入方式</p>
+<p>日志格式</p>
+<p>用途</p>
+<p>为什么有了 binlog， 还要有 redo log？</p>
+<p>历史遗留问题，早期mysql官方只有binlog日志，且不支持掉电数据恢复。而redo log是InnoDB引擎特有</p>
+<p>的，是为了解决buffer pool脏页丢失的问题，只依靠bin log是不能实现crash safe</p>
+<p>能不能只用redo，不用binlog</p>
+<p>可以的，不考虑主从复制or数据备份的话（即从权限上解决删库跑路的问题），而且bin log默认就是关</p>
+<p>闭的</p>
+<p>为什么binlogcache是线程私有的，而redo log buffer的就是全局共享的呢？</p>
+<p>这是因为一个事务的bin log要求不可以被拆分的，且我们都知道的bin log是用来主从同步的。一个线程</p>
+<p>同时只能执行一个事务，基于这个特性，每个线程就得有一个binlogcache。如果不是的话，到时候在从</p>
+<p>库执行binlog时，每个事务的命令就会交叉在一起，那这样就会破坏原子性了，这显然是不行的。</p>
+<p>而redo log显然就没这个要求</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E7%BB%84%E6%8F%90%E4%BA%A4/" class="post-title-link" itemprop="url">组提交</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:45:50" itemprop="dateCreated datePublished" datetime="2025-04-27T01:45:50+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-03 15:32:09" itemprop="dateModified" datetime="2025-05-03T15:32:09+08:00">2025-05-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>MySQL引入bin log组提交是为了提升两阶段提交过程中，磁盘IO高的问题。它会把多个bin log刷盘合并成一</p>
+<p>个刷盘</p>
+<p><img src="/images/699493bf401101c2db16f0762a8f75a0.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%97%A5%E5%BF%97%E9%A1%BA%E5%BA%8F/" class="post-title-link" itemprop="url">日志顺序</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:45:39" itemprop="dateCreated datePublished" datetime="2025-04-27T01:45:39+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-02 17:34:34" itemprop="dateModified" datetime="2025-05-02T17:34:34+08:00">2025-05-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>先写undo log，修改buffer pool的同时，先记录变更数据到redo log中，然后再写bin log。那么这时候事务</p>
+<p>已经算提交了，不管脏页有没有被刷到磁盘</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/%E6%85%A2%E6%9F%A5%E8%AF%A2log/" class="post-title-link" itemprop="url">慢查询log</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-04-27 01:43:49 / 修改时间：01:43:59" itemprop="dateCreated datePublished" datetime="2025-04-27T01:43:49+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/bin%20log/" class="post-title-link" itemprop="url">bin log</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:43:41" itemprop="dateCreated datePublished" datetime="2025-04-27T01:43:41+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-02 19:00:30" itemprop="dateModified" datetime="2025-05-02T19:00:30+08:00">2025-05-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>用于数据备份和主从复制，默认下是关闭的</p>
+<p>bin log有三种格式</p>
+<p>statement：记录的是sql原句</p>
+<p>row：记录的是哪里变更了xx</p>
+<p>row和statement混合</p>
+<p>怎么刷盘的？</p>
+<p>mysql会先给每个线程分配一块binlog cache，且每个binlog cache都有固定大小binlog_cache_size，如</p>
+<p>超过了这个大小，就会先暂时存到磁盘。虽然每个线程都有，但最终都还是写到同一个bin log里</p>
+<p><img src="/images/2ea765545a14e30f3e5832c162be55c6.png"></p>
+<p>什么时候binlog cache里的内容会写到磁盘？</p>
+<p><img src="/images/7a05a77c740f65bc3c8d27caeb93038c.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/redo%20log%20/" class="post-title-link" itemprop="url">redo log </a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:43:34" itemprop="dateCreated datePublished" datetime="2025-04-27T01:43:34+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-02 17:37:39" itemprop="dateModified" datetime="2025-05-02T17:37:39+08:00">2025-05-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>记录的是事务的更改数据 即某个页的修改，用于保证事务的持久性，就是如果数据库宕机后，可以用于数据</p>
+<p>恢复</p>
+<p>采用了WAL（写前日志，先写日志再写数据），将随机写变成顺序写</p>
+<p>记录格式为物理日志，即记录的是某某地方发生了xx变化</p>
+<p>为什么事务提交后不直接把 Buffer pool 的数据同步到磁盘</p>
+<p>首先你如果直接用bufferpool，可能你就修改一个页中的某条数据，然后就把整个页的数据刷到磁盘里去</p>
+<p>这显然是不合理的，因为数据库内存和磁盘交换的基本单位是页（16kb），所以你每次刷只能刷一整</p>
+<p>页。且这个行为是随机写，效率偏低。而写redo log，一行记录可能就占10多byte，内容少，再加上这</p>
+<p>哥顺序写，性能要比直接刷盘要快得多</p>
+<p>redo log的三种状态</p>
+<p>1.在redo log buffer里</p>
+<p>2.在os的page cache里</p>
+<p>3.在磁盘里</p>
+<p>redo的流程</p>
+<p><img src="/images/fab089f4c876e69ee0507509b60ab34e.png"></p>
+<p>整体流程就是</p>
+<p>1.先看看bufferpool里面有没有数据，没有就去磁盘拉取</p>
+<p>2.这时候先把修改的内容记录到redo log buffer里</p>
+<p>3.在bufferpool里修改页数据</p>
+<p>4.事务提交时，将redo log里的内容追加到redo file里面去</p>
+<p>**磁盘表数据的最终变更是靠 Buffer Pool 中的脏页刷盘实现的，不是 redo log 直接修改的；redo log 的	**</p>
+<p><strong>作用是在崩溃后辅助恢复这些变更</strong></p>
+<p>ps：Redis的AOF是写后日志，先执行Redis的命令，再写日志。为什么？</p>
+<p>这可能跟AOF记录的内容有关，AOF记录的是执行的Redis命令，先执行可以避免记录一些错误的命</p>
+<p>令</p>
+<p>那么为什么redo log要为写前日志了呢</p>
+<p>redo log buffer刷盘时机参数：<code>&lt;font style=&quot;color:rgb(194, 24, 91);background-color:rgb(255, 244, 244);&quot;&gt;innodb_flush_log_at_trx_commit&lt;/font&gt;</code><font style="color:rgb(53, 53, 53);"> 的三种状态</font></p>
+<p><font style="color:rgb(53, 53, 53);">InnoDB_flush_log_at_trx_commit&#x3D;&#x3D;1：每次事务提交时都刷盘，会先把pool里的内容刷到操作系统的文件缓存</font></p>
+<p><font style="color:rgb(53, 53, 53);">系统page cache里去，再刷到磁盘里，这个是默认设置。好处就是能满足ACID的D，因为只有你的redo </font></p>
+<p><font style="color:rgb(53, 53, 53);">log落入磁盘才算事务提交成功，但就是效率低</font></p>
+<p><font style="color:rgb(53, 53, 53);">InnoDB_flush_log_at_trx_commit&#x3D;&#x3D;2：先刷到page cache，再由OS后台线程定期 fsync。操作系统宕机就会</font></p>
+<p><font style="color:rgb(53, 53, 53);">丢失这个定期的间隔的数据，但效率要比上一种高一点  </font></p>
+<p><font style="color:rgb(53, 53, 53);">innodb_flush_log_at_trx_commit&#x3D;&#x3D;0：不刷到page cache,直接由后台线程定期刷到磁盘</font></p>
+<p><img src="/images/1c8dfc642aa6b2fd1c227cd2e2566b86.png"></p>
+<p>怎么选择？从安全性和性能两个方面出发</p>
+<p>redo log写满了怎么办？</p>
+<p>我们都知道redo log是为了解决buffer pool脏页数据丢失的问题（脏页：内存里有，磁盘没有的数据页）；</p>
+<p>因为redo log写日志，它是通过循环写的方式，磁盘里有两文件，什么0和1，一开始从0开始写，写完就到1</p>
+<p>然后再从头开始写覆盖原先数据，前提是原先数据已经全部落入磁盘。那么写满的意思就是redo log记录的变更都还没持久化到磁盘的数据库表（即write pos追上check point了）。</p>
+<p><img src="/images/561d3d8f01e4744c52870381abf0a218.png"></p>
+<p>那么这时候MySQL就会被阻塞，停下来把buffer pool的脏页数据刷到磁盘，并把旧的redo log擦除掉，腾空间出来，mysql才会恢复。（所以说在高并发系统中，适当设置redo log的大小很重要的）</p>
+<p>事务还没提交，redo会被持久化到磁盘吗？ </p>
+<p>是有可能的。</p>
+<p>一般来说有三种情况。</p>
+<p>1.你采用的刷盘策略为0和2，因为它们的刷盘策略是由操作系统后台线程来控制，而不是说你执行完commit</p>
+<p>后才刷盘，那么就存在这种commit前，redo log就被持久化到磁盘</p>
+<p>ps：事务怎么提交？？？ 就是手动命令哦</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">begin;</span><br><span class="line"></span><br><span class="line">commit;//执行到这行，就是提交了</span><br></pre></td></tr></table></figure>
+
+<p>2.采用的刷盘策略为1，也有可能。另一个事务提交时顺便把其他事务在redo log buffer里的redo log也给刷</p>
+<p>到磁盘里</p>
+<p>3.redo log pool满了，达到我们设置的上限的一半了，就会先把里面的内容刷到page cache，但不会落盘，</p>
+<p>还是在磁盘里</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/27/MySQL/%E6%97%A5%E5%BF%97/undo%20log/" class="post-title-link" itemprop="url">undo log</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-27 01:43:24" itemprop="dateCreated datePublished" datetime="2025-04-27T01:43:24+08:00">2025-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-01 20:52:13" itemprop="dateModified" datetime="2025-05-01T20:52:13+08:00">2025-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/%E6%97%A5%E5%BF%97/" itemprop="url" rel="index"><span itemprop="name">日志</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>保证原子性，用于事务回滚</p>
+<p>实现MVCC</p>
+<p>记录的是事务修改前的数据</p>
+<p>它的持久化是靠redolog</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&hellip;</span><a class="page-number" href="/page/45/">45</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/36/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lkl</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/soyobat" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 </body>
-
-<script src="/js/activate-power-mode.js"></script>
-
-<script>
-
-    // 配置highslide
-	hs.graphicsDir = '/js/highslide/graphics/'
-    hs.outlineType = "rounded-white";
-    hs.dimmingOpacity = 0.8;
-    hs.outlineWhileAnimating = true;
-    hs.showCredits = false;
-    hs.captionEval = "this.thumb.alt";
-    hs.numberPosition = "caption";
-    hs.align = "center";
-    hs.transitions = ["expand", "crossfade"];
-    hs.lang.number = '共%2张图, 当前是第%1张';
-    hs.addSlideshow({
-      interval: 5000,
-      repeat: true,
-      useControls: true,
-      fixedControls: "fit",
-      overlayOptions: {
-        opacity: 0.75,
-        position: "bottom center",
-        hideOnMouseOut: true
-      }
-    })
-
-    // 初始化aos
-    AOS.init({
-      duration: 1000,
-      delay: 0,
-      easing: 'ease-out-back'
-    });
-
-</script>
-<script>
-	POWERMODE.colorful = 'true';    // make power mode colorful
-	POWERMODE.shake = 'true';       // turn off shake
-	// TODO 这里根据具体情况修改
-	document.body.addEventListener('input', POWERMODE);
-</script>
-<script>
-    window.slideConfig = {
-      prefix: '/imgs/slide/background',
-      ext: 'jpg',
-      maxCount: '6'
-    }
-</script>
-
-<script src="/js/hs.js"></script>
-<script src="/js/blog.js"></script>
-
-
-
-
 </html>

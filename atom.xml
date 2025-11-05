@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+  
+  <subtitle>ε=(´ο｀*)))唉，学Java的这辈子有了</subtitle>
+  <link href="https://www.soyorin.online/atom.xml" rel="self"/>
+  
+  <link href="https://www.soyorin.online/"/>
+  <updated>2025-10-24T16:38:14.000Z</updated>
+  <id>https://www.soyorin.online/</id>
+  
+  <author>
+    <name>lkl</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>豆包神</title>
+    <link href="https://www.soyorin.online/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/"/>
+    <id>https://www.soyorin.online/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/</id>
+    <published>2025-10-24T16:38:04.000Z</published>
+    <updated>2025-10-24T16:38:14.000Z</updated>
+    
+    
+    
+    
+    <category term="ai 应用相关" scheme="https://www.soyorin.online/categories/ai-%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>prompt生成网站</title>
+    <link href="https://www.soyorin.online/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/"/>
+    <id>https://www.soyorin.online/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/</id>
+    <published>2025-10-23T03:55:13.000Z</published>
+    <updated>2025-10-23T03:55:23.000Z</updated>
+    
+    
+    
+    
+    <category term="ai 应用相关" scheme="https://www.soyorin.online/categories/ai-%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>文件打开和关闭过程</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/</id>
+    <published>2025-10-22T08:40:37.000Z</published>
+    <updated>2025-10-22T13:34:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>当用户进程想打开文件，就像向操作系统申请通行证，通过 open() 系统调用，提供文件名和打开模式。</p><p>内核拿到请求，首先得验证权限，就像门卫一样，检查进程是否有权访问，比如用户ID和组ID是否匹配，权限位是否允许等。 没权限就返回错误，直接拒绝。</p><p>权限过了，内核就要在文件系统里找对应的 inode，就像在档案室里找文件。 如果文件不存在，但打开模式允许创建，就创建一个新的 inode。</p><p>找到 inode 后，内核会在进程的文件描述符表中找个空位，文件描述符就像是借阅卡，每个进程都有自己的卡。</p><p>然后，内核会创建一个文件对象，也叫文件句柄，维护文件的状态信息，比如读写位置。文件对象是系统级的，可以被多个进程共享。</p><p>最后，内核建立连接，将文件描述符指向文件对象，文件对象指向 inode。这样，进程就可以通过文件描述符访问文件了。 open() 成功后，返回文件描述符给用户进程，进程就能用它读写文件了。</p><p>关闭文件也很有意思。进程调用 close()，内核首先验证文件描述符是否有效。</p><p>有效的话，内核把它从进程的文件描述符表中移除，这样这个描述符就能被下次打开文件重用了。同时，内核减少文件对象的引用计数。因为文件对象可能被多个进程共享，只有当引用计数为零时，才会真正释放。</p><p>释放文件对象时，内核会把文件缓冲区的数据写回磁盘，保证数据不丢失，然后释放文件对象占用的内存。 如果这是最后一个指向 inode 的链接，且文件被删除了，内核还会释放 inode 和文件数据块占用的空间。</p><p>总的来说，文件的打开和关闭过程保证了文件访问的安全性、效率以及资源的合理利用。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;当用户进程想打开文件，就像向操作系统申请通行证，通过 open() 系统调用，提供文件名和打开模式。&lt;/p&gt;
+&lt;p&gt;内核拿到请求，首先得验证权限，就像门卫一样，检查进程是否有权访问，比如用户ID和组ID是否匹配，权限位是否允许等。 没权限就返回错误，直接拒绝。&lt;/p&gt;
+&lt;p</summary>
+      
+    
+    
+    
+    <category term="操作系统" scheme="https://www.soyorin.online/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>顺序写为什么这么快？</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/</id>
+    <published>2025-10-22T08:36:48.000Z</published>
+    <updated>2025-10-22T08:38:21.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><font style="color:rgb(31, 41, 55);">顺序写快的原因有很多。</font></p><p><font style="color:rgb(31, 41, 55);">最重要的一个原因则是寻址问题，也就是要找到写入的磁盘空间，而后将磁头移动到对应的位置。很显然，随机写是每一次写入都要重新寻址，而顺序写则是找到一个位置之后就可以连绵不绝写下去。</font></p><p><font style="color:rgb(31, 41, 55);">除了这个最根源的原因以外，还有两个原因：一个是充分利用写缓冲，这也是局部性原理的一个体现。另外一个则是现代的文件系统会有意识地将偏向并且优化顺序写的性能。</font></p><blockquote><h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">简述</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">随机写寻址慢，局部性差，文件系统支持不友好</font></p><h4 id="引导"><a href="#引导" class="headerlink" title="引导"></a><font style="color:rgb(75, 85, 99);background-color:rgb(249, 250, 251);">引导</font></h4><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">局部性原理</font></p></blockquote><p><font style="color:rgb(31, 41, 55);">当然，当下广泛使用的 SSD 也有类似的特性，但是原理上有些区别。这其中比较大的一个差异是虽然 SSD 也要寻址，但是没有机械硬盘那么慢，也不需要挪动磁头。</font></p><p><font style="color:rgb(31, 41, 55);">SSD 顺序写快的原因主要是局部性原理的应用，这源自两方面，一个是 SSD 写入是以页为单位的，也就是你写 1B 还是写入 1KB，都是按照页来写入的。另外一个是 SSD 同样会有缓存，顺序写也能更加好的利用这些缓存。</font></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;顺序写快的原因有很多。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;最重要的一个原因则是寻址问题，也就是要找到写入的磁盘空间，而后将磁头移动到</summary>
+      
+    
+    
+    
+    <category term="操作系统" scheme="https://www.soyorin.online/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>交换区</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/</id>
+    <published>2025-10-22T02:26:10.000Z</published>
+    <updated>2025-10-22T02:27:54.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><font style="color:rgb(31, 41, 55);">交换区是硬盘上的一块特殊区域，用于存储那些当前不使用的内存页，这样可以在物理内存紧张时，将这些页换出到硬盘上，从而释放物理内存供其他进程使用。</font></p><p><font style="color:rgb(31, 41, 55);">交换区的作用是扩展系统的可用内存空间，它允许操作系统在物理内存不足时，将不常用的内存页换出到硬盘上，这样就可以在不增加物理内存的情况下，支持更多的进程运行，提高内存的使用效率。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">所以，显而易见使用交换区会导致性能变差。因此在性能优化里面，一个常见的措施就是尽可能减少交换区的使用。举个例子来说，在使用 Kafka 之类的中间件的时候，我们会将它的最大内存设置为不大于物理内存。一般都是让中间件使用的内存加上操作系统占用的内存，不大于物理内存。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">这样可以确保很少触发换入换出，也就是避免使用交换区。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">当然，类似的另外一个手段是调整 Linux 下的 vm.swapness 的值。例如说调整到 1，也就是尽可能规避使用交换区。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">这两种手段是可以混合使用的。例如说在 Kafka 的服务器上，同时限制住 Kafka 的堆大小，以及 Kafka 所在 Linux 系统的 vm.swapness 参数到一个极小的值，例如说 1。</font></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;交换区是硬盘上的一块特殊区域，用于存储那些当前不使用的内存页，这样可以在物理内存紧张时，将这些页换出到硬盘上，从而释放物理内存供其他进程使用。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&quot;c</summary>
+      
+    
+    
+    
+    <category term="操作系统" scheme="https://www.soyorin.online/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>页面置换算法</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/</id>
+    <published>2025-10-22T02:26:10.000Z</published>
+    <updated>2025-10-22T02:32:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>简单的说就是物理内存页淘汰算法</p><p>它其实就是我们在虚拟内存里面提到的，当物理内存不够的时候，要将一部分物理页的内容写到交换区中。页面替换算法就是用来计算，究竟哪些页应该写到交换区上。</p><p><font style="color:rgb(31, 41, 55);">有很多种算法，每种算法都有自己的特色。</font></p><p><font style="color:rgb(31, 41, 55);">第一种是</font><strong><font style="color:rgb(17, 24, 39);">先进先出（FIFO）算法</font></strong><font style="color:rgb(31, 41, 55);">：这是最简单的页面替换算法。它基于“先进先出”的原则，即最早进入内存的页面将首先被替换。这种算法易于实现，但可能不适合实际的工作负载，因为它不考虑页面的使用频率。</font></p><p><font style="color:rgb(31, 41, 55);">第二种是</font><strong><font style="color:rgb(17, 24, 39);">最近最少使用（LRU）算法</font></strong><font style="color:rgb(31, 41, 55);">：LRU算法认为过去一段时间内最少被使用的页面，在未来的使用概率也相对较低。因此，当需要替换页面时，它会选择最长时间未被使用的页面进行替换。</font></p><p><font style="color:rgb(31, 41, 55);">第三种是</font><strong><font style="color:rgb(17, 24, 39);">最久未使用（LFU）算法</font></strong><font style="color:rgb(31, 41, 55);">：LFU算法是基于页面访问频率来替换页面的。它替换掉访问次数最少的页面，认为这些页面在将来可能也不常被使用。</font></p><p><font style="color:rgb(31, 41, 55);">第四种是</font><strong><font style="color:rgb(17, 24, 39);">最优（OPT）算法</font></strong><font style="color:rgb(31, 41, 55);">：这是一种理想化的算法，但在实际中很难实现。OPT算法在每次页面请求时都会选择将来最长时间内不会被访问的页面进行替换，因此它也被称为“未来导向”的算法。</font></p><p><font style="color:rgb(31, 41, 55);">第五种是</font><strong><font style="color:rgb(17, 24, 39);">时钟（Clock）算法</font></strong><font style="color:rgb(31, 41, 55);">：这是一种简单并且实用的近似算法，用来模拟OPT算法。它通过一个循环的列表来跟踪页面，给每个页面一个“访问位”。当需要替换时，它会检查访问位，如果未被访问过，则替换这个页面；如果已被访问，则重新标记并继续。</font></p><p><font style="color:rgb(31, 41, 55);">第六种是</font><strong><font style="color:rgb(17, 24, 39);">第二次机会（SCR）算法</font></strong><font style="color:rgb(31, 41, 55);">：这是对FIFO算法的一种改进。在FIFO的基础上，每个页面都有一个引用位。如果页面被访问，则设置引用位。在替换页面时，如果页面的引用位是0，则替换；如果是1，则将其置为0并给它“第二次机会”。</font></p><p><font style="color:rgb(31, 41, 55);">第七种是</font><strong><font style="color:rgb(17, 24, 39);">老化（Aging）算法</font></strong><font style="color:rgb(31, 41, 55);">：用于模拟LFU算法，但避免了LFU算法中可能出现的页面饥饿问题。它通过一组位来表示页面的使用情况，并定期右移这些位，以减少旧的使用记录的影响。</font></p><p><font style="color:rgb(31, 41, 55);">第八种是</font><strong><font style="color:rgb(17, 24, 39);">WSClock算法</font></strong><font style="color:rgb(31, 41, 55);">：结合了LRU和Clock算法的特点，使用一个钟表算法的列表来选择可能的页面替换候选，然后检查这些页面的引用位来决定是否替换。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">Linux内核使用了多种页面替换算法的组合，主要是基于LRU的变种，同时考虑了文件页面和匿名页面的不同特性。它不是一个固定的算法，而是根据系统负载和内存使用模式动态调整的策略。随着内核版本的更新，页面替换算法也在不断地得到改进和优化。</font></p><p><font style="color:rgb(31, 41, 55);">进一步来说，LRU 算法虽然简单，但是 LRU 其实深刻反应了计算机的时间局部性和空间局部性，所以在计算机里面应用非常广泛。最典型的就是缓存淘汰算法，比如说本地缓存已经满了，但是还需要继续放入内容，那么就需要淘汰一部分缓存，以腾出空间。</font></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;简单的说就是物理内存页淘汰算法&lt;/p&gt;
+&lt;p&gt;它其实就是我们在虚拟内存里面提到的，当物理内存不够的时候，要将一部分物理页的内容写到交换区中。页面替换算法就是用来计算，究竟哪些页应该写到交换区上。&lt;/p&gt;
+&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 5</summary>
+      
+    
+    
+    
+    <category term="操作系统" scheme="https://www.soyorin.online/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>临界区</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/</id>
+    <published>2025-10-22T01:33:57.000Z</published>
+    <updated>2025-10-22T01:35:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><font style="color:rgb(31, 41, 55);">临界区是指一个访问共享资源（如变量、数据结构、文件等）的程序片段，在这个片段中，多个进程或线程不能同时执行，否则可能会导致数据不一致或竞态条件。</font></p><p><font style="color:rgb(31, 41, 55);">具体来说，临界区有四个特点。</font></p><p><font style="color:rgb(31, 41, 55);">第一个是互斥性，即同一时间只能有一个进程或线程进入临界区，其他进程或线程必须等待；</font></p><p><font style="color:rgb(31, 41, 55);">第二个是有限等待，进程或线程在有限时间内能够进入临界区，不会无限期等待；</font></p><p><font style="color:rgb(31, 41, 55);">第三个是让权等待，即如果进程或线程不能立即进入临界区，它应该释放CPU，让其他进程或线程运行。</font></p><p><font style="color:rgb(31, 41, 55);">第三个是空闲让进，即如果没有进程或线程在临界区中执行，那么请求进入临界区的进程或线程应该被允许进入。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">和临界区这个概念紧密联系的就是并发编程了，比如说可以站在并发编程的角度重新看这四个特性。</font></p><p><font style="color:rgb(31, 41, 55);">互斥性其实不是必须满足的特性。比如说读写锁就没有严格遵循互斥性，读锁本身是允许多个线程加锁的。</font></p><p><font style="color:rgb(31, 41, 55);">而有限等待更多体现为超时控制。最为典型的例子就是在使用并发队列的时候，入队出队都可以增加超时控制，如果要是在时限内都没有操作成功，则返回错误。</font></p><p><font style="color:rgb(31, 41, 55);">让权等待则是体现为如果要是没有拿到锁之类的，就会阻塞，从而让出了 CPU。当然有一些场景下为了优化性能，会引入自旋机制，看看能不能在自旋的时候就获得锁，或者操作成功。</font></p><p><font style="color:rgb(31, 41, 55);">空闲让进则意味着线程或者协程的调度机制，必须要在锁让出的时候，唤醒阻塞的线程或者协程，进一步执行。</font></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;临界区是指一个访问共享资源（如变量、数据结构、文件等）的程序片段，在这个片段中，多个进程或线程不能同时执行，否则可能会导致数据不一致或竞态条件。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&quot;</summary>
+      
+    
+    
+    
+    <category term="操作系统" scheme="https://www.soyorin.online/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>进程调度</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/</id>
+    <published>2025-10-22T01:33:57.000Z</published>
+    <updated>2025-10-22T08:43:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>从理论上来说，有很多种调度策略。</p><p>第一种是先来先服务，也就是按照到达就绪队列的顺序来调度。优点是简单易实现，缺点就是就绪队列尾部的进程可能会出现饥饿。</p><p>第二种是短作业优先。也就是优先调度预计执行时间最短的。优点是可以减少平均等待时间，但是缺点是长作业会饥饿。</p><p>第三种是优先级调度，也就是优先级高的先调度，显然缺点是优先级低的任务可能会饥饿。</p><p>第四种是时间片轮转，也就是说每个进程轮流运行一段时间，到点之后不管有没有结束，都要让出 CPU，显然这种算法公平性比较好。</p><p>第五种是多级反馈队列。简单来说就是分成多个队列，每个队列代表一个优先级。操作系统会动态调整进程的优先级，保证进程都能得到调度。这个算法是一个综合性的算法，综合考虑了非常多的因素，所以总体来说调度效率和公平性都比较好。缺点就是实现会比较复杂。</p><p>第六种是最短时间优先，也就是优先调度剩余执行时间最短的任务。它和短作业优先的区别是，短作业优先考虑的是整个任务的执行时间，而这个算法考虑的是剩余执行时间。</p><p>第七种是保证公平调度，也就是每个用户或者用户组的 CPU 时间是相同的。</p><p>第八种事基于需求调度，也就是根据进程需要的资源来执行调度。</p><p><font style="color:#DF2A3F;">大多数操作系统并不会使用单一的调度策略，而是多种策略混合使用。</font></p><p><font style="color:#DF2A3F;">比如说 Linux 使用的就是所谓的 CFS，完全公平调度策略。它的核心在于确保每个进程都能公平地分享CPU时间。它通过一个叫做虚拟运行时间的东西来决定哪个进程该运行，并且用一个红黑树来管理这些进程。重要的是，它能够动态地调整每个进程的运行时间，确保系统既高效又公平。</font></p><p><font style="color:#DF2A3F;">简而言之，CFS让每个进程都有机会得到CPU的运行时间，而且还能根据实际情况灵活调整</font>。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;从理论上来说，有很多种调度策略。&lt;/p&gt;
+&lt;p&gt;第一种是先来先服务，也就是按照到达就绪队列的顺序来调度。优点是简单易实现，缺点就是就绪队列尾部的进程可能会出现饥饿。&lt;/p&gt;
+&lt;p&gt;第二种是短作业优先。也就是优先调度预计执行时间最短的。优点是可以减少平均等待时间，但是缺点是长</summary>
+      
+    
+    
+    
+    <category term="操作系统" scheme="https://www.soyorin.online/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>CDN</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/</id>
+    <published>2025-10-21T17:02:11.000Z</published>
+    <updated>2025-10-21T17:03:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>CDN（Content Delivery Network），也就是内容分发网络，其实就是在全球不同地区部署了大量“边缘节点”服务器，把网站上的静态资源（比如图片、视频、CSS、JavaScript 等）预先缓存起来。这样，当用户访问这些内容时，就能就近从最接近的节点获得资源，无须每次都回到源站取数据，整个访问过程会变得又快又稳定。</p><p>在具体运作上，用户在访问网站时，首先会通过 DNS 解析域名，CDN 的智能 DNS 根据用户 IP 返回最近的节点地址。</p><p>然后，如果该节点本身已经缓存了用户需要的文件，那就会直接把这些文件提供给用户。要是没有缓存，就会去源站拉取资源，保存到节点里，再把文件返回给用户。等到下次访问时，同一资源就可以直接从缓存里取，进一步提升访问速度。</p><p>有些 CDN 还会采用负载均衡，把不同的请求分配给不同的服务器，这样能避免个别节点负载过高而导致访问变慢。要进一步提速，CDN 系统往往会做包括智能路由（选择更高效的网络路径）、压缩和优化（例如开启 GZIP 或针对图片做无损压缩）等额外处理，通过尽可能减小数据的体积，或者避开网络访问中的拥堵区，让传输效率提升到更高的水平。除此之外，CDN 常常也会提供一定的安全防护功能，例如抵御 DDoS 攻击、提供 Web 应用防火墙（WAF）等，这样不仅能保证性能，还能守护源站不被恶意攻击击破。</p><p>总的来说，CDN通过地理分布的边缘节点、缓存机制和智能调度，把网站和应用的内容有效地送到全球用户手里，既能缩短加载时间，又能抵御突发的大流量冲击，对业务的稳定性和用户体验都有显著的提升效果。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;CDN（Content Delivery Network），也就是内容分发网络，其实就是在全球不同地区部署了大量“边缘节点”服务器，把网站上的静态资源（比如图片、视频、CSS、JavaScript 等）预先缓存起来。这样，当用户访问这些内容时，就能就近从最接近的节点获得资源</summary>
+      
+    
+    
+    
+    <category term="计网" scheme="https://www.soyorin.online/categories/%E8%AE%A1%E7%BD%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>粘包拆包</title>
+    <link href="https://www.soyorin.online/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/"/>
+    <id>https://www.soyorin.online/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/</id>
+    <published>2025-10-21T16:56:50.000Z</published>
+    <updated>2025-10-21T17:01:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>粘包的意思是，发送方发送的多个数据包在接收方被合并成了一个数据包。比如，发送方分别发送了两条消息“Hello”和“World”，但接收方可能一次性收到“HelloWorld”。而拆包则是相反的情况，发送方发送了一条完整的消息，比如“HelloWorld”，但接收方可能分两次接收到“Hello”和“World”。这两种情况都会导致接收方无法正确解析数据。</p><p>TCP 的粘包和拆包问题其实并不是 TCP 本身的缺陷，而是由它的传输特性和应用层协议的交互方式共同导致的。粘包和拆包的产生原因主要有以下几个方面。</p><p>首先，TCP 是一个面向字节流的协议，它只负责把数据可靠地传输到对方，但并不关心数据的边界。数据在传输过程中，TCP 会根据网络状况和缓冲区大小动态调整数据包的大小，这就可能导致粘包或拆包。</p><p>其次，TCP 的 Nagle 算法也会合并多个小数据包以提高传输效率，这也是粘包的一个常见原因。</p><p>还有一种情况是接收方处理数据的速度跟不上发送方的发送速度，导致多个数据包堆积在缓冲区里，一起被读取。</p><p>拆包的原因则更多是因为数据包的大小受限，比如 TCP 的 MSS（最大分段大小）或者网络的 MTU（最大传输单元）。如果发送的数据包超过了这些限制，就会被拆分成多个小包传输。</p><p>要解决粘包和拆包问题，关键在于在应用层定义清晰的数据边界。常见的解决方法有以下几种：</p><p>第一种是消息定长。也就是说，每条消息的长度是固定的，接收方只需要按照固定的长度读取数据就可以了。这种方法实现起来很简单，解析速度也很快，但缺点是灵活性差，无法适应不同长度的消息。</p><p>第二种方法是添加分隔符。在每条消息的末尾加一个特定的分隔符，比如换行符 \n 或者空字符 \0，接收方通过识别分隔符来区分消息。这种方法比较灵活，适合不同长度的消息，但需要确保分隔符不会出现在消息内容中，或者对消息内容进行转义处理。</p><p><font style="color:#DF2A3F;">第三种方法是“消息头 + 消息体”。在每条消息的开头加一个固定长度的字段，用来表示消息的总长度。接收方先读取消息头，知道消息体的长度后，再根据这个长度读取完整的消息。这种方法既灵活又高效，能够准确地确定消息边界，但需要设计好消息头的格式和解析逻辑。</font></p><p>总的来说，粘包和拆包是 TCP 编程中非常常见的问题。为了让应用层能够正确解析消息，必须在应用层设计合适的协议机制，比如固定长度、分隔符或者长度字段的方式。具体选择哪种方法，还是要根据实际的应用场景和需求来决定。</p><p><font style="color:rgb(31, 41, 55);">这种“消息头+消息体”的协议设计模式方式非常常见，比如我之前参与的DBproxy项目中，需要对接MySQL协议。而MySQL协议大体上也遵循这个协议模式。</font></p><font style="color:rgb(10, 10, 10);background-color:rgb(249, 250, 251);">  </font>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;粘包的意思是，发送方发送的多个数据包在接收方被合并成了一个数据包。比如，发送方分别发送了两条消息“Hello”和“World”，但接收方可能一次性收到“HelloWorld”。而拆包则是相反的情况，发送方发送了一条完整的消息，比如“HelloWorld”，但接收方可能分两次</summary>
+      
+    
+    
+    
+    <category term="计网" scheme="https://www.soyorin.online/categories/%E8%AE%A1%E7%BD%91/"/>
+    
+    <category term="TCP和UDP" scheme="https://www.soyorin.online/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/"/>
+    
+    <category term="TCP传输发生粘包or拆包的原因" scheme="https://www.soyorin.online/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>如果已经建立了连接，但是客户端出现故障了怎么办？</title>
+    <link href="https://www.soyorin.online/2025/10/21/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/%E5%A6%82%E6%9E%9C%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E4%BA%86%E8%BF%9E%E6%8E%A5%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F/"/>
+    <id>https://www.soyorin.online/2025/10/21/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/%E5%A6%82%E6%9E%9C%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E4%BA%86%E8%BF%9E%E6%8E%A5%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F/</id>
+    <published>2025-10-21T14:47:08.000Z</published>
+    <updated>2025-10-21T14:47:39.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><font style="color:rgb(31, 41, 55);">这要分成两种情况。</font></p><p><font style="color:rgb(31, 41, 55);">第一种情况是服务端发数据给客户端，因为客户端此时已经崩溃了，所以没办法 ACK 服务端的报文。那么会触发服务端的重试功能，在超过重试上限之后，服务端会判定连接不可用，直接关闭连接。</font></p><p><font style="color:rgb(31, 41, 55);">第二种情况是，服务端和客户端之间没有啥报文要发的，而且开启了保活机制，那么超过保活期限，那么服务端也会关闭连接。</font></p><p><font style="color:rgb(51, 51, 51);">具体来说，TCP 设有一个保活计时器。服务器每收到一次客户端的数据，都会重新复位这个计时器，时间通常是设置为 2 小时。若 2 小时还没有收到客户端的任何数据，服务器就开始重试：每隔 75 分钟发送一个探测报文段，若一连发送 10 个探测报文后客户端依然没有回应，那么服务器就认为连接已经断开了。</font></p><blockquote><p><font style="color:rgb(31, 41, 55);background-color:rgb(249, 250, 251);">服务端最终认定客户端崩了，关闭连接；</font></p></blockquote>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;这要分成两种情况。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;第一种情况是服务端发数据给客户端，因为客户端此时已经崩溃了，所以没办法 ACK</summary>
+      
+    
+    
+    
+    <category term="计网" scheme="https://www.soyorin.online/categories/%E8%AE%A1%E7%BD%91/"/>
+    
+    <category term="TCP和UDP" scheme="https://www.soyorin.online/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>方法区的gc</title>
+    <link href="https://www.soyorin.online/2025/10/21/JVM/%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84gc/"/>
+    <id>https://www.soyorin.online/2025/10/21/JVM/%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84gc/</id>
+    <published>2025-10-21T08:08:45.000Z</published>
+    <updated>2025-10-21T08:08:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>通过可达性分析算法判定对象是否存活： </p><p>通过一系列称为“GC Roots”的根对象作为起始节点集，从这些节点开始，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”，如果某个对象到GC Roots间没有任何引用链相连，或者用图论的话来说就是从GC Roots到这个对象不可达时，则证明此对象是不可能再被使用的。 </p><p>在Java技术体系里面，固定可作为GC Roots的对象包括以下几种： </p><ul><li>在虚拟机栈（栈帧中的本地变量表）中引用的对象，譬如各个线程被调用的方法堆栈中使用到的参数、局部变量、临时变量等 </li><li>在方法区中类静态属性引用的对象，譬如Java类的引用类型静态变量 </li><li>在方法区中常量引用的对象，譬如字符串常量池（String Table）里的引用 </li><li>在本地方法栈中JNI（即通常所说的Native方法）引用的对象 </li><li>Java 虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象 （比如NullPointExcepiton、OutOfMemoryError）等，还有系统类加载器 </li><li>所有被同步锁（synchronized关键字）持有的对象 </li><li>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等。</li></ul><p>在JDK 1.2版之后，Java对引用的概念进行了扩充，将引用分为强引用（Strongly Re-ference）、软引用（Soft Reference）、弱引用（Weak Reference）和虚引用（Phantom Reference）4 种 </p><ul><li>强引用是最传统的“引用”的定义，是指在程序代码之中普遍存在的引用赋值，即类似“Object obj&#x3D;new Object()”这种引用关系。无论任何情况下，只要强引用关系还存在， 垃圾收集器就永远不会回收掉被引用的对象，即使OOM。  </li><li>软引用是用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存，才会抛出内存溢出异常。在JDK 1.2版之后提供了 SoftReference 类来实现软引用。  </li><li>弱引用也是用来描述那些非必须对象，但是它的强度比软引用更弱一些，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。在JDK 1.2版之后提供了 WeakReference 类来实现弱引用。  </li><li>虚引用是最弱的一种引用关系。虚引用和引用队列联合使用，用来追踪对象的回收情况。虚拟机回收对象时，如果发现对象还存在虚引用，会在回收对象后将引用加入到关联的引用队列中。程序可以通过观察引用队列的方式，来感知对象即将被垃圾回收的时机。一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。在JDK 1.2版之后提供了PhantomReference类来实现虚引用。</li></ul><p>对象自救： </p><p>即使在可达性分析算法中判定为不可达的对象，也不是“非死不可”的，这时候它们暂时还处于“缓刑”阶段，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会被第一次标记，随后进行一次筛选，筛选的条件是此对象是否有必要执行finalize()方法。假如对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，那么虚拟机将这两种情况都视为“没有必要执行”，没有必要执行则直接回收。 </p><p>如果这个对象被判定为确有必要执行finalize()方法，那么该对象将会被放置在一个名为F-Queue的队列之中，并在稍后由一条由虚拟机自动建立的、低调度优先级的 Finalizer 线程去执行它们的 finalize() 方法。 </p><p>finalize()方法是对象逃脱死亡命运的最后一次机会，稍后收集器将对F-Queue中的对象进行第二次小规模的标记，如果对象要在finalize()中成功拯救自己——只要重新与引用链上的任何一个对象建立关联即可，譬如把自己（this关键字）赋值给某个类变量或者对象的成员变量，那在第二次标记时它将被移出“即将回收”的集合；如果对象这时候还没有逃脱，那基本上它就真的要被回收了 </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;通过可达性分析算法判定对象是否存活： &lt;/p&gt;
+&lt;p&gt;通过一系列称为“GC Roots”的根对象作为起始节点集，从这些节点开始，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”，如果某个对象到GC Roots间没有任何引用链相连，或者用图论的话来说就是从GC Roo</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://www.soyorin.online/categories/JVM/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>jit</title>
+    <link href="https://www.soyorin.online/2025/10/21/JVM/jit/"/>
+    <id>https://www.soyorin.online/2025/10/21/JVM/jit/</id>
+    <published>2025-10-21T08:05:44.000Z</published>
+    <updated>2025-10-21T08:06:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java 代码首先被编译为字节码（.class），JVM 在运行时通过解释器执行字节码。当某部分的代码被频繁执行时，JIT 会将这些热点代码编译为机器码，以此来提高程序的执行效率。 </p><p>那为什么 JIT 就能提高程序的执行效率呢，解释器不也是将字节码翻译为机器码交给操作系统执行吗？ </p><p>解释器在执行程序时，对于每一条字节码指令，都需要进行一次解释过程，然后执行相应的机器指令。这个过程在每次执行时都会重复进行，因为解释器不会记住之前的解释结果。 </p><p>与此相对，JIT 会将频繁执行的字节码编译成机器码。这个过程只发生一次。一旦字节码被编译成机器码，之后每次执行这部分代码时，直接执行对应的机器码，无需再次解释。 </p><p>除此之外，JIT 生成的机器码更接近底层，能够更有效地利用 CPU 和内存等资源，同时，JIT 能够在运行时根据实际情况对代码进行优化（如内联、循环展开、分支预测优化等），这些优化是在机器码级别上进行的，可以显著提升执行效率。 </p><p>Java 的执行过程分为两步，第一步由 javac 将源码编译成字节码，在这个过程中会进行词法分析、语法分析、语义分析。 </p><p>第二步，解释器会逐行解释字节码并执行，在解释执行的过程中，JVM 会对程序运行时的信息进行收集，在这些信息的基础上，JIT 会逐渐发挥作用，它会把字节码编译成机器码，但不是所有的代码都会被编译，只有被 JVM 认定为热点代码，才会被编译。 </p><p>JVM 中有一个阈值，当方法或者代码块的在一定时间内的调用次数超过这个阈值时就会被认定为热点代码，然后编译存入 codeCache 中。当下次执行时，再遇到这段代码，就会从 codeCache 中直接读取机器码，然后执行，以此来提升程序运行的性能。 </p><p>为什么不一开始就把所有字节码翻译成机器码？ </p><p>首先JVM是运行字节码的，这是他能够跨平台运行的核心，所以必须运行字节码，而运行字节码的过程中，如果遇到一条字节码就把他翻译成机器码并存储下来，这是需要空间存储的，如果是冷门代码，得不偿失 </p><p>JIT优化手段： </p><p>锁消除：如果synchronized锁住的区域经过JIT分析发现不会产生线程安全问题，会把锁消除掉 </p><p>标量替换：某对象没有逃逸出方法，那么这个对象的字段可以拆成标量 </p><p><img src="/images/8a425d0f227c38ded6a383205a81446c.png"></p><p><img src="/images/2093e30797eab0d043c02283ab17b479.png"></p><p>栈上分配：对象没有逃逸出方法，就可以在栈上分配，本质其实是标量替换 </p><p>方法内联：简单的方法可以直接内联到调用处 </p><p><img src="/images/beec7d30d880112eaeb9a8bcb780bd1e.png"></p><p><img src="/images/82bdae0a5289568b737b2f84a2a4808d.png"></p><p>逃逸分析： </p><p>全局逃逸：对象超出方法或线程范围，比如存储在静态字段或者作为方法的返回值 </p><p>参数逃逸：对象被作为参数传毒，但方法调用期间不会全局逃逸 </p><p>无逃逸：对象没有逃逸出方法 </p><p><img src="/images/aa189b0af575ee4ee096d3936cc81878.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Java 代码首先被编译为字节码（.class），JVM 在运行时通过解释器执行字节码。当某部分的代码被频繁执行时，JIT 会将这些热点代码编译为机器码，以此来提高程序的执行效率。 &lt;/p&gt;
+&lt;p&gt;那为什么 JIT 就能提高程序的执行效率呢，解释器不也是将字节码翻译为机器码</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://www.soyorin.online/categories/JVM/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>内存资源</title>
+    <link href="https://www.soyorin.online/2025/10/21/JVM/%E5%86%85%E5%AD%98%E8%B5%84%E6%BA%90/"/>
+    <id>https://www.soyorin.online/2025/10/21/JVM/%E5%86%85%E5%AD%98%E8%B5%84%E6%BA%90/</id>
+    <published>2025-10-21T08:04:45.000Z</published>
+    <updated>2025-10-21T08:04:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>未关闭的资源，如文件、数据库连接、网络连接，使用完后没正确关闭 </p><p>集合是静态的，此时静态集合无法被垃圾回收，里面的对象也无法被回收，例如ThreadLocalMap </p><p>不正确的引用，A-&gt;B，此时B不需要了，但A没取消对B的引用，B无法释放 </p><p>线程池没终止，线程对象无法被回收 </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;未关闭的资源，如文件、数据库连接、网络连接，使用完后没正确关闭 &lt;/p&gt;
+&lt;p&gt;集合是静态的，此时静态集合无法被垃圾回收，里面的对象也无法被回收，例如ThreadLocalMap &lt;/p&gt;
+&lt;p&gt;不正确的引用，A-&amp;gt;B，此时B不需要了，但A没取消对B的引用，B无法释放</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://www.soyorin.online/categories/JVM/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>volatile源码</title>
+    <link href="https://www.soyorin.online/2025/10/21/JUC/juc%E6%BA%90%E7%A0%81/volatile%E6%BA%90%E7%A0%81/"/>
+    <id>https://www.soyorin.online/2025/10/21/JUC/juc%E6%BA%90%E7%A0%81/volatile%E6%BA%90%E7%A0%81/</id>
+    <published>2025-10-21T02:31:23.000Z</published>
+    <updated>2025-10-21T02:31:39.000Z</updated>
+    
+    
+    
+    
+    <category term="JUC" scheme="https://www.soyorin.online/categories/JUC/"/>
+    
+    <category term="juc源码" scheme="https://www.soyorin.online/categories/JUC/juc%E6%BA%90%E7%A0%81/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>集群</title>
+    <link href="https://www.soyorin.online/2025/10/21/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E9%9B%86%E7%BE%A4/"/>
+    <id>https://www.soyorin.online/2025/10/21/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/%E9%9B%86%E7%BE%A4/</id>
+    <published>2025-10-21T00:13:13.000Z</published>
+    <updated>2025-10-21T00:44:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><font style="color:rgb(31, 41, 55);">Redis集群由多个节点组成，每个节点都是一个主从集群。整体结构如下：</font></p><p><img src="/images/26613c7db3af4dedd3af79e48826aabe.png"></p><p><font style="color:rgb(31, 41, 55);">在这种结构之下，现在就会有一个问题，当我存放一个键值对的时候，放哪个节点上？</font></p><p><font style="color:rgb(31, 41, 55);">对此 Redis Cluster 用的是槽映射的解决方案。Redis Cluster 将所有的key 按照 CRC16 算法映射到16384个槽，这些槽会被分配到这些节点上。大多数情况下槽是均匀分配的，但是小部分情况并不会均匀分配。</font></p><p><font style="color:rgb(31, 41, 55);">整个结构如下图：</font></p><p><img src="/images/20cac80ca9ece1209e9b253dec0e7933.png"></p><p><font style="color:rgb(31, 41, 55);">所以 Redis 的高可用就源自两方面：</font></p><ul><li><font style="color:rgb(31, 41, 55);">如果节点内的主节点崩溃了，那么从节点经过主从选举就可以顶上；</font></li><li><font style="color:rgb(31, 41, 55);">如果某个节点全崩溃了，那么还有别的节点可以用。虽然会损失数据，但是不至于完全不可用；</font></li></ul><p>对于sentinel和cluster应该选哪种，单机无瓶颈就选sentinel，单机有瓶颈就选cluster</p><p><font style="color:rgba(0, 0, 0, 0.88);">Redis Cluster 是一个对等结构和主从结构的混合架构。Redis Cluster 由多个节点组成，这些节点之间地位是平等的，也就是说它们构成了一个对等结构。</font></p><p><font style="color:rgba(0, 0, 0, 0.88);">但是从细节上来说，每一个节点都是一个主从集群，也就是说每一个节点都是类似于 Redis Sentinel 模式，并借此来保证高可用。</font></p><p><font style="color:rgba(0, 0, 0, 0.88);">Redis Cluster 借鉴一致性哈希的思想，利用 CRC16 将 key 分散到 16384 个槽（哈希槽就相当于一致性哈希中的虚拟节点）上面，而后再次将这些槽分配给不同的节点。可以平均分，也可以不是平均分。</font></p><p><font style="color:rgba(0, 0, 0, 0.88);">通过这种混合模式，Redis 能有效应对各种问题。</font></p><p><font style="color:rgba(0, 0, 0, 0.88);">首先是从对等结构上来说，就算是某个节点彻底不可用，也不会影响到别的节点，整个集群还是能够提供有损服务的。</font></p><p><font style="color:rgba(0, 0, 0, 0.88);">而从主从结构上来说，通过数据同步和主从选举，这样即便主节点崩溃了， 也能选举出来一个新的从节点顶上。</font></p><p><font style="color:rgb(31, 41, 55);">Redis Cluster 能够撑住极高的并发，并且能够提供极高的可用性，所以已经成了当下大规模分布式系统里面的核心组件。</font></p><blockquote><p> 二、pipeline 是什么</p><p><code>pipeline</code> 是客户端的一种 批量发送命令 的方式：</p><p>它允许客户端一次性把多个命令发到 Redis 服务器，然后 Redis 一次性返回结果。<br>减少了网络往返（RTT），因此性能更高。</p><p>✅ 在单机 Redis 下，pipeline 可以极大提高性能。<br>❌ 但在 Redis Cluster 下，有一个问题：</p></blockquote><p><font style="color:rgb(31, 41, 55);">但是 Redis Cluster 并不是毫无缺点，最大的问题就是难以处理跨槽的问题。</font></p><p><font style="color:rgb(31, 41, 55);">这最典型的例子就是 pipeline。例如说在 pipeline 里面要处理分散在不同槽上的多个 key，那么pipeline 就会返回错误，这需要客户端进行处理。而有些语言的 Redis 客户端其实没有那么智能。</font></p><p><font style="color:rgb(31, 41, 55);">从我个人使用经验上来说，在使用 Redis Cluster 的时候，就要避免跨槽的问题。即便使用 Redis pipeline，如果跨槽其实意义就不大了，毕竟我用 pipeline 就是为了高性能，即便我的客户端能帮我处理跨槽的问题，但是性能还是损耗极大。</font></p><p><font style="color:rgb(31, 41, 55);">所以我即便要操作跨槽的 key，也更加倾向于自己将 key 分组，落到同一个节点上的 key 作为一组，而后分批操作。这样分组之后，用 pipeline 也就没有跨槽的问题了。</font></p><p><font style="color:rgb(31, 41, 55);"></font></p><p><font style="color:rgb(31, 41, 55);">Redis Cluster 这种</font><font style="color:rgb(31, 41, 55);">对等集群和主从集群的混合模式</font><font style="color:rgb(31, 41, 55);">，在别的中间件里面也能看到类似的设计，甚至于可以说现代的大规模分布式软件的高可用都是通过这种设计来保证的。</font></p><p><font style="color:rgb(31, 41, 55);">举个例子来说，Kafka 的一个 Topic 有多个分区，这些分区之间地位是平等的，所以可以看做是对等结构。而每一个分区本身也是一个主从结构，也有数据复制和主从选举。所以Kafka 就算一个分区出问题，或者逻辑分区的主分区出现问题，依旧能够正常对外提供服务。</font></p><p><font style="color:rgb(31, 41, 55);">再举个例子来说，MySQL 的分库分表也可以看做是这种形态。一个逻辑表被分库分表之后，每一个物理表地位都是平等的，也就是可以看做是对等结构。而每一个物理表都是存储在 MySQL 主从集群上的，那么也就是说物理表本身也有主表和从表。通过这种混合模式可以保证极高的可用性。</font></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;font style=&quot;color:rgb(31, 41, 55);&quot;&gt;Redis集群由多个节点组成，每个节点都是一个主从集群。整体结构如下：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/26613c7db3af4dedd3af79e48826aabe</summary>
+      
+    
+    
+    
+    <category term="Redis" scheme="https://www.soyorin.online/categories/Redis/"/>
+    
+    <category term="Redis高可用" scheme="https://www.soyorin.online/categories/Redis/Redis%E9%AB%98%E5%8F%AF%E7%94%A8/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Object方法</title>
+    <link href="https://www.soyorin.online/2025/10/21/JavaSE/Object%E6%96%B9%E6%B3%95/"/>
+    <id>https://www.soyorin.online/2025/10/21/JavaSE/Object%E6%96%B9%E6%B3%95/</id>
+    <published>2025-10-20T16:47:29.000Z</published>
+    <updated>2025-10-20T16:47:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>clone：用于克隆对象 </p><p>equals：用于比较两个对象是否相同 </p><p>getClass：获取到对象的类对象，也就是Class对象 </p><p>hashCode：获取到对象的hash值 </p><p>toString：返回对象的字符串表示形式，一般交给子类重写 </p><p>notify：当对象被当作锁时使用，让出锁使用权，随机唤醒一个阻塞线程 </p><p>notifyAll：同上，但会唤醒所有线程竞争锁 </p><p>wait：当对象被当作锁时使用，让出锁使用权，阻塞等待 </p><p>finalize：用于对象垃圾回收自救，子类重写，将自己和引用链搭上关系，垃圾回收器会调用该方法，搭上关系了就不再清理该对象，但只会调用一次，即如果调用了一次，搭上关系了，后面关系断了，又被垃圾回收器盯上了，那么直接回收，不再给自救的机会。当然也可以用作其它作用，比如清理释放一些资源，当对象被垃圾回收时，finalize中进行一些善后处理，但finalize的调用时机是由垃圾回收器决定的，可能并不会在对象成为垃圾后立马被调用，所以不推荐这种方式，该方法jdk9被标记为过时 </p><p>为什么finalize方法非常不好，非常影响性能？ </p><p>非常不好： </p><p>FinalizerThread是守护线程，代码很有可能还没来得及执行完，线程就结束了，造成资源没有正确释放 </p><p>finalize方法中的异常会被吞掉，不抛出，可能不能判断有没有在释放资源时发送错误 </p><p>影响性能： </p><p>重写了finalize方法的对象在第一次被gc时，不能及时释放内存，需要等待FinalizerThread调用完finalize，第二次gc时才能真正释放内存 </p><p>gc时说明内存本就不足，finalize调用又慢（涉及到队列的移除等操作），finalize中可能还有释放连接资源等耗时操作，不能及时释放内存，这可能会让对象移到老年代（内存担保机制），老年代积累垃圾过多，可能触发full gc </p><p>hashCode依赖的字段最好是不变的，如果易变，可能出现这种情况：把一个对象放入map中，然后更改这个对象的属性，那么这个对象的hashCode也会变，那么再get时，就get不出来了！ </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;clone：用于克隆对象 &lt;/p&gt;
+&lt;p&gt;equals：用于比较两个对象是否相同 &lt;/p&gt;
+&lt;p&gt;getClass：获取到对象的类对象，也就是Class对象 &lt;/p&gt;
+&lt;p&gt;hashCode：获取到对象的hash值 &lt;/p&gt;
+&lt;p&gt;toString：返回对象的字符串表示形式</summary>
+      
+    
+    
+    
+    <category term="JavaSE" scheme="https://www.soyorin.online/categories/JavaSE/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>静态方法为什么不能调用非静态成员？</title>
+    <link href="https://www.soyorin.online/2025/10/20/JavaSE/%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E8%B0%83%E7%94%A8%E9%9D%9E%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%EF%BC%9F/"/>
+    <id>https://www.soyorin.online/2025/10/20/JavaSE/%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E8%B0%83%E7%94%A8%E9%9D%9E%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%EF%BC%9F/</id>
+    <published>2025-10-20T14:51:07.000Z</published>
+    <updated>2025-10-20T15:10:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>静态方法是属于类的，在类加载的时候就会分配内存，可以通过类名直接访问。而非静态成员属于实例对象，只有在对象实例化之后才存在，需要通过类的实例对象去访问。 </li><li>在类的非静态成员不存在的时候静态方法就已经存在了，此时调用在内存中还不存在的非静态成员，属于非法操作。</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;静态方法是属于类的，在类加载的时候就会分配内存，可以通过类名直接访问。而非静态成员属于实例对象，只有在对象实例化之后才存在，需要通过类的实例对象去访问。 &lt;/li&gt;
+&lt;li&gt;在类的非静态成员不存在的时候静态方法就已经存在了，此时调用在内存中还不存在的非静态成员，</summary>
+      
+    
+    
+    
+    <category term="JavaSE" scheme="https://www.soyorin.online/categories/JavaSE/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>为什么成员变量有默认值而局部变量没有</title>
+    <link href="https://www.soyorin.online/2025/10/20/JavaSE/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E6%9C%89%E9%BB%98%E8%AE%A4%E5%80%BC%E8%80%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E6%B2%A1%E6%9C%89/"/>
+    <id>https://www.soyorin.online/2025/10/20/JavaSE/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E6%9C%89%E9%BB%98%E8%AE%A4%E5%80%BC%E8%80%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E6%B2%A1%E6%9C%89/</id>
+    <published>2025-10-20T14:50:58.000Z</published>
+    <updated>2025-10-20T15:22:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>先不考虑变量类型，如果没有默认值会怎样？变量存储的是内存地址对应的任意随机值，程序读取该值运行会出现意外。 </p><p>默认值有两种设置方式：手动和自动，根据第一点，没有手动赋值一定要自动赋值。那么编译器是希望我们手动赋值，还是帮我们自动赋值呢？我觉得应该是前者，因为这能很好让我们程序员在写代码的时候先初始化再使用一个变量，很清楚的知道使用一个变量时，它的值是多少，这才是比较好的规范。 </p><p>所以成员变量和局部变量都应该是没有默认值的，我们需要先手动赋值，再使用变量。 </p><p>对于编译器（javac）来说，局部变量没手动赋值很好判断，因为就在一个方法代码块中。没有手动赋值可以直接报错。 </p><p>而成员变量可能是运行时手动赋值，编译器不知道在哪个方法就被赋值了，甚至在哪个地方可能反射给它赋值，这就无法判断是先使用还是先赋值初始化，而误报“没默认值”又会影响用户体验（都tm运行了你和我说我代码有问题？为什么编译不帮我检查出来？），所以采用自动赋默认值 </p><p>kotlin就得强制赋值</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;先不考虑变量类型，如果没有默认值会怎样？变量存储的是内存地址对应的任意随机值，程序读取该值运行会出现意外。 &lt;/p&gt;
+&lt;p&gt;默认值有两种设置方式：手动和自动，根据第一点，没有手动赋值一定要自动赋值。那么编译器是希望我们手动赋值，还是帮我们自动赋值呢？我觉得应该是前者，因为这</summary>
+      
+    
+    
+    
+    <category term="JavaSE" scheme="https://www.soyorin.online/categories/JavaSE/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>字符串常量池</title>
+    <link href="https://www.soyorin.online/2025/10/20/JavaSE/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/"/>
+    <id>https://www.soyorin.online/2025/10/20/JavaSE/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/</id>
+    <published>2025-10-20T14:50:34.000Z</published>
+    <updated>2025-10-20T16:09:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>字符串常量池在运行时常量池中，jdk7开始字符串常量池则被移入到堆中，就是说jdk7开始字符串常量池和常量池分开了。 </p><p>当在双引号””中有字面量时，就会在串池创建一个该对象，如出现“a”，就会在串池中有个”a”，又如String s &#x3D; “b”；那么串池中就有个”b”，这里注意，除了后面说的一种特殊情况，<u>其它正常来说只要在双引号有字面量，就会在串池创建对象</u>，如String s &#x3D; new String(“c”)；这里既有双引号，又有关键字new，就会在串池和堆中分别创建”c”和一个字符串对象”c”，这句话创建了两个对象！但s的引用是指向堆中的字符串对象。</p><p>当要在串池中创建对象时，会去检查串池中有没有该对象，没有才创建，如String s1 &#x3D; “a”;String s2 &#x3D; “a”，则s1和s2的地址是一样的，都是指向串池中的”a”，但如果是String s1 &#x3D; new String(“a”);String s2 &#x3D; new String(“a”)，则s1和s2的地址是不一样的，因为两者分别指向堆中的两个不同的字符串对象，当然，在创建s1的时候在串池中创建”a”，但创建s2时发现串池中已经有”a”了，就不会再创建。 </p><p>字符串拼接有两种，一种是字符串常量拼接，另一种是字符串变量拼接。当加号+左右都是常量时才是常量拼接，当出现一个变量或加号左右都是变量时就是变量拼接 </p><p>编译器在编译期间（javac）会先把所有常量拼接好，换句话说class文件中只有变量拼接。<u>先说字符串常量拼接吧，字符串常量拼接原理是编译器优化</u>，如有String s1 &#x3D; “ab”；String s2 &#x3D; “a” + “b”；这里s2是由两个常量拼接来的，在编译器这句话就会变成String s2 &#x3D; “ab”；也就是说在class文件就没有”a”和”b”了，这就是之前说的特殊情况，java文件中的双引号中有字面量，但不会在串池中创建对象，因为被编译器优化了，实际上在class文件中没有”a”和”b”，故这里s1和s2都是串池中的”ab”，是同一个串池对象。 </p><p>再说字符串变量拼接，字符串变量拼接原理是StringBuilder，就是说有String s1 &#x3D; “a”；String s2 &#x3D; “b”；String s3 &#x3D; s1 +s2；那么这句话本质其实是，String s3 &#x3D; new StringBuilder().append(“a”).append(“b”).toString()；可以理解为String s3 &#x3D; new String(“ab”)，但这里不会往串池中放入”ab”，因为这是拼接后的结果，class文件中没有”ab”。最终结果是：串池中有”a”,”b”，堆中有个字符串对象”ab”，过程中出现了个StringBuilder对象。当然，串池从jdk7开始也是在堆中，但只是堆单独划出的一部分，没有和堆融合。再补充一点，被final修饰的变量可以当常量处理。 </p><p>那么，String s &#x3D; new String(“a”) + new String(“b”)；这句话创建了几个对象呢，首先有双引号，双引号中有字面量”a”,”b”，所以会在串池中创建两个对象”a”,”b”，因为还有两个new，所以会在堆中创建两个字符串对象，对象的值也分别为”a”,”b”，但和串池中的不是同一个，一个在串池，一个在堆中。又因为这是字符串变量拼接，所以还有new一个StringBuilder对象，最后结果是String s &#x3D; new String(“ab”)；又在堆中创建了一个字符串对象”ab”，所以一句话总共创建了六个对象，串池中”a”,”b”，堆中”a”,”b”,”ab”还有一个StringBuilder。 </p><p>String s &#x3D; new String(“a”) +”a”+”b”；这句话创建了几个对象？5个（串池中a，ab，堆中a，aab，stringBuilder） </p><p>intern方法会将一个字符串对象主动放入串池： </p><ul><li>如果串池中已经有这个字符串：</li></ul><p>那么就不会再放入，并返回串池中该对象的引用。 </p><ul><li>如果串池中没有该字符串： <ul><li>jdk7以前：<font style="background-color:#FBDE28;">新建一个字符串对象放入串池</font>，也就是说串池和堆中的对象不是同一个，然后会返回串池里的那个的引用。 </li><li>jdk7开始：把堆中的引用放入串池，即串池和堆中的对象是同一个，方法返回串池中的引用。即这里串池中的地址，堆中的地址和返回的地址是同一个，都源自于堆中的那个对象。</li></ul></li></ul><p>比如有String s1 &#x3D; “a”；String s2 &#x3D; s1.intern()；那么s1&#x3D;&#x3D;s2的，因为串池中已经有”a”了，intern()返回的是串池中的引用。 </p><p>再比如String s1 &#x3D; new String(“a”) + new String(“b”)；String s2 &#x3D; s1.intern()，在jdk7以前，s1 !&#x3D; s2，因为intern是串池中创建新的对象，两个”ab”是不同的；jdk7开始s1&#x3D;&#x3D;s2，因为<font style="background-color:#FBDE28;">intern是把堆中的地址放入串池</font>，串池和堆中的”ab”是同一个对象。 </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;字符串常量池在运行时常量池中，jdk7开始字符串常量池则被移入到堆中，就是说jdk7开始字符串常量池和常量池分开了。 &lt;/p&gt;
+&lt;p&gt;当在双引号””中有字面量时，就会在串池创建一个该对象，如出现“a”，就会在串池中有个”a”，又如String s &amp;#x3D; “b”；那么</summary>
+      
+    
+    
+    
+    <category term="JavaSE" scheme="https://www.soyorin.online/categories/JavaSE/"/>
+    
+    
+  </entry>
+  
+</feed>

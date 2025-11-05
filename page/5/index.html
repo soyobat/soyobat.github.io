@@ -1,1299 +1,1275 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="author" content="lkl">
-    
-    
-    
-    
-    
-    
-    <title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
-    <link href="https://www.soyorin.online" rel="prefetch" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
 
-    
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/aos.css">
-<link rel="stylesheet" href="/css/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-<script src="/js/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/main.css">
 
-    
-<script src="/js/bootstrap.min.js"></script>
 
-    
-<script src="/js/aos.js"></script>
 
-    
-<script src="/js/highslide/highslide-full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-    
-<link rel="stylesheet" href="/js/highslide/highslide.css">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.soyorin.online","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":10,"width":280,"onmobile":true},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac","show_result":true},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night eighties"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <style type="text/css">
-        @media (max-width: 768px) {
-            body {
-                background-color: #f0f0f0;
-                background: url('/imgs/xsbg.gif');
-                background-attachment: fixed;
-            }
-        }
-    </style>
-    
-    <!--<script type="text/javascript">
-      if (document.images) {
-        var avatar = new Image();
-        avatar.src = '/imgs/avatar.jpg'
-        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
-        var previewsPreLoad = []
-        for(var i = 0; i < length; i++) {
-          previewsPreLoad.push(new Image())
-          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
-        }
-      }
-    </script>-->
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <!-- 背景轮播图功能 -->
-    <section class="hidden-xs">
-    <ul class="cb-slideshow">
-        <li><span>天若</span></li>
-        <li><span>有情</span></li>
-        <li><span>天亦老</span></li>
-        <li><span>我为</span></li>
-        <li><span>长者</span></li>
-        <li><span>续一秒</span></li>
-    </ul>
-</section>
-    <!-- 欧尼酱功能, 谁用谁知道 -->
-    
-    <header class="navbar navbar-inverse" id="gal-header">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target=".bs-navbar-collapse"
-                    aria-expanded="false">
-                <span class="fa fa-lg fa-reorder"></span>
-            </button>
-            <a href="https://www.soyorin.online">
-                
-                <style>
-                    #gal-header .navbar-brand {
-                        height: 54px;
-                        line-height: 24px;
-                        font-size: 28px;
-                        opacity: 1;
-                        background-color: rgba(0,0,0,0);
-                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
-                    }
-                </style>
-                <!-- 这里使用文字(navbar_text or config.title) -->
-                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
-                
-            </a>
-        </div>
-        <div class="collapse navbar-collapse bs-navbar-collapse">
-            <ul class="nav navbar-nav" id="menu-gal">
-                
-                
-                <li class="">
-                    <a href="/">
-                        <i class="fa fa-home"></i>首页
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>归档
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/categories">
-                        <i class="fa fa-list"></i>分类
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/tags">
-                        <i class="fa fa-tags"></i>标签
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/aboutme">
-                        <i class="fa fa-user"></i>关于我
-                    </a>
-                </li>
-                
-                
-            </ul>
-        </div>
+    <meta property="og:type" content="website">
+<meta property="og:title" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:url" content="https://www.soyorin.online/page/5/index.html">
+<meta property="og:site_name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="lkl">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="日常">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.soyorin.online/page/5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/5/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ε=(´ο｀*)))唉，学Java的这辈子有了</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-友链"><a href="/link/" rel="section"><i class="fas fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </header>
-    <div id="gal-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 gal-right" id="mainstay">
-                    
-<div class="alert well fade in" id="gal-issue" role="alert">
-    <!-- TODO 添加关闭公告框功能 -->
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <!-- 这里自行配置公告内容 -->
-    这里是公告内容
-    <br>
-    配置相关说明请看<strong>_config.yml</strong>
-    <!-- 自行配置公告内容结束 -->
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lkl"
+      src="/images/boqi.jpg">
+  <p class="site-author-name" itemprop="name">lkl</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">441</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/soyobat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;soyobat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">Linux内存管理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-23 20:23:44" itemprop="dateCreated datePublished" datetime="2025-09-23T20:23:44+08:00">2025-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-22 09:32:29" itemprop="dateModified" datetime="2025-10-22T09:32:29+08:00">2025-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<div id="article-list">
-     
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">23</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-                    <span>Linux内存管理</span>
-                </a>
-            </h1>
         </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="Linux内存管理">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-                        <span>Linux内存管理</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-23
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="Linux内存管理">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">19</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/">
-                    <span>什么是Kafka的重平衡机制？</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="什么是Kafka的重平衡机制？">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/">
-                        <span>什么是Kafka的重平衡机制？</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-19
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="什么是Kafka的重平衡机制？">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">19</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/19/kafka/ISR/">
-                    <span>ISR</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/19/kafka/ISR/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/19/kafka/ISR/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview3.jpg" alt="ISR">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/19/kafka/ISR/">
-                        <span>ISR</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-19
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/19/kafka/ISR/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="ISR">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/19/kafka/ISR/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">19</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/">
-                    <span>Kafka的保存流程 ？ 副本同步相关的HW 、 LEO?</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="Kafka的保存流程 ？ 副本同步相关的HW 、 LEO?">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/">
-                        <span>Kafka的保存流程 ？ 副本同步相关的HW 、 LEO?</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-19
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="Kafka的保存流程 ？ 副本同步相关的HW 、 LEO?">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">19</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/">
-                    <span>为什么使用双端队列？</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="为什么使用双端队列？">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/">
-                        <span>为什么使用双端队列？</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-19
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="为什么使用双端队列？">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">19</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/">
-                    <span>bfs</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="bfs">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/">
-                        <span>bfs</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-19
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="bfs">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">19</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/">
-                    <span>dfs</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="dfs">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/">
-                        <span>dfs</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-19
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="dfs">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">18</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">
-                    <span>TCP函数</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="TCP函数">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">
-                        <span>TCP函数</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-18
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="TCP函数">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">18</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/">
-                    <span>有没有遇到过跨域的问题。你知道跨域是啥意思？</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="有没有遇到过跨域的问题。你知道跨域是啥意思？">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/">
-                        <span>有没有遇到过跨域的问题。你知道跨域是啥意思？</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-18
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="有没有遇到过跨域的问题。你知道跨域是啥意思？">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">18</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">
-                    <span>TCP 协议通信排查工具</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="TCP 协议通信排查工具">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">
-                        <span>TCP 协议通信排查工具</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-18
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="TCP 协议通信排查工具">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-</div>
-<!-- 前方最多7个 < 1 2 3 4 5 6 -->
-<!-- 前方超过第7页则分为 < 1 ... (n - 3) (n - 2) (n - 1) n, 此时前面为固定的6个 -->
+      </header>
 
-<!-- 后方最多8个 (n + 1) 到 (n + 7) > -->
-<!-- 如果末页和当前页相差超过7, 此时后面为固定的6个, (n + 1) (n + 2) (n + 3) ... total > -->
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>函数 malloc&#x2F;calloc&#x2F;realloc，free</p>
+<p>封装得太好，内存对于程序员来说就是一黑箱操作</p>
+<p>内存碎片问题很烦</p>
+<p>随机的bug大概率跟 内存有关系</p>
+<p>如何避免内存碎片的产生？</p>
+<p>内存池。</p>
+<p>第一个版本，分配的块用链表串起来</p>
+<p>分配：找到一个flag&#x3D;0的块就使用，没有就新建</p>
+<p>释放：</p>
+<p><img src="/images/35a7c97ec976d850c4266001eeab7b95.png"></p>
+<p>第二个版本，解决第一个版本的缺点：内存利用率以及查找性能问题</p>
+<p>比链表查找效率高的组件：rbtree,skiplist,btree,hash</p>
+<p><img src="/images/2d8ba119ba9ed624562263367bb3b86a.png"></p>
+<p>根据大小查找 key为内存大小</p>
+<p><img src="/images/e6e6810d77d6384dc76aed046b3ff0dd.png"></p>
+<p><img src="/images/70fb023c35d49782aa1360f47e04ef37.png"></p>
+<p>以下做法buffer出不了while循环</p>
+<p><img src="/images/ea2d2ab1adf890cda3cf9fefa80edcbd.png"></p>
+<p>以下做法会出现大量的1k 内存块</p>
+<p><img src="/images/2600021df1aed1f71e0ed923e751b29d.png"></p>
+<p>解决以上问题，需要引入大块拆成大块，小块拆成大块的做法</p>
+<p><img src="/images/c9700dca4241e56658f5e036fc23d485.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
 
 
-<div id="gal-pagination" class="clearfix">
-    <ul class="pagination pagination-gal pull-right">
-        
-        <li class="prev">
-            <a href="/page/4/">«</a>
-        </li>
-        
-        
-        
-        <li>
-            <a href="/">1</a>
-        </li>
-        
-        <li>
-            <a href="/page/2 ">2</a>
-        </li>
-        
-        <li>
-            <a href="/page/3 ">3</a>
-        </li>
-        
-        <li>
-            <a href="/page/4 ">4</a>
-        </li>
-        
-        
-        <li class="current">
-            <span>5</span>
-        </li>
-        
-        
-        <li>
-            <a href="/page/6">6</a>
-        </li>
-        
-        <li>
-            <a href="/page/7">7</a>
-        </li>
-        
-        <li>
-            <a href="/page/8">8</a>
-        </li>
-        
-        <li>
-            <span>...</span>
-        </li>
-        
-        
-        <li class="next">
-            <a href="/page/6/">»</a>
-        </li>
-        
-    </ul>
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/19/kafka/%E4%BB%80%E4%B9%88%E6%98%AFKafka%E7%9A%84%E9%87%8D%E5%B9%B3%E8%A1%A1%E6%9C%BA%E5%88%B6%EF%BC%9F/" class="post-title-link" itemprop="url">什么是Kafka的重平衡机制？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-19 17:26:55 / 修改时间：17:36:38" itemprop="dateCreated datePublished" datetime="2025-09-19T17:26:55+08:00">2025-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<!-- 加上这段代码原因： gitment在首页加载时, 如果找不到对应的控件会报错，此处加上，同时设置为none，防止报错 -->   
+        </div>
+      </header>
 
-                </div>
-                <aside class="col-md-4 gal-left" id="sidebar">
-    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
-<aside id="sidebar-search">
-    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <form class="form-inline clearfix" id="search-form" method="get"
-              action="/search/index.html">
-            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
-            <button class="btn btn-danger btn-gal" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-    </div>
-</aside>
-    <aside id="sidebar-author">
-    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
-        <div class="panel-heading" style="text-align: center">
-            <i class="fa fa-quote-left"></i>
-            lkl
-            <i class="fa fa-quote-right"></i>
-        </div>
-        <div class="author-panel text-center">
-            <img src="/imgs/avatar.jpg" width="140" height="140"
-                 alt="个人头像" class="author-image">
-            <p class="author-description"></p>
-        </div>
-    </div>
-</aside>
-    
-    <aside id="sidebar-recent_comments">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-comments"></i>
-            最新评论
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush"></ul>
-    </div>
-</aside>
-    
-    <!-- 要配置好leancloud才能开启此小工具 -->
     
     
-    <aside id="sidebar-recent_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            近期文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
     
-    
-    <aside id="sidebar-rand_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            随机文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">Excutor框架</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/25/Codetop%E5%88%B7%E9%A2%98/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/">滑动窗口</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/25/MySQL/bufferpool%EF%BC%9F/">bufferpool？</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/05/JVM/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/08/31/kafka/%E5%86%99MQ%E7%9A%84Consumer%E6%97%B6%E4%BC%9A%E8%80%83%E8%99%91%E5%93%AA%E4%BA%9B%E7%82%B9/">写MQ的Consumer时会考虑哪些点?</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/08/15/%E6%89%8B%E5%86%99%E7%B3%BB%E5%88%97/%E6%89%8B%E5%86%99%E6%97%B6%E9%97%B4%E8%BD%AE/">手写时间轮</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/MySQL/%E9%94%81/%E8%A1%A8%E7%BA%A7%E9%94%81/">表级锁</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/13/JVM/jvm%E6%BA%90%E7%A0%81/int%E5%8F%AF%E6%95%B0%E5%A4%A7%E5%BE%AA%E7%8E%AF%E4%BA%8B%E6%95%85/">int可数大循环事故</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/23/Redis/%E4%BA%8B%E5%8A%A1/redis%E4%BA%8B%E5%8A%A1/">redis事务</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/02/%E9%A1%B9%E7%9B%AE/%E8%87%AA%E7%A0%94%E7%BD%91%E5%85%B3/%E7%BD%91%E5%85%B3%E5%BC%B9%E5%8A%9B%E8%AE%BE%E8%AE%A1/%E5%BC%B9%E5%8A%9B%E8%AE%BE%E8%AE%A1%E7%AF%87%E4%B9%8B%E2%80%9C%E9%99%90%E6%B5%81%E8%AE%BE%E8%AE%A1%E2%80%9D/">弹力设计篇之“限流设计”</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
-    
-    
-    <aside id="gal-sets">
-        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-            <ul class="nav nav-pills pills-gal">
+    <div class="post-body" itemprop="articleBody">
+          <p>它是指当我们的Consumer数量发生变动时，kafka会重新分配topic partition给Consumer，以保证每个</p>
+<p>Consumer的分区数量尽可能均衡</p>
+<p>简单地说就是实现消费者负载均衡</p>
+<p><img src="/images/ac4b3fc9238dd541c7978d9c84900e29.png"></p>
+<p>重平衡的3个触发机制：</p>
+<p>1、Consumer数量发送变化</p>
+<p>2、订阅的partition发生变化</p>
+<p>3、订阅的topic发生变化</p>
+<p>当kafka集群要出发重平衡机制时，大致的步骤</p>
+<ol>
+<li>暂停消费</li>
+<li>计算分区分配方案</li>
+<li>通知消费者</li>
+<li>重新飞陪分区</li>
+<li>恢复消费</li>
+</ol>
+<p>重平衡会造成 Consumer的 STW，我们应该尽量避免触发它</p>
 
-                
-                <li>
-                    <a href="/page/5/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/5/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/5/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
-                </li>
-                
-            </ul>
-            <div class="tab-content">
-                
-                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
-    
-</div>
-                
-                
-                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
-    
-</div>
-                
-                
-                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
-    
-    <li>
-        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
-    </li>
-    
-    <li>
-        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
-    </li>
-    
-    <li>
-        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
-    </li>
-    
-</div>
-                
-            </div>
-        </div>
-    </aside>
-    
-</aside>
-            </div>
-        </div>
+      
     </div>
-    <footer id="gal-footer">
-    <div class="container">
-        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
-    </div>
-</footer>
 
-<!-- 回到顶端 -->
-<div id="gal-gotop">
-    <i class="fa fa-angle-up"></i>
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
 </div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/19/kafka/ISR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/19/kafka/ISR/" class="post-title-link" itemprop="url">ISR</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-19 17:10:10 / 修改时间：17:22:09" itemprop="dateCreated datePublished" datetime="2025-09-19T17:10:10+08:00">2025-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>ISR，In-Sync Replicas 同步副本拿到意思</p>
+<p>在每个kafka中，每个topic partition可以有多个replica。ISR是与Leader replica保持同步的follower</p>
+<p>replica集合</p>
+<p>可以说ISR机制就是确保数据的可靠性和一致性的</p>
+<p>当消息被sender线程发送后，它会先被写入Leader副本，然后再由follower主动轮询Leader同步消息</p>
+<p>只有ISR中的所有副本成功接收到并确认了消息后，主副本才会认为消息已经成功提交</p>
+<h2 id="ISR列表维护"><a href="#ISR列表维护" class="headerlink" title="ISR列表维护"></a>ISR列表维护</h2><p>什么时候follower会被移除出ISR列表</p>
+<p><font style="color:rgb(51, 51, 51);background-color:rgb(243, 244, 244);">replica.lag.max.messages</font></p>
+<p>在0.9x之前是，表示follower落后Leader这个数就会被移除</p>
+<p>这个就有大问题，如果高并发场景，Leader一下子收到几万条消息，那么所有follower都会被驱逐</p>
+<p>在0.9x后，</p>
+<p>新增了<font style="color:rgb(51, 51, 51);background-color:rgb(243, 244, 244);">replica.lag.max.ms</font></p>
+<p>表示follower的LEO一直落后Leader超过这个replica.lag.max.ms时间，才会被移除出境</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/19/kafka/Kafka%E7%9A%84%E4%BF%9D%E5%AD%98%E6%B5%81%E7%A8%8B%20%EF%BC%9F%20%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84HW%20%E3%80%81%20LEO/" class="post-title-link" itemprop="url">Kafka的保存流程 ？ 副本同步相关的HW 、 LEO?</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-19 16:22:52 / 修改时间：17:09:57" itemprop="dateCreated datePublished" datetime="2025-09-19T16:22:52+08:00">2025-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="HW"><a href="#HW" class="headerlink" title="HW"></a>HW</h2><p>高水平位，用于控制哪些消息是对Consumer可读的。<font style="color:rgb(59, 67, 81);">一</font><strong><font style="color:rgb(59, 67, 81);">个普通消费者只能“看到”Leader副本上介于Log </font></strong></p>
+<p><strong><font style="color:rgb(59, 67, 81);">Start Offset和HW（不含）之间的所有消息</font></strong><font style="color:rgb(59, 67, 81);">。follower同步完消息后会更新HW</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">也就是说在HW之前的数据都是已经被所有的Follower所同步，比较安全</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">HW取自于所有follower副本的 LEO</font></p>
+<h2 id="LEO"><a href="#LEO" class="headerlink" title="LEO"></a>LEO</h2><p><font style="color:rgb(59, 67, 81);">Log End Offset。消息的末尾偏移，表示</font><strong><font style="color:rgb(59, 67, 81);">日志下一条待插入消息的位移值</font></strong><font style="color:rgb(59, 67, 81);">。比如当时log文件里有10条</font></p>
+<p><font style="color:rgb(59, 67, 81);">日志，位移值从0开始，那么，第10条消息的位移值就是9。此时，LEO &#x3D; 10。</font></p>
+<h2 id="follower故障："><a href="#follower故障：" class="headerlink" title="follower故障："></a><font style="color:rgb(17, 17, 17);background-color:rgb(253, 253, 253);">follower故障：</font></h2><p>follower长时间没和Leader同步，就会被提出ISR（follower同步集合）。待follower恢复后，会读取本地的H</p>
+<p>W，然后截取Log上大于HW的部分，进行同步。当该follower的LEO大于HW，即代表follower追上Leader就</p>
+<p>会重新加入ISR</p>
+<h2 id="Leader故障"><a href="#Leader故障" class="headerlink" title="Leader故障"></a>Leader故障</h2><p>Leader故障后，由Controller从 ISR中选取一个follower成为新的Leader。之后为了保证多个follower副本数</p>
+<p>剧一致性，<strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">其余的follower会将log中高于新Leader的LEO的部分截掉</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">，然后从新的Leader同步数据</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);"></font></p>
+<p>比如一个Leader现在有 3个follower，F1：读到了3，F2：读到了5，F3：读到了4。此时HW&#x3D;min()&#x3D;3</p>
+<p>然后这时候Leader宕机了，F1成为了新的Leader，F2就会丢弃3-5的消息，F4丢弃4-5的消息</p>
+<p>那如果F2成为了Leader呢？F1和F2就不会丢？</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/19/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97%EF%BC%9F/" class="post-title-link" itemprop="url">为什么使用双端队列？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-19 15:44:10" itemprop="dateCreated datePublished" datetime="2025-09-19T15:44:10+08:00">2025-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-09 23:52:18" itemprop="dateModified" datetime="2025-10-09T23:52:18+08:00">2025-10-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>双端队列区别于普通的队列，可以直接往队列头塞元素，这样可以满足分区内数据有序性，再尝试发送。</p>
+<p>DQ由<font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">RecordAccumulator维护</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">一个topic里的partition都会对应一个DQ</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    ：:方法内容</span></span><br><span class="line"><span class="comment">    -&gt; ： 方法调用方法</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"></span><br><span class="line">sendProducerRequest():</span><br><span class="line">    <span class="comment">//回调</span></span><br><span class="line">    <span class="type">RequestCompletionHandler</span> <span class="variable">callback</span> <span class="operator">=</span> response -&gt; handleProduceResponse(response, recordsByPartition, time.milliseconds());</span><br><span class="line">    -&gt;</span><br><span class="line">    handleProduceResponse() -&gt;</span><br><span class="line">        completeBatch() :</span><br><span class="line">            <span class="keyword">if</span> (canRetry(batch, response, now)) &#123;</span><br><span class="line">                <span class="comment">//......</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment">//消息从新入队    </span></span><br><span class="line">                reenqueueBatch(batch, now);</span><br><span class="line">            &#125;</span><br><span class="line">            reenqueueBatch: <span class="built_in">this</span>.accumulator.reenqueue(batch, currentTimeMs);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Re-enqueue the given record batch in the accumulator. In Sender.completeBatch method, we check</span></span><br><span class="line"><span class="comment">* whether the batch has reached deliveryTimeoutMs or not. Hence we do not do the delivery timeout check here.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reenqueue</span><span class="params">(ProducerBatch batch, <span class="type">long</span> now)</span> &#123;</span><br><span class="line">    batch.reenqueued(now);</span><br><span class="line">    Deque&lt;ProducerBatch&gt; deque = getOrCreateDeque(batch.topicPartition);</span><br><span class="line">    <span class="keyword">synchronized</span> (deque) &#123;</span><br><span class="line">        <span class="keyword">if</span> (transactionManager != <span class="literal">null</span>)</span><br><span class="line">            insertInSequenceOrder(deque, batch);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            deque.addFirst(batch);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/bfs/" class="post-title-link" itemprop="url">bfs</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-19 02:01:47" itemprop="dateCreated datePublished" datetime="2025-09-19T02:01:47+08:00">2025-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-14 21:01:29" itemprop="dateModified" datetime="2025-10-14T21:01:29+08:00">2025-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Codetop%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">Codetop刷题</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="除法求值"><a href="#除法求值" class="headerlink" title="除法求值"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/evaluate-division"><font style="color:rgb(64, 158, 255);">除法求值</font></a></h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/19/Codetop%E5%88%B7%E9%A2%98/dfs/" class="post-title-link" itemprop="url">dfs</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-19 02:01:35" itemprop="dateCreated datePublished" datetime="2025-09-19T02:01:35+08:00">2025-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-17 15:33:28" itemprop="dateModified" datetime="2025-10-17T15:33:28+08:00">2025-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Codetop%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">Codetop刷题</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="必看"><a href="#必看" class="headerlink" title="必看"></a>必看</h2><p>回溯模版的解释</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//向数组中的每个整数前添加 &#x27;+&#x27; 或 &#x27;-&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对于每个节点两种选择： + or -。不能硬套模版</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">fun dfs():</span></span><br><span class="line"><span class="comment">    for(int i = 0; i &lt; nums.length; i++)&#123;</span></span><br><span class="line"><span class="comment">        add</span></span><br><span class="line"><span class="comment">        dfs</span></span><br><span class="line"><span class="comment">        delete</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">以上是因为每个节点都有多选择 比如 排列，组合</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="岛屿数量-289"><a href="#岛屿数量-289" class="headerlink" title="岛屿数量[289]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/number-of-islands"><font style="color:rgb(64, 158, 255);">岛屿数量</font></a>[<font style="color:rgb(96, 98, 102);background-color:rgb(244, 247, 251);">289</font>]</h2><p>思路：</p>
+<p>1. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="type">int</span> [][]direct=&#123;&#123;<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">1</span>&#125;,&#123;-<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,-<span class="number">1</span>&#125;&#125;;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">numIslands</span><span class="params">(<span class="type">char</span>[][] grid)</span> &#123;</span><br><span class="line">        <span class="type">int</span> res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;grid.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;grid[<span class="number">0</span>].length;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][j]==<span class="string">&#x27;1&#x27;</span>)&#123;</span><br><span class="line">                  res++;</span><br><span class="line">                  dfs(grid,i,j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">char</span> [][]grid,<span class="type">int</span> x,<span class="type">int</span> y)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(x&lt;<span class="number">0</span>||y&lt;<span class="number">0</span>||x&gt;=grid.length||y&gt;=grid[<span class="number">0</span>].length)&#123;</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(grid[x][y]==<span class="string">&#x27;0&#x27;</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//用海水把陆地淹掉，相当于valid数组的作用</span></span><br><span class="line">            grid[x][y]=<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">           <span class="comment">//四个方向</span></span><br><span class="line">           <span class="type">int</span> nextX=x+direct[i][<span class="number">0</span>];</span><br><span class="line">           <span class="type">int</span> nextY=y+direct[i][<span class="number">1</span>];</span><br><span class="line">           dfs(grid,nextX,nextY);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@週刊少年 时间复杂度BFS会低一点，空间复杂度感觉DFS会好一点（但是要考虑递归调用的堆栈的空间就不好说了）</p>
+<p>被问到深度优先和广度优先的差别、计算时间空间复杂度<br>面试用BFS写出来了，然后让我用并查集再写一个，字节</p>
+<font style="color:rgb(140, 140, 140);">  
+  
+</font>
+
+<h2 id="全排列-277"><a href="#全排列-277" class="headerlink" title="全排列[277]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/permutations"><font style="color:rgb(64, 158, 255);">全排列</font></a>[277]</h2><p>思路：</p>
+<ol>
+<li>used[i] 用于控制 防止走回头路</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; res=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">//存放路径</span></span><br><span class="line">    List&lt;Integer&gt; path=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">permute</span><span class="params">(<span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">        <span class="type">boolean</span> []used=<span class="keyword">new</span> <span class="title class_">boolean</span>[nums.length];</span><br><span class="line">        dfs(nums,used);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> []nums,<span class="type">boolean</span> []used)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(path.size()==nums.length)&#123;</span><br><span class="line">          res.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(path));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">           <span class="keyword">if</span>(used[i])&#123;</span><br><span class="line">              <span class="keyword">continue</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">//递归</span></span><br><span class="line">           path.add(nums[i]);</span><br><span class="line">           used[i]=<span class="literal">true</span>;</span><br><span class="line">           dfs(nums,used);</span><br><span class="line">           <span class="comment">//回溯</span></span><br><span class="line">           path.removeLast();</span><br><span class="line">           used[i]=<span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间复杂度：</p>
+<table>
+<thead>
+<tr>
+<th>问题类型</th>
+<th>是否需要 <code>startIndex</code></th>
+<th>控制逻辑</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>排列 Permutation</strong></td>
+<td>❌ 不需要</td>
+<td>用 <code>used[i]</code> 防止重复选</td>
+<td><code>[1,2]</code> vs <code>[2,1]</code> 都算不同</td>
+</tr>
+<tr>
+<td><strong>组合 Combination</strong></td>
+<td>✅ 必须</td>
+<td>用 <code>startIndex</code> 防止重复，为了防止来回选，必须 <strong>保证后面的选择只能从当前元素后面开始</strong>。</td>
+<td><code>[1,2]</code> 和 <code>[2,1]</code> 视为相同</td>
+</tr>
+</tbody></table>
+<h2 id="全排列-II-57"><a href="#全排列-II-57" class="headerlink" title="全排列 II[57]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/permutations-ii/">全排列 II</a>[57]</h2><p>去重版的全排列 I，用HashSet存结果集即可</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="课程表-56"><a href="#课程表-56" class="headerlink" title="课程表[56]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/course-schedule/"><font style="color:rgb(10, 132, 255);">课程表</font></a>[56]</h2><p>思路：</p>
+<ol>
+<li>spring</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="comment">//k：</span></span><br><span class="line">    Map&lt;Integer, List&lt;Integer&gt;&gt; graph = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    Set&lt;Integer&gt; wait = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();      <span class="comment">// 当前正在修的课程（类似 wait 集合）</span></span><br><span class="line">    Set&lt;Integer&gt; completed = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;(); <span class="comment">// 已确认可修完的课程（类似缓存）</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">canFinish</span><span class="params">(<span class="type">int</span> numCourses, <span class="type">int</span>[][] prerequisites)</span> &#123;</span><br><span class="line">        <span class="comment">// 构建依赖图</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;numCourses;i++) graph.put(i, <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span>[] pre : prerequisites) graph.get(pre[<span class="number">1</span>]).add(pre[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历所有课程</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;numCourses;i++)</span><br><span class="line">            <span class="keyword">if</span>(!completed.contains(i) &amp;&amp; !dfs(i)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> course)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(wait.contains(course)) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 当前路径已出现 → 有环</span></span><br><span class="line">        <span class="keyword">if</span>(completed.contains(course)) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// 已确认可完成</span></span><br><span class="line"></span><br><span class="line">        wait.add(course); <span class="comment">// 加入 wait 集合（正在修）</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> next : graph.get(course)) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!dfs(next)) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 依赖课程不可修完 → 当前也不可修</span></span><br><span class="line">        &#125;</span><br><span class="line">        wait.remove(course);       <span class="comment">// 移出 wait 集合</span></span><br><span class="line">        completed.add(course);     <span class="comment">// 加入已完成缓存</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="交错字符串-27"><a href="#交错字符串-27" class="headerlink" title="交错字符串[27]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/interleaving-string">交错字符串</a>[27]</h2><h2 id="单词拆分-64"><a href="#单词拆分-64" class="headerlink" title="单词拆分[64]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/word-break"><font style="color:rgb(64, 158, 255);">单词拆分</font></a>[<font style="color:rgb(96, 98, 102);background-color:rgb(241, 246, 252);">64</font>]</h2><p>思路：</p>
+<p>DFS + 记忆化搜索</p>
+<p><strong>还是得把回溯树给画出来，才清晰易懂！！！（明天来搞）</strong></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/word-break/solutions/302779/shou-hui-tu-jie-san-chong-fang-fa-dfs-bfs-dong-tai/"><strong>https://leetcode.cn/problems/word-break/solutions/302779/shou-hui-tu-jie-san-chong-fang-fa-dfs-bfs-dong-tai/</strong></a></p>
+<p>竟然可以记忆化，说明可以转成DP</p>
+<p>判断可能性大概率是 DP</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    Boolean []memory ;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">wordBreak</span><span class="params">(String s, List&lt;String&gt; wordDict)</span> &#123;</span><br><span class="line">        memory = <span class="keyword">new</span> <span class="title class_">Boolean</span>[s.length()];</span><br><span class="line">        <span class="keyword">return</span> dfs(s, <span class="number">0</span>, wordDict);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//leetcode7</span></span><br><span class="line">    <span class="comment">//leet code </span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">dfs</span><span class="params">(String s,<span class="type">int</span> startIndex,List&lt;String&gt; wordDict)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(startIndex == s.length()) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(memory[startIndex] != <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> memory[startIndex];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(String word: wordDict)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">nextStartIndex</span> <span class="operator">=</span> startIndex + word.length();</span><br><span class="line">            <span class="keyword">if</span>(nextStartIndex &gt; s.length())&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//startsWith：s中startIndex开头的子串是否以word开头</span></span><br><span class="line">            <span class="keyword">if</span>(s.startsWith(word, startIndex) &amp;&amp; dfs(s,nextStartIndex,wordDict))&#123;</span><br><span class="line">                memory[startIndex] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        memory[startIndex] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="电话号码的字母组合-19"><a href="#电话号码的字母组合-19" class="headerlink" title="电话号码的字母组合[19]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number"><font style="color:rgb(64, 158, 255);">电话号码的字母组合</font></a>[<font style="color:rgb(96, 98, 102);background-color:rgb(240, 246, 253);">19</font>]</h2><p>思路：</p>
+<ol>
+<li>回溯，最基础的题了。可以细想一下这个递归，最容易的一次</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[abc]</span><br><span class="line"></span><br><span class="line">[iop]</span><br><span class="line">交叉相乘，笛卡尔集</span><br><span class="line"></span><br><span class="line">排列何尝不是一种算 笛卡尔集合</span><br><span class="line">[a b c]</span><br><span class="line">[a b c]</span><br><span class="line">[a b c]</span><br><span class="line">abb 只不过递归的集合不断为自己本身</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; t.get(tIndex).length(); i++) &#123;</span><br><span class="line">    path.append(t.get(tIndex).charAt(i));</span><br><span class="line">    dfs(tIndex + <span class="number">1</span>);</span><br><span class="line">    path.deleteCharAt(path.length() - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    Map&lt;Integer, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>();</span><br><span class="line">    List&lt;String&gt; t = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">    List&lt;String&gt; res = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">path</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;String&gt; <span class="title function_">letterCombinations</span><span class="params">(String digits)</span> &#123;</span><br><span class="line">        map.put(<span class="number">1</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        map.put(<span class="number">2</span>, <span class="string">&quot;abc&quot;</span>);</span><br><span class="line">        map.put(<span class="number">3</span>, <span class="string">&quot;def&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>, <span class="string">&quot;ghi&quot;</span>);</span><br><span class="line">        map.put(<span class="number">5</span>, <span class="string">&quot;jkl&quot;</span>);</span><br><span class="line">        map.put(<span class="number">6</span>, <span class="string">&quot;mno&quot;</span>);</span><br><span class="line">        map.put(<span class="number">7</span>, <span class="string">&quot;pqrs&quot;</span>);</span><br><span class="line">        map.put(<span class="number">8</span>, <span class="string">&quot;tuv&quot;</span>);</span><br><span class="line">        map.put(<span class="number">9</span>, <span class="string">&quot;wxyz&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">char</span> c : digits.toCharArray()) &#123;</span><br><span class="line">            t.add(map.get(c - <span class="string">&#x27;0&#x27;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        dfs(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> tIndex)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (path.length() == t.size()) &#123;</span><br><span class="line">            res.add(path.toString());</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; t.get(tIndex).length(); i++) &#123;</span><br><span class="line">            path.append(t.get(tIndex).charAt(i));</span><br><span class="line">            dfs(tIndex + <span class="number">1</span>);</span><br><span class="line">            path.deleteCharAt(path.length() - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除无效的括号-18"><a href="#删除无效的括号-18" class="headerlink" title="删除无效的括号[18]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-invalid-parentheses/">删除无效的括号</a>[<font style="color:rgb(96, 98, 102);background-color:rgb(238, 245, 254);">18</font>]</h2><p>思路</p>
+<ol>
+<li>将左右括号 -+化</li>
+<li>对于path，则在参数中update</li>
+</ol>
+<p><img src="/images/af77def7ff4117c7ddefae75aad932e9.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    Set&lt;String&gt; res = <span class="keyword">new</span> <span class="title class_">HashSet</span>();</span><br><span class="line">    <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    String s;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="comment">//最大路径长度</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">maxPathLen</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> List&lt;String&gt; <span class="title function_">removeInvalidParentheses</span><span class="params">(String _s)</span> &#123;</span><br><span class="line">        <span class="comment">//左右括号</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">l</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        s = _s;</span><br><span class="line">        n = s.length();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span> c: s.toCharArray())&#123;</span><br><span class="line">            <span class="keyword">if</span>(c == <span class="string">&#x27;(&#x27;</span>) l++;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(c == <span class="string">&#x27;)&#x27;</span>) r++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//max：最大括号数（单括号）</span></span><br><span class="line">        max = Math.max(l, r);</span><br><span class="line">        dfs(<span class="number">0</span>, <span class="string">&quot;&quot;</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>(res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 遍历 _s 字符串，记录有效路径</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> curCharIndex 当前遍历的字符下标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> path 遍历时的路径（括号组合字符串）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score 分数，用于标记左右括号的得分，左则+1，右则-1</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> curCharIndex, String path, <span class="type">int</span> score)</span>&#123;</span><br><span class="line">        <span class="comment">//不合法情况，0 &lt;= score &lt;= max </span></span><br><span class="line">        <span class="keyword">if</span>(score &lt; <span class="number">0</span> || score &gt; max) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//当下标等于字符串长度，即遍历完时，则说明搜索完成，保存合法结果到 set</span></span><br><span class="line">        <span class="keyword">if</span>(curCharIndex == n)&#123;</span><br><span class="line">            <span class="comment">//只有score == 0结果才合法，并且当前路径长度要大于最大路径子串的长度才记录或者更新</span></span><br><span class="line">            <span class="comment">//小于最长路径子串就不用更新了</span></span><br><span class="line">            <span class="keyword">if</span>(score == <span class="number">0</span> &amp;&amp; path.length() &gt;= maxPathLen)&#123;</span><br><span class="line">                <span class="comment">//为什么要有这一步，因为题目要求 删除最小数量的无效括号，换句话说，就是你结果集里的合法字符串要为最长的</span></span><br><span class="line">                <span class="comment">//如果有更长的了，就把前面的clear掉</span></span><br><span class="line">                <span class="keyword">if</span>(path.length() &gt; maxPathLen) res.clear();</span><br><span class="line">                </span><br><span class="line">                <span class="comment">//更新最大路径子串</span></span><br><span class="line">                maxPathLen = path.length();</span><br><span class="line">                res.add(path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//当前字符</span></span><br><span class="line">        <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> s.charAt(curCharIndex);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//对于( ) 都有选和不选两种选择</span></span><br><span class="line">        <span class="keyword">if</span>(c == <span class="string">&#x27;(&#x27;</span>)&#123; <span class="comment">// 选左括号，score + 1；不选score不变</span></span><br><span class="line">            dfs(curCharIndex + <span class="number">1</span>, path + c, score + <span class="number">1</span>);</span><br><span class="line">            dfs(curCharIndex + <span class="number">1</span>, path, score);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(c == <span class="string">&#x27;)&#x27;</span>)&#123;<span class="comment">// 选左括号，score - 1；不选score不变</span></span><br><span class="line">            dfs(curCharIndex + <span class="number">1</span>, path + c, score - <span class="number">1</span>);</span><br><span class="line">            dfs(curCharIndex + <span class="number">1</span>, path, score);</span><br><span class="line">        &#125;<span class="comment">//选正确字符不变</span></span><br><span class="line">        <span class="keyword">else</span> dfs(curCharIndex + <span class="number">1</span>, path + c, score);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="戳气球"><a href="#戳气球" class="headerlink" title="戳气球"></a>戳气球</h2><p>思路</p>
+<ol>
+<li>dfs + 回溯，有一个n层的数组，然后我往下走，戳当前i节点，并在下次递归之前把当前节点置为 -1，防止重复选，curLevel &#x3D;&#x3D; n时更新结果。但超时，得进行记忆化</li>
+</ol>
+<p>回溯树：</p>
+<p><img src="/images/bd7111c2b00e192f9a799670488458e4.jpeg" alt="画板"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">maxCoins</span><span class="params">(<span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">        n = nums.length;</span><br><span class="line">        dfs(nums, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> curLevel, <span class="type">int</span> curCoin)</span>&#123;</span><br><span class="line">        <span class="comment">//回溯：一个n层的数组，我们从第一层走到底n层</span></span><br><span class="line">        <span class="comment">//nums[i] = -1来防止 重复选</span></span><br><span class="line">        <span class="comment">//为什么不是startIndex，这个主要是决定 选元素只能从startINdex后开始选，而不能往回选，对于组合这种 1 2和 2 1是一样的</span></span><br><span class="line">        <span class="keyword">if</span>(curLevel == n)&#123;</span><br><span class="line">            res = Math.max(res, curCoin);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] == -<span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">int</span> <span class="variable">midQ</span> <span class="operator">=</span> nums[i];</span><br><span class="line">            <span class="comment">//左测的气球编号</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">lQ</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">            <span class="comment">//右侧的气球编号</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">rQ</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">l</span> <span class="operator">=</span> i - <span class="number">1</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> i + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span>(l &gt;= <span class="number">0</span> &amp;&amp; nums[l] == -<span class="number">1</span>)&#123;</span><br><span class="line">                l--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(l &lt; <span class="number">0</span>) lQ = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> lQ = nums[l];</span><br><span class="line">            <span class="keyword">while</span>(r &lt; nums.length &amp;&amp; nums[r] == -<span class="number">1</span>)&#123;</span><br><span class="line">                r++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(r &gt;= nums.length) rQ = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> rQ = nums[r];</span><br><span class="line">            <span class="type">int</span> <span class="variable">add</span> <span class="operator">=</span> lQ * midQ * rQ;</span><br><span class="line">            nums[i] = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//右侧的气球</span></span><br><span class="line">            dfs(nums, curLevel + <span class="number">1</span>, curCoin + add);</span><br><span class="line">            nums[i] = midQ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间复杂度 &#x3D; O(n! × n) </p>
+<ol start="2">
+<li>dp，dp[i][j] 表示 i 到 j能获得的最大金币</li>
+<li>dp[i][j] &#x3D; 区间内的最大。那么dp[i][i + len] &#x3D; res;</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">maxCoins</span><span class="params">(<span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="comment">// 创建一个辅助数组，并在首尾各添加1，方便处理边界情况</span></span><br><span class="line">        <span class="type">int</span>[] temp = <span class="keyword">new</span> <span class="title class_">int</span>[n+<span class="number">2</span>];</span><br><span class="line">        temp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        temp[n+<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            temp[i+<span class="number">1</span>] = nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[n+<span class="number">2</span>][n+<span class="number">2</span>];</span><br><span class="line">        <span class="comment">// len表示开区间长度</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> len=<span class="number">3</span>; len&lt;=n+<span class="number">2</span>; len++)&#123;</span><br><span class="line">            <span class="comment">// i表示开区间左端点</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;=n+<span class="number">2</span>-len; i++)&#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>; </span><br><span class="line">                <span class="comment">// k为开区间内的索引</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> i+<span class="number">1</span>; k&lt;i+len-<span class="number">1</span>; k++)&#123;</span><br><span class="line">                    <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> dp[i][k];</span><br><span class="line">                    <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> dp[k][i+len-<span class="number">1</span>];</span><br><span class="line">                    <span class="comment">//dp[i][j] 表示 i 到 j能获得的最大金币</span></span><br><span class="line">                    <span class="comment">//(i....k) k (k.... i + len -1)</span></span><br><span class="line">                    res = Math.max(res, left + temp[i]*temp[k]*temp[i+len-<span class="number">1</span>] + right);</span><br><span class="line">                &#125;</span><br><span class="line">                dp[i][i+len-<span class="number">1</span>] = res;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">0</span>][n+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="目标和-22"><a href="#目标和-22" class="headerlink" title="目标和[22]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/target-sum"><font style="color:rgb(64, 158, 255);">目标和</font></a>[22]</h2><p>思路</p>
+<ol>
+<li>DFS</li>
+<li>每个节点两种选择 + or -</li>
+</ol>
+<p>比较简单的回溯，和普通的回溯的区别，就是在循环过程中，如果是像组合排列这些题，就需要往后遍历找，即树的宽度不定，而这题则树宽为 1，每次直接一个数递归下去即可，不用循环。</p>
+<font style="color:rgb(140, 140, 140);">  
+</font>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findTargetSumWays</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span> &#123;</span><br><span class="line"></span><br><span class="line">        dfs(nums, target, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target, <span class="type">int</span> numIndex, <span class="type">int</span> sum)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(numIndex == nums.length)&#123;</span><br><span class="line">            <span class="keyword">if</span>(target == sum) res++;</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//向数组中的每个整数前添加 &#x27;+&#x27; 或 &#x27;-&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//对于每个节点两种选择： + or -。不能硬套模版</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        fun dfs():</span></span><br><span class="line"><span class="comment">            for(int i = 0; i &lt; nums.length; i++)&#123;</span></span><br><span class="line"><span class="comment">                add</span></span><br><span class="line"><span class="comment">                dfs</span></span><br><span class="line"><span class="comment">                delete</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">        以上是因为每个节点都有多选择 比如 排列，组合</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        dfs(nums, target, numIndex + <span class="number">1</span>, sum + nums[numIndex]);</span><br><span class="line">        dfs(nums, target, numIndex + <span class="number">1</span>, sum - nums[numIndex]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/1f20a6addcd5634e79749da3186bc8e5.png"></p>
+<h2 id="路径总和-II-75"><a href="#路径总和-II-75" class="headerlink" title="路径总和 II[75]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/path-sum-ii/"><font style="color:rgb(10, 132, 255);">路径总和 II</font></a>[75]</h2><p>题目：</p>
+<p><strong>求叶子节点到根节点 路径和 为target的路径</strong></p>
+<p>思路：</p>
+<ol>
+<li>dfs 回溯。</li>
+<li>注意！！！ 叶子结点定义，root.left &#x3D;&#x3D; null &amp;&amp; root.right &#x3D;&#x3D; null</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">pathSum</span><span class="params">(TreeNode root, <span class="type">int</span> targetSum)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>(res);</span><br><span class="line">        dfs(root, targetSum, <span class="number">0</span>, <span class="keyword">new</span> <span class="title class_">ArrayList</span>());</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(TreeNode root, <span class="type">int</span> targetSum, <span class="type">int</span> sum, List&lt;Integer&gt; path)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// if (sum == targetSum)</span></span><br><span class="line">            <span class="comment">//     // res.add(path.chars()</span></span><br><span class="line">            <span class="comment">//     //         .map(e -&gt; e - &#x27;0&#x27;)</span></span><br><span class="line">            <span class="comment">//     //         .boxed()</span></span><br><span class="line">            <span class="comment">//     //         .collect(Collectors.toList()));</span></span><br><span class="line">            <span class="comment">//     res.add(new ArrayList(path));</span></span><br><span class="line">            <span class="comment">// return;</span></span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        sum += root.val;</span><br><span class="line">        <span class="comment">//System.out.println(sum);</span></span><br><span class="line">        path.add(root.val);</span><br><span class="line">        <span class="comment">//System.out.println(path);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//到达叶子节点</span></span><br><span class="line">        <span class="keyword">if</span>(root.left == <span class="literal">null</span> &amp;&amp; root.right == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (sum == targetSum)</span><br><span class="line">                res.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>(path));</span><br><span class="line">            <span class="comment">//return; 肯定不能return啊，因为它是叶子结点到根节点</span></span><br><span class="line">        &#125;</span><br><span class="line">        dfs(root.left, targetSum, sum, path);</span><br><span class="line">        dfs(root.right, targetSum, sum, path);</span><br><span class="line">        <span class="comment">//回溯</span></span><br><span class="line">        path.remove(path.size() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/a417ddc702cee8cf1d63d5ba1083107d.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">TCP函数</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-18 17:37:46 / 修改时间：20:05:16" itemprop="dateCreated datePublished" datetime="2025-09-18T17:37:46+08:00">2025-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/" itemprop="url" rel="index"><span itemprop="name">TCP和UDP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>close()</p>
+<p>accept()</p>
+<p>listen()</p>
+<p>socket()</p>
+<p>read()</p>
+<p>write()</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/%E6%9C%89%E6%B2%A1%E6%9C%89%E9%81%87%E5%88%B0%E8%BF%87%E8%B7%A8%E5%9F%9F%E7%9A%84%E9%97%AE%E9%A2%98%E3%80%82%E4%BD%A0%E7%9F%A5%E9%81%93%E8%B7%A8%E5%9F%9F%E6%98%AF%E5%95%A5%E6%84%8F%E6%80%9D%EF%BC%9F/" class="post-title-link" itemprop="url">有没有遇到过跨域的问题。你知道跨域是啥意思？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-18 16:18:56 / 修改时间：16:33:50" itemprop="dateCreated datePublished" datetime="2025-09-18T16:18:56+08:00">2025-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>跨域就是指跨 同一个协议，域名，端口进行数据请求，常见在现在前后端分离部署的场景。这主要是浏览器的一个安全策略，就是防止钓鱼网站携带像你的cookie像你的bank网站请求。然后我们正常开发要解决这种跨域问题，一般就得在服务端的响应头里CORS相关字段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">204</span> No Content</span><br><span class="line"><span class="comment">// 相信的前端页面网址，也就只有这个网址，服务端能放行</span></span><br><span class="line">Access-Control-Allow-Origin: https:<span class="comment">//app.bank-partner.com </span></span><br><span class="line">Access-Control-Allow-Methods: GET, POST, PUT, DELETE</span><br><span class="line">Access-Control-Allow-Headers: Content-Type, Authorization</span><br><span class="line">Access-Control-Allow-Credentials: <span class="literal">true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/18/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%20%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E6%8E%92%E6%9F%A5%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">TCP 协议通信排查工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-18 16:13:31 / 修改时间：16:18:21" itemprop="dateCreated datePublished" datetime="2025-09-18T16:13:31+08:00">2025-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">计网</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/" itemprop="url" rel="index"><span itemprop="name">TCP和UDP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>Wireshark</strong>（图形化抓包工具）  ，通过过滤工具定位到 具体ACK连接，查看各自包体来排查</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/45/">45</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lkl</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/soyobat" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 </body>
-
-<script src="/js/activate-power-mode.js"></script>
-
-<script>
-
-    // 配置highslide
-	hs.graphicsDir = '/js/highslide/graphics/'
-    hs.outlineType = "rounded-white";
-    hs.dimmingOpacity = 0.8;
-    hs.outlineWhileAnimating = true;
-    hs.showCredits = false;
-    hs.captionEval = "this.thumb.alt";
-    hs.numberPosition = "caption";
-    hs.align = "center";
-    hs.transitions = ["expand", "crossfade"];
-    hs.lang.number = '共%2张图, 当前是第%1张';
-    hs.addSlideshow({
-      interval: 5000,
-      repeat: true,
-      useControls: true,
-      fixedControls: "fit",
-      overlayOptions: {
-        opacity: 0.75,
-        position: "bottom center",
-        hideOnMouseOut: true
-      }
-    })
-
-    // 初始化aos
-    AOS.init({
-      duration: 1000,
-      delay: 0,
-      easing: 'ease-out-back'
-    });
-
-</script>
-<script>
-	POWERMODE.colorful = 'true';    // make power mode colorful
-	POWERMODE.shake = 'true';       // turn off shake
-	// TODO 这里根据具体情况修改
-	document.body.addEventListener('input', POWERMODE);
-</script>
-<script>
-    window.slideConfig = {
-      prefix: '/imgs/slide/background',
-      ext: 'jpg',
-      maxCount: '6'
-    }
-</script>
-
-<script src="/js/hs.js"></script>
-<script src="/js/blog.js"></script>
-
-
-
-
 </html>

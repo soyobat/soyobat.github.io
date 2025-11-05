@@ -1,1301 +1,1230 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="author" content="lkl">
-    
-    
-    
-    
-    
-    
-    <title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
-    <link href="https://www.soyorin.online" rel="prefetch" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
 
-    
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/aos.css">
-<link rel="stylesheet" href="/css/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-<script src="/js/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/main.css">
 
-    
-<script src="/js/bootstrap.min.js"></script>
 
-    
-<script src="/js/aos.js"></script>
 
-    
-<script src="/js/highslide/highslide-full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-    
-<link rel="stylesheet" href="/js/highslide/highslide.css">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.soyorin.online","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":10,"width":280,"onmobile":true},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac","show_result":true},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night eighties"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <style type="text/css">
-        @media (max-width: 768px) {
-            body {
-                background-color: #f0f0f0;
-                background: url('/imgs/xsbg.gif');
-                background-attachment: fixed;
-            }
-        }
-    </style>
-    
-    <!--<script type="text/javascript">
-      if (document.images) {
-        var avatar = new Image();
-        avatar.src = '/imgs/avatar.jpg'
-        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
-        var previewsPreLoad = []
-        for(var i = 0; i < length; i++) {
-          previewsPreLoad.push(new Image())
-          previewsPreLoad[previewsPreLoad.length - 1].src = '/imgs/preview' + previews[i]
-        }
-      }
-    </script>-->
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <!-- 背景轮播图功能 -->
-    <section class="hidden-xs">
-    <ul class="cb-slideshow">
-        <li><span>天若</span></li>
-        <li><span>有情</span></li>
-        <li><span>天亦老</span></li>
-        <li><span>我为</span></li>
-        <li><span>长者</span></li>
-        <li><span>续一秒</span></li>
-    </ul>
-</section>
-    <!-- 欧尼酱功能, 谁用谁知道 -->
-    
-    <header class="navbar navbar-inverse" id="gal-header">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target=".bs-navbar-collapse"
-                    aria-expanded="false">
-                <span class="fa fa-lg fa-reorder"></span>
-            </button>
-            <a href="https://www.soyorin.online">
-                
-                <style>
-                    #gal-header .navbar-brand {
-                        height: 54px;
-                        line-height: 24px;
-                        font-size: 28px;
-                        opacity: 1;
-                        background-color: rgba(0,0,0,0);
-                        text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228DFF,0 0 35px #228DFF,0 0 40px #228DFF,0 0 50px #228DFF,0 0 75px #228DFF;
-                    }
-                </style>
-                <!-- 这里使用文字(navbar_text or config.title) -->
-                <div class="navbar-brand">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</div>
-                
-            </a>
-        </div>
-        <div class="collapse navbar-collapse bs-navbar-collapse">
-            <ul class="nav navbar-nav" id="menu-gal">
-                
-                
-                <li class="">
-                    <a href="/">
-                        <i class="fa fa-home"></i>首页
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>归档
-                    </a>
-                </li>
-                
-                
-                
-                <li class="">
-                    <a href="/categories">
-                        <i class="fa fa-list"></i>分类
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/tags">
-                        <i class="fa fa-tags"></i>标签
-                    </a>
-                </li>
-                
-                
-                
-                
-                <li class="">
-                    <a href="/aboutme">
-                        <i class="fa fa-user"></i>关于我
-                    </a>
-                </li>
-                
-                
-            </ul>
-        </div>
+    <meta property="og:type" content="website">
+<meta property="og:title" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:url" content="https://www.soyorin.online/page/12/index.html">
+<meta property="og:site_name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="lkl">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="日常">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.soyorin.online/page/12/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/12/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ε=(´ο｀*)))唉，学Java的这辈子有了</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-友链"><a href="/link/" rel="section"><i class="fas fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </header>
-    <div id="gal-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 gal-right" id="mainstay">
-                    
-<div class="alert well fade in" id="gal-issue" role="alert">
-    <!-- TODO 添加关闭公告框功能 -->
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <!-- 这里自行配置公告内容 -->
-    这里是公告内容
-    <br>
-    配置相关说明请看<strong>_config.yml</strong>
-    <!-- 自行配置公告内容结束 -->
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lkl"
+      src="/images/boqi.jpg">
+  <p class="site-author-name" itemprop="name">lkl</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">441</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/soyobat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;soyobat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/" class="post-title-link" itemprop="url">源码</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-07 01:21:50 / 修改时间：01:22:46" itemprop="dateCreated datePublished" datetime="2025-09-07T01:21:50+08:00">2025-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<div id="article-list">
-     
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">07</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">
-                    <span>源码</span>
-                </a>
-            </h1>
         </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="源码">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">
-                        <span>源码</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-07
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="源码">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/07/Redis/%E6%BA%90%E7%A0%81/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/">
-                    <span>虚拟线程</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="虚拟线程">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/">
-                        <span>虚拟线程</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="虚拟线程">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">
-                    <span>Excutor框架</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="Excutor框架">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">
-                        <span>Excutor框架</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="Excutor框架">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/">
-                    <span>为什么kafka 2.8 要抛弃zk</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="为什么kafka 2.8 要抛弃zk">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/">
-                        <span>为什么kafka 2.8 要抛弃zk</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="为什么kafka 2.8 要抛弃zk">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/">
-                    <span>Kafka的生产数据的流程 ？ACK应答机制 ？</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="Kafka的生产数据的流程 ？ACK应答机制 ？">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/">
-                        <span>Kafka的生产数据的流程 ？ACK应答机制 ？</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/">
-                    
-                    <img src="/imgs/preview/preview4.jpg" alt="Kafka的生产数据的流程 ？ACK应答机制 ？">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/">
-                    <span>kafka写入机制</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="kafka写入机制">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/">
-                        <span>kafka写入机制</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="kafka写入机制">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">
-                    <span>Kafka为什么读写效率高（高吞吐） ？</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview4.jpg" alt="Kafka为什么读写效率高（高吞吐） ？">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">
-                        <span>Kafka为什么读写效率高（高吞吐） ？</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">
-                    
-                    <img src="/imgs/preview/preview1.jpg" alt="Kafka为什么读写效率高（高吞吐） ？">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">
-                    <span>kafka副本</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview2.jpg" alt="kafka副本">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">
-                        <span>kafka副本</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">
-                    
-                    <img src="/imgs/preview/preview3.jpg" alt="kafka副本">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/">
-                    <span>架构</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="架构">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/">
-                        <span>架构</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="架构">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-     <div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
-    
-    <div class="data-article hidden-xs">
-        <span class="month">09月</span>
-        <span class="day">06</span>
-    </div>
-    <!-- 大型设备文章 -->
-    <section class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/">
-                    <span>消息队列的两种模式 ？</span>
-                </a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            
-            <!-- TODO 添加评论统计 -->
-            <!--<span class="label label-gal">
-                <i class="fa fa-comments"></i>
-                <a href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/#comments">739</a>
-            </span>-->
-        </div>
-        <div class="alert alert-gal article-body content-article">
-            <div class="item">
-                <a href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/">
-                    <div class="img">
-                        
-                        <img src="/imgs/preview/preview1.jpg" alt="消息队列的两种模式 ？">
-                    </div>
-                    <div class="info">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="visible-xs">
-        <div class="title-article">
-            <center>
-                <h4>
-                    <a href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/">
-                        <span>消息队列的两种模式 ？</span>
-                    </a>
-                </h4>
-            </center>
-        </div>
-        <p></p>
-        <center>
-            <i class="fa fa-calendar"></i> 2025-09-06
-        </center>
-        <p></p>
-        <p></p>
-        <center>
-            
-            
-        </center>
-        <p></p>
-        <div class="alert alert-gal article-body content-article">
-            <p style="text-align: center;">
-                <a href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/">
-                    
-                    <img src="/imgs/preview/preview2.jpg" alt="消息队列的两种模式 ？">
-                </a>
-            </p>
-        </div>
-        
-        <a class="btn btn-danger pull-right read-more btn-block" href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/">
-            阅读全文
-            <!--<span class="badge">739</span>-->
-        </a>
-    </section>
-</div>
-     
-</div>
-<!-- 前方最多7个 < 1 2 3 4 5 6 -->
-<!-- 前方超过第7页则分为 < 1 ... (n - 3) (n - 2) (n - 1) n, 此时前面为固定的6个 -->
+      </header>
 
-<!-- 后方最多8个 (n + 1) 到 (n + 7) > -->
-<!-- 如果末页和当前页相差超过7, 此时后面为固定的6个, (n + 1) (n + 2) (n + 3) ... total > -->
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>1.单线程</p>
+<p>2.aof  和 rdb</p>
+<ol start="3">
+<li></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
 
 
-<div id="gal-pagination" class="clearfix">
-    <ul class="pagination pagination-gal pull-right">
-        
-        <li class="prev">
-            <a href="/page/11/">«</a>
-        </li>
-        
-        
-        <li>
-            <a href="/">1</a>
-        </li>
-        <li>
-            <span>...</span>
-        </li>
-        
-        <li>
-            <a href="/page/9 ">9</a>
-        </li>
-        
-        <li>
-            <a href="/page/10 ">10</a>
-        </li>
-        
-        <li>
-            <a href="/page/11 ">11</a>
-        </li>
-        
-        
-        <li class="current">
-            <span>12</span>
-        </li>
-        
-        
-        <li>
-            <a href="/page/13">13</a>
-        </li>
-        
-        <li>
-            <a href="/page/14">14</a>
-        </li>
-        
-        <li>
-            <a href="/page/15">15</a>
-        </li>
-        
-        <li>
-            <span>...</span>
-        </li>
-        
-        
-        <li class="next">
-            <a href="/page/13/">»</a>
-        </li>
-        
-    </ul>
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">虚拟线程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 20:00:37 / 修改时间：20:00:58" itemprop="dateCreated datePublished" datetime="2025-09-06T20:00:37+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">虚拟线程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/%E8%99%9A%E6%8B%9F%E7%BA%BF%E7%A8%8B/%E5%8D%8F%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">协程</span></a>
+        </span>
+    </span>
+
+  
 </div>
 
-<!-- 加上这段代码原因： gitment在首页加载时, 如果找不到对应的控件会报错，此处加上，同时设置为none，防止报错 -->   
+        </div>
+      </header>
 
-                </div>
-                <aside class="col-md-4 gal-left" id="sidebar">
-    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
-<aside id="sidebar-search">
-    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <form class="form-inline clearfix" id="search-form" method="get"
-              action="/search/index.html">
-            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
-            <button class="btn btn-danger btn-gal" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-    </div>
-</aside>
-    <aside id="sidebar-author">
-    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
-        <div class="panel-heading" style="text-align: center">
-            <i class="fa fa-quote-left"></i>
-            lkl
-            <i class="fa fa-quote-right"></i>
-        </div>
-        <div class="author-panel text-center">
-            <img src="/imgs/avatar.jpg" width="140" height="140"
-                 alt="个人头像" class="author-image">
-            <p class="author-description"></p>
-        </div>
-    </div>
-</aside>
-    
-    <aside id="sidebar-recent_comments">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-comments"></i>
-            最新评论
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush"></ul>
-    </div>
-</aside>
-    
-    <!-- 要配置好leancloud才能开启此小工具 -->
     
     
-    <aside id="sidebar-recent_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            近期文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/25/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/%E8%B1%86%E5%8C%85%E7%A5%9E/">豆包神</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/23/ai%20%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3/prompt%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99/">prompt生成网站</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E8%BF%87%E7%A8%8B/">文件打开和关闭过程</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%BA%E5%BA%8F%E5%86%99%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB%EF%BC%9F/">顺序写为什么这么快？</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%A4%E6%8D%A2%E5%8C%BA/">交换区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">进程调度</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E5%8C%BA/">临界区</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/CDN/">CDN</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/22/%E8%AE%A1%E7%BD%91/TCP%E5%92%8CUDP/TCP%E4%BC%A0%E8%BE%93%E5%8F%91%E7%94%9F%E7%B2%98%E5%8C%85or%E6%8B%86%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0/%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85/">粘包拆包</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
     
-    
-    <aside id="sidebar-rand_posts">
-    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-        <div class="panel-heading">
-            <i class="fa fa-refresh"></i>
-            随机文章
-            <i class="fa fa-times-circle panel-remove"></i>
-            <i class="fa fa-chevron-circle-up panel-toggle"></i>
-        </div>
-        <ul class="list-group list-group-flush">
-            
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/JavaSE/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">动态代理</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/25/Codetop%E5%88%B7%E9%A2%98/%E6%A0%91/">树</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/17/Spring/BeanFactory%E5%92%8CFactoryBean/">BeanFactory和FactoryBean</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/01/Spring/Spring%E4%BA%8B%E5%8A%A1/">Spring事务</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/05/24/mongodb/%E5%9F%BA%E7%A1%80/">基础</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/09/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">虚拟内存</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/08/09/%E8%AE%A1%E7%BD%91/URI%EF%BC%8CURL%EF%BC%8CURN/">URI，URL，URN</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/10/11/%E6%89%8B%E5%86%99%E7%B3%BB%E5%88%97/%E6%97%A0%E6%A0%87%E9%A2%98%E6%96%87%E6%A1%A3/">无标题文档</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/04/27/MySQL/%E7%B4%A2%E5%BC%95/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/">索引失效</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2025/08/10/%E8%AE%A1%E7%BD%91/IP/IP%E5%88%86%E7%89%87%E3%80%81TCP%E5%88%86%E6%AE%B5/">IP分片、TCP分段</a>
-                </span>
-            </li>
-            
-        </ul>
-    </div>
-</aside>
-    
-    
-    <aside id="gal-sets">
-        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
-            <ul class="nav nav-pills pills-gal">
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>为什么说他轻量级</strong></p>
+<p>:::color4<br>因为像原来的platform thread创建时，需要在栈空间上分配1mb的内存，1000个线程就需要1g栈空间</p>
+<p>而虚拟线程则不用</p>
+<p>:::</p>
+<p><strong>执行原理</strong></p>
+<p>:::color4<br>当我们创建并且运行虚拟线程时，jvm后台会帮助我们去创建一个platform thread pool，且pool size&#x3D;Runtime.getAvailableCore</p>
+<p>我们可以像创建普通Java对象一样创建虚拟线程，你可以把虚拟对象看做平台线程的普通版的。那他要如何执行呢，它会绑定到平台线程上。且一个平台线程只能绑定一个虚拟线程，当虚拟线程里的任务执行完时就会断开。</p>
+<p><img src="/images/867f61b90ab58a9417f742276e1a7632.png"></p>
+<p>:::</p>
+<p><strong>适用场景：</strong></p>
+<p>:::color4<br>IO阻塞任务！！！！</p>
+<p>为啥？阻塞时，虚拟线程会剥离平台线程，然后会生成<strong>堆栈快照</strong>。且它阻塞完重新被jvm bind到platform thread时会把原来的platform堆栈删掉，并且把之前剥离时产出的堆栈copy并加载到平台线程的堆栈，从而继续完成</p>
+<p>最大的好处就是在IO任务避免浪费了cpu</p>
+<p>:::</p>
+<p><strong>那如果一个虚拟线程阻塞后发现所有线程都被占用了，那会发生什么？</strong></p>
+<p>:::color4<br>就继续等待，就这么简单</p>
+<p><img src="/images/c2562e173d3507100aed42ef8ce5f095.png"></p>
+<p>:::</p>
+<p>意义</p>
+<p>:::color4<br>1.内存占用小</p>
+<p>2.虚拟线程的开销比较小，因为只有mouting or unmouting。但平台线程的parking就会继续上下文切换，这就涉及到用户-&gt;内核-&gt;用户</p>
+<p>:::</p>
+<p>:::success<br>在大多数现代 OS（比如 Linux）里，<strong>线程调度由内核完成</strong>，所以线程上下文切换通常伴随 <strong>用户态 <strong><strong>↔</strong></strong> 内核态</strong> 的切换。</p>
+<p><strong>上下文切换 (Context Switch)</strong> 指的是 CPU 从执行一个线程（或进程）切换到另一个线程（或进程）。</p>
+<p>切换时需要保存和恢复很多内容，例如：</p>
+<ul>
+<li>通用寄存器（eax、rbx…）</li>
+<li>程序计数器（下一条要执行的指令地址）</li>
+<li>栈指针</li>
+<li>内存映射（页表信息，切换进程时才会变）</li>
+</ul>
+<p>👉 换句话说，就是 CPU 不能“中途换人跑”，必须先把当前线程的“执行现场”保存好，再加载另一个线程的“执行现场”。</p>
+<p>:::</p>
 
-                
-                <li>
-                    <a href="/page/12/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/12/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
-                </li>
-                
-                
-                <li>
-                    <a href="/page/12/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
-                </li>
-                
-            </ul>
-            <div class="tab-content">
-                
-                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
-    
-</div>
-                
-                
-                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
-    
-</div>
-                
-                
-                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
-    
-    <li>
-        <a href="https://github.com/ZEROKISEKI/" target="_blank">Github</a>
-    </li>
-    
-    <li>
-        <a href="https://coding.net/u/SORA1" target="_blank">Coding</a>
-    </li>
-    
-    <li>
-        <a href="https://www.zhihu.com/people/aonosora/activities" target="_blank">知乎</a>
-    </li>
-    
-</div>
-                
-            </div>
-        </div>
-    </aside>
-    
-</aside>
-            </div>
-        </div>
+      
     </div>
-    <footer id="gal-footer">
-    <div class="container">
-        Copyright © 2018 lkl Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
-    </div>
-</footer>
 
-<!-- 回到顶端 -->
-<div id="gal-gotop">
-    <i class="fa fa-angle-up"></i>
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
 </div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/JUC/Excutor%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="url">Excutor框架</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 19:00:57 / 修改时间：20:37:03" itemprop="dateCreated datePublished" datetime="2025-09-06T19:00:57+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>JDK1.5开始，开始将工作单元和工作机制分离开来，工作单元就是Runnable和Callable这种，</p>
+<p>而具体工作由Excutor具体提供</p>
+<p>在hotspot vm的线程模型中，用户线程和内核线程是一对一的</p>
+<p>Excutor可以分为两个部分，一个是架构一个是其包含的组件</p>
+<p>Excutor的结构</p>
+<p>1.任务：执行的任务需要实现的接口：Runnable（无返回值）和Callable（有返回值）</p>
+<p>2.任务的执行：任务执行的core interface：Excutor接口，以及继承于这个接口的ExcutorService接口。</p>
+<p>ExcutorService接口有两个非常重要的实现类，ThreadPoolExcutor和ScheduleThreadPoolExcutor</p>
+<p>3.异步计算的结果：包括接口Future和实现接口Future的FutureTask类</p>
+<p>Executor框架的成员： </p>
+<pre><code>- ThreadPoolExecutor 
+- ScheduledThreadPoolExecutor 
+- Future接口 
+- Runnable接口和Callable接口 
+</code></pre>
+<p>Runnable、Callable、Future、RunnableFuture、FutureTask、CompletableFuture：</p>
+<p><img src="/images/a56a8995c259fd721efc1741ad09745f.png"></p>
+<p>Runnable：只有一个void run()方法，Thread实现了这个接口，所以创建Thread的时候实现这个接口，然后thread.start()就能创建一个线程执行run()，或者往Thread构造方法中传入Runnable的一个实现类。 </p>
+<p>Callable：有返回值的call()方法 </p>
+<p>Future：接口，异步获取任务结果 </p>
+<p>RunnableFuture：接口，其实就相当于异步的Runnable </p>
+<p>**FutureTask：RunnableFuture的实现类。内部其实内聚了一个Callable，即使你用第二个构造方法传入Runnable，也会包装成Callable！所以其实就相当于异步的Runnable和Callable（适配器模式），里面的run方法就是执行Callable的call()！其线程安全通过CAS保证 **</p>
+<p>CompletableFuture：实现了Future接口，提供了许多更为强大的功能，使用：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7140244126679138312">Java CompletableFuture</a> </p>
+<p>ScheduleThreadPoolExcutor</p>
+<p>构造方法和普通线程池一样，或者使用Executors.newScheduledThreadPool(int coreSize) </p>
+<p>核心方法： </p>
+<p>延迟执行一次：schedule(Runnable command, long delay,TimeUnit unit) </p>
+<p>固定频率执行：scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)，首次在initialDelay后执行，之后每隔period时间执行一次。如果任务时间超过周期，会等待上次执行完毕 </p>
+<p>固定延迟执行：scheduleWithFixedDelay(Runnable command, long initialDelay, long period, TimeUnit unit)，和上面类似，但每次计算是上次任务结束后开始计算延迟 </p>
+<p><img src="/images/6903b40b6a3ec26efc55221e6c70b9cf.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/%E4%B8%BA%E4%BB%80%E4%B9%88kafka%202.8%20%E8%A6%81%E6%8A%9B%E5%BC%83zk/" class="post-title-link" itemprop="url">为什么kafka 2.8 要抛弃zk</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 17:09:05 / 修改时间：17:28:12" itemprop="dateCreated datePublished" datetime="2025-09-06T17:09:05+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>1.运维问题</p>
+<p>原生部署zk需要强制部署 zk，这使得kafka运维人员需要同时具备运维zk和kafka的能力</p>
+<p>2.为了保证可用性</p>
+<p>原生kafka与zk交互是依赖单个broker即Controller，如果旧broker故障了，会选举出一个</p>
+<p>新的Controller节点。新的Controller继任成功，会从zk上拉取元数据同步初始化，同时通知其他broker更新</p>
+<p>新的ActiveControllerID。且旧broker需要<font style="color:rgb(51, 51, 51);">关闭监听、事件处理线程和定时任务。这个过程如果partition特别多，</font></p>
+<p><font style="color:rgb(51, 51, 51);">那么就会导致整个过程非常漫长，且这个过程kafka是无法处理消息的，处于不可用状态</font></p>
+<p>3.分区瓶颈</p>
+<p><font style="color:rgb(51, 51, 51);">当分区数增加时，</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Zookeeper&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">保存的元数据变多，</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Zookeeper&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">集群压力变大，达到一定级别后，监听延迟增加，</font></p>
+<p><font style="color:rgb(51, 51, 51);">给</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Kafaka&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">的工作带来了影响。所以，</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Kafka&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">单集群承载的分区数量是一个瓶颈。而这又恰恰是一些业务场景需要</font></p>
+<p><font style="color:rgb(51, 51, 51);">的。</font></p>
+<h2 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h2><p><img src="/images/d8a34f3e62124aeaefd133eacfb1b131.png"></p>
+<p><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;KIP-500&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">用</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Quorum Controller&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">代替之前的</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Controller&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">，</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Quorum&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">中每个</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Controller&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">节点都会保存所有</font></p>
+<p><font style="color:rgb(51, 51, 51);">元数据，通过</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;KRaft&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">协议保证副本的一致性。这样即使</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Quorum Controller&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">节点出故障了，新的</font><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;Controlle&lt;/font&gt;</code></p>
+<p><code>&lt;font style=&quot;color:rgb(10, 191, 91);background-color:rgb(243, 245, 249);&quot;&gt;r&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">迁移也会非常快。</font></p>
+<p><font style="color:rgb(51, 51, 51);">即由</font><strong><font style="color:rgb(51, 51, 51);">单个Controller变成了多个Controller</font></strong><font style="color:rgb(51, 51, 51);">，即由独裁变为了议会制</font></p>
+<p>升级kafka后，官方说轻松支持百万partition</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/Kafka%E7%9A%84%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%20%EF%BC%9FACK%E5%BA%94%E7%AD%94%E6%9C%BA%E5%88%B6%20%EF%BC%9F/" class="post-title-link" itemprop="url">Kafka的生产数据的流程 ？ACK应答机制 ？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-06 17:04:58" itemprop="dateCreated datePublished" datetime="2025-09-06T17:04:58+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-26 20:26:29" itemprop="dateModified" datetime="2025-09-26T20:26:29+08:00">2025-09-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>早期kafka集群是由zk来保证，我们公司也是，后面kafka更新了，不需要zk了</p>
+<p>早期版本：Consumer靠zk来保存offset，而producer不与zk打交道</p>
+<h2 id="生产数据的流程"><a href="#生产数据的流程" class="headerlink" title="生产数据的流程"></a>生产数据的流程</h2><p>早期版本：</p>
+<pre><code>1. producer需要找到集群，并把那个数据放到某个分区中。而这个leader端口号和分区存在zk中，集群和zk一直处于连接状态，partition的leader端口号回由集群去拿出，然后producer会向集群拿到topic对应的partition以及partition的leader信息
+2. &lt;font style=&quot;color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);&quot;&gt;当Producer通过Sender从集群获取到partition和Leader信息，若&lt;/font&gt;**&lt;font style=&quot;color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);&quot;&gt;有指定partition则使用指定的partition&lt;/font&gt;**&lt;font style=&quot;color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);&quot;&gt;，若没有则使用分区算法对key做操作；当没有key则轮询partition；&lt;/font&gt;
+3. producer会先把数据存入DQ中，每一个partition一个DQ，就是一种消息聚合的方式，sender会轮询，队列满了或者到达一定的时间周期，就会发送给leader。  
+</code></pre>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Producer给Leader发数据使用批处理，如果没有批处理每次发送都建立连接在进程间做交互，会使效率很低</font><br>    4. leader将数据写入本地的log日志分段<br>    5. 后续Consumer轮询从broker拉取消息，Kafka的ACK应答机制（producer，三种，0,1,2 ）；  </p>
+<p><strong>三种ACK模式：</strong></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">当取值为0，则不关心是否到达，尽最大努力交付，效率高，数据可能丢失；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">取值为1（默认），Producer的发送数据，需要等待Leader的应答才能发生下一条，不关心Follower是否接收成功，性能稍慢，数据较安全，但当Leader突然宕机，则当Follower还未同步，数据会丢失；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">取值为 -1（all） ，Producer发送数据，需要等待ISR内的所有副本（leader和所有Follower）都完成备份，最安全，性能差；需要等待follower一定时间后拉取数据，也就是这个”一定时间”是其效率的主要影响</font></p>
+<font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">  
+</font>![](/images/a27e7ae381e0c5a8aefe7ee4d84f556c.png)
+
+<h2 id="详细流程"><a href="#详细流程" class="headerlink" title="详细流程"></a><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">详细流程</h2><p></font><img src="/images/4b826239c388a8ccba308e3611a151cf.png"><br>sender方法：</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/kafka%E5%86%99%E5%85%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">kafka写入机制</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 16:52:32 / 修改时间：17:04:59" itemprop="dateCreated datePublished" datetime="2025-09-06T16:52:32+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>1.producer会将数据push到broker上，每条消息会被追加到topic下的一个partition里的log文件里的末</p>
+<p>尾，保证分区有序性，且会顺序写入磁盘</p>
+<p>2.为了不让log文件过大，kafka还采用了分区分段存储，即log体积达到了某个阈值，就会生成新的log文件，</p>
+<p>后面来的消息会追加到新的文件里</p>
+<p>3.文件结构</p>
+<p>一个topic里有多个partition，partition内有多个segement，一个segement包括三个文件index，log，		timeIndex </p>
+<p>partition就是一个文件夹，属于物理概念。命名规则为 topic + 分区号 如 first-1</p>
+<p>而segement也是个逻辑概念</p>
+<p>index，log文件命名为 segement里第一条消息的offset</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/Kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%BB%E5%86%99%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%88%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%89%20%EF%BC%9F/" class="post-title-link" itemprop="url">Kafka为什么读写效率高（高吞吐） ？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 14:47:26 / 修改时间：15:46:50" itemprop="dateCreated datePublished" datetime="2025-09-06T14:47:26+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>首先kafka是分布式集群，吞吐量大。天生分布式，随便加机器</p>
+<h2 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h2><p>这里的零拷贝是对于应用层而言</p>
+<p><strong>我们要将磁盘的数据发送到远端的服务器去，一般的应用做法是</strong></p>
+<p>0.调用系统函数read，切换为<strong>内核态</strong></p>
+<p>1.先将数据从磁盘拷贝到page cache</p>
+<p>2.然后切换到**用户态，**将数据拷贝到应用层</p>
+<p>3.切换为<strong>内核态</strong>，调用write,将数据写入page cache</p>
+<p>4.最后将page cache 拷贝到网卡 缓冲区</p>
+<p>5.切换为<strong>用户态</strong>，继续程序的运行</p>
+<p>这其中需要经过四次拷贝，四次用户内核态切换</p>
+<p>而对于<strong>sendFile</strong>的零拷贝</p>
+<p>**数据不需要再拷贝到应用层，而是由内核态全程负责，让数据从磁盘拷贝到内核缓存，然后直接发给NIC **</p>
+<p><strong>网卡缓冲区，且用户态内核态也只需要切换两次</strong></p>
+<p><strong>PS：DMA</strong></p>
+<h2 id="顺序写磁盘"><a href="#顺序写磁盘" class="headerlink" title="顺序写磁盘"></a>顺序写磁盘</h2><h2 id="page-cache预热"><a href="#page-cache预热" class="headerlink" title="page cache预热"></a>page cache预热</h2><h2 id="写page-cache"><a href="#写page-cache" class="headerlink" title="写page cache"></a>写page cache</h2><h2 id="分段日志"><a href="#分段日志" class="headerlink" title="分段日志"></a><font style="color:rgb(17, 17, 17);background-color:rgb(253, 253, 253);">分段日志</font></h2><p>Leader将文件切分为多个segement，好处就是让 IO更快</p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Topic→partition→segment</font></p>
+<p><img src="/images/fdada241e4df91c5cb6fc9bbd11ba5fe.png"></p>
+<p>index、log以当前segement的第一条消息的offset命名，以便可以快速查找</p>
+<p><img src="/images/b755f6403606a71739a4e1ffbf2978e8.png"></p>
+<p>log里面存的是消息，而index里存的是offset和其对应的 物理偏移</p>
+<p><img src="/images/8c53767c3627226acddc11e17d8a8e27.png"></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hzmark/p/kafka_message_format.html">Kafka消息（存储）格式及索引组织方式 - 杭州.Mark - 博客园</a></p>
+<h2 id="双端队列与批处理"><a href="#双端队列与批处理" class="headerlink" title="双端队列与批处理"></a>双端队列与批处理</h2><p>在producer这边，每一个partition在其producer都会对应着一个DQ</p>
+<p>1.producer发送数据时都会往这个DQ里存消息</p>
+<p>2.<strong>DQ满了或者一定的时间周期到了</strong>，producer就会拿出里面的消息，send到broker的Leader里。这即满足了</p>
+<p>partition里消息的有序性，还提高了效率性</p>
+<p>但消息聚合会降低一定的实时性</p>
+<p>而Consumer这边也是一样，先拉取一批数据到本地的DQ里，然后消费</p>
+<p>压缩：给的字符串，会被压缩成<strong>byte数组</strong>，压缩后数据小，传输快</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/kafka%E5%89%AF%E6%9C%AC/" class="post-title-link" itemprop="url">kafka副本</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 14:27:05 / 修改时间：14:33:24" itemprop="dateCreated datePublished" datetime="2025-09-06T14:27:05+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>提供可靠性支持，每个partition都会其<font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">replication。broker会从这些里面选举其Leader和follower。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Leader和follower其实都是副本</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">producer和Consumer只会和 Leader交互</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Leader会将数据同步到follower，如果Leader主动push数据，这时候会让Leader负载过大，故这时候</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">应该让follower主动定时去pull数据</font></p>
+<p><img src="/images/cc231d6bd1763af33f6f6646ea0e6134.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">架构</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 14:20:34 / 修改时间：14:23:33" itemprop="dateCreated datePublished" datetime="2025-09-06T14:20:34+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/images/39db42cdc5d14ac10a6482f88d354aab.png"></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Kafka集群的目的是保存消息，Producers往Brokers里面的指定Topic中写消息，Consumers从Brokers里面拉去指定Topic的消息，生产者把数据以K、V的方式传给集群；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">首先Kafka需要多台机器组成一个Kafka集群才能承载负荷，每一台服务器是一个Broker，</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">数据有多种进行分类 → 一个Broker中有Topic主题</font></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">为了提高负载</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);"> → 一个Topic有多个partition分区，一个partition可以放在多个不同的Broker上，而数据放在不同的partition当中（取模的方式），可以让不同的消费者来消费，提高消费速率</font></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">为了防止数据丢失</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);"> → 每个分区下有多个副本，即Leader和Follower，Leader做io处理，Follower只作备份，多个分区进行“交叉备份”，Follower从Leader中实时同步数据，当Leader挂掉后，Follower会代替Leader。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">以【消费者组】为单位进行读取数据，其中一个消费者读取一个partition分区，所以</font><strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">一般partition分区数量&#x3D;消费者组中的Consumer消费者数量，以保证分区内数据有序</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Zookeeper：kafka集群依赖zookeeper来保存集群的的元信息，来保证系统的可用性。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">Kafka -&gt; Broker -&gt; Topic -&gt; partition -&gt; Replication(Leader、Follower) -&gt;Consumer</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">1）Producer ：消息生产者，就是向 kafka broker中的Topic主题发消息的客户端；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">2）Consumer ：消息消费者，向 kafka broker中的Topic中 取消息的客户端；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">3）Consumer Group （CG）：消费者组，由多个 consumer 组成。消费者组内每个消费者负责消费不同分区的数据，</font><strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">一个分区只能由一个组内消费者消费</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">；消费者组之间互不影响。 所有的消费者都属于某个消费者组，即消费者组是逻辑上的一个订阅者。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">4）Broker ：一台 kafka 服务器就是一个 broker。一个集群由多个 broker 组成。 一个 broker可以容纳多个topic。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">5）Topic ：可以理解为一个队列，生产者和消费者面向的都是一个 topic；topic逻辑上的概念，partition是物理上的概念；</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">6）Partition：为了实现扩展性，一个非常大的 topic 可以分布到多个broker（即服务器）上，一个 topic 可以分为多个 partition，每个 partition 是一个有序的队列；partition中的每条消息都会被分配一个有序的id（offset）</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">7）Replica：副本，为保证集群中的某个节点发生故障时，该节点上的 partition 数据不丢失，</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">且kafka 仍然能够继续工作，kafka 提供了副本机制，一个 topic 的每个分区都有若干个副本，一个 leader 和若干个 follower。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">8）leader：每个分区多个副本的“主”，生产者发送数据的对象，以及消费者消费数据的对象都是 leader。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">9）follower：每个分区多个副本中的“从”，实时从 leader 中同步数据，保持和 leader 数据的同步。leader 发生故障时，某个 follower 会成为新的 follower。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">10）Offset：偏移量， kafka的存储文件都是按照offset.kafka来命名，用offset做名字的好处是方便查找。例如你想找位于2049的位置，只要找到2048.kafka的文件即可。</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(253, 253, 253);">当然the first offset就是00000000000.kafka。</font></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.soyorin.online/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boqi.jpg">
+      <meta itemprop="name" content="lkl">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | soyo的跨机房部署、同城双活、异地多活、9个9高可用博客yuque笔记同步site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/kafka/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%EF%BC%9F/" class="post-title-link" itemprop="url">消息队列的两种模式 ？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-06 14:14:38 / 修改时间：14:16:54" itemprop="dateCreated datePublished" datetime="2025-09-06T14:14:38+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="点到点"><a href="#点到点" class="headerlink" title="点到点"></a>点到点</h2><p><img src="/images/9e5140bdea51903f5f63454318f6dd8b.png"></p>
+<p>同一条消息只会被一个消费者消费</p>
+<h2 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h2><p><img src="/images/8200ee7775eb61b3d123bfdb9b49a7dd.png"><br>一个消费者可以被多个消费者消费</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/45/">45</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lkl</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/soyobat" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 </body>
-
-<script src="/js/activate-power-mode.js"></script>
-
-<script>
-
-    // 配置highslide
-	hs.graphicsDir = '/js/highslide/graphics/'
-    hs.outlineType = "rounded-white";
-    hs.dimmingOpacity = 0.8;
-    hs.outlineWhileAnimating = true;
-    hs.showCredits = false;
-    hs.captionEval = "this.thumb.alt";
-    hs.numberPosition = "caption";
-    hs.align = "center";
-    hs.transitions = ["expand", "crossfade"];
-    hs.lang.number = '共%2张图, 当前是第%1张';
-    hs.addSlideshow({
-      interval: 5000,
-      repeat: true,
-      useControls: true,
-      fixedControls: "fit",
-      overlayOptions: {
-        opacity: 0.75,
-        position: "bottom center",
-        hideOnMouseOut: true
-      }
-    })
-
-    // 初始化aos
-    AOS.init({
-      duration: 1000,
-      delay: 0,
-      easing: 'ease-out-back'
-    });
-
-</script>
-<script>
-	POWERMODE.colorful = 'true';    // make power mode colorful
-	POWERMODE.shake = 'true';       // turn off shake
-	// TODO 这里根据具体情况修改
-	document.body.addEventListener('input', POWERMODE);
-</script>
-<script>
-    window.slideConfig = {
-      prefix: '/imgs/slide/background',
-      ext: 'jpg',
-      maxCount: '6'
-    }
-</script>
-
-<script src="/js/hs.js"></script>
-<script src="/js/blog.js"></script>
-
-
-
-
 </html>
